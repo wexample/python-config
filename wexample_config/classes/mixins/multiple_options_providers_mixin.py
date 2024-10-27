@@ -1,17 +1,17 @@
-from abc import abstractmethod, ABC
+from abc import abstractmethod
 from typing import List, Type, cast, Optional
-
+from pydantic import BaseModel
 from wexample_config.const.types import DictConfig
 from wexample_config.option.abstract_option import AbstractOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
 from wexample_config.src.config_manager import ConfigManager
 
 
-class MultipleOptionsProvidersMixin(ABC):
+class MultipleOptionsProvidersMixin(BaseModel):
     config_manager: Optional[ConfigManager] = None
 
     def __init__(self, config: Optional[DictConfig] = None, **data):
-        super().__init__()
+        super().__init__(**data)
 
         config = self.build_config(config)
 
