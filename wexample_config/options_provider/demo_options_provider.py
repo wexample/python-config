@@ -12,5 +12,5 @@ class DemoOptionsProvider(AbstractOptionsProvider):
         from wexample_config.option.name_option import NameOption
 
         return [
-            NameOption
+            NameOption,
         ]
