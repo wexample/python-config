@@ -24,3 +24,16 @@ class MultipleOptionsProvidersTest(unittest.TestCase):
             self.test_object.configure({
                 "unexpected_option": "yes"
             })
+
+    def test_configure_unexpected_type(self):
+        from wexample_config.exception.option import InvalidOptionTypeException
+
+        with self.assertRaises(InvalidOptionTypeException):
+            self.test_object.configure({
+                "name": 123
+            })
+
+        with self.assertRaises(InvalidOptionTypeException):
+            self.test_object.configure({
+                "name": []
+            })
