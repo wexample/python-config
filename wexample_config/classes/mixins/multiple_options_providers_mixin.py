@@ -24,6 +24,14 @@ class MultipleOptionsProvidersMixin(ABC):
     def configure(self, config: Optional[DictConfig]) -> None:
         from wexample_config.src.config_manager import ConfigManager
 
+        options = self.get_all_options()
+        valid_option_names = {option_class.get_name() for option_class in options}
+
+        unknown_keys = set(config.keys()) - valid_option_names
+        if unknown_keys:
+            from wexample_config.exception.option import InvalidOptionException
+            raise InvalidOptionException(f'Unknown configuration option name: {unknown_keys}')
+
         self.config_manager = ConfigManager(config=config)
 
     @abstractmethod

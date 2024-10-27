@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel
 
@@ -9,7 +9,8 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     value: Any
 
-    def get_class_name_suffix(self) -> str:
+    @classmethod
+    def get_class_name_suffix(cls) -> Optional[str]:
         return 'Option'
 
     @classmethod
