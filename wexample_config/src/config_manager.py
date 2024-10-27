@@ -2,8 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from wexample_config.const.types import StateItemConfig
+from wexample_config.const.types import DictConfig
 
 
 class ConfigManager(BaseModel):
-    config: Optional[StateItemConfig] = None
+    config: Optional[DictConfig] = None
