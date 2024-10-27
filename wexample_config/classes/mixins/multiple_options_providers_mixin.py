@@ -9,7 +9,7 @@ from wexample_config.src.config_manager import ConfigManager
 
 class MultipleOptionsProvidersMixin(BaseModel):
     config_manager: Optional[ConfigManager] = None
-    _options: Dict[str, AbstractOption] = {}
+    options: Dict[str, AbstractOption] = {}
 
     def __init__(self, config: Optional[DictConfig] = None, **data):
         super().__init__(**data)
@@ -41,7 +41,7 @@ class MultipleOptionsProvidersMixin(BaseModel):
         for option_class in options:
             option_name = option_class.get_name()
             if option_name in config:
-                self._options[option_name] = option_class(
+                self.options[option_name] = option_class(
                     value=config[option_name]
                 )
 
@@ -59,3 +59,11 @@ class MultipleOptionsProvidersMixin(BaseModel):
             options.extend(cast("AbstractOptionsProvider", provider).get_options())
 
         return options
+
+    def get_option(self, option_type: Type["AbstractOption"]) -> Optional["AbstractOption"]:
+        option_name = option_type.get_name()
+
+        if option_name in self.options:
+            return self.options[option_name]
+
+        return None
