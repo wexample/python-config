@@ -39,7 +39,7 @@ class ConfigValue(BaseModel):
         return isinstance(self.raw, value_type)
 
     def _assert_type(self, expected_type: Type) -> None:
-        if self.is_of_type(expected_type):
+        if not self.is_of_type(expected_type):
             raise TypeError(f'Expected {expected_type} but got {type(self.raw)}')
 
     def is_none(self) -> bool:
@@ -78,7 +78,7 @@ class ConfigValue(BaseModel):
 
     # Getter methods
     def get_str(self) -> str:
-        self._assert_type(int)
+        self._assert_type(str)
         return self.raw
 
     def get_int(self) -> int:

@@ -1,4 +1,5 @@
 from abc import ABC
+from types import UnionType
 from typing import Any, Optional, Type
 from pydantic import BaseModel
 from wexample_config.const.types import DictConfig
@@ -27,6 +28,7 @@ class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     def resolve_config(config: "DictConfig") -> "DictConfig":
         return config
 
-    def get_value_class_type(self) -> Type[ConfigValue]:
+    @staticmethod
+    def get_value_class_type() -> Type | UnionType:
         return ConfigValue
 
