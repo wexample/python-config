@@ -11,9 +11,7 @@ from wexample_config.options_provider.abstract_options_provider import AbstractO
 class MultipleOptionsProvidersMixin(BaseModel):
     options: Dict[str, AbstractOption] = {}
 
-    def __init__(self, config: Optional[DictConfig] = None, **data):
-        super().__init__(**data)
-
+    def autoconfigure(self, config: Optional[DictConfig] = None):
         config = self.build_config(config)
 
         if config:
