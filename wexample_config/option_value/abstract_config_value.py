@@ -83,3 +83,31 @@ class AbstractConfigValue(BaseModel):
 
     def is_bool(self) -> bool:
         return self.is_of_type(bool)
+
+    def get_complex(self) -> complex:
+        self._assert_type(complex)
+        return self.raw
+
+    def is_complex(self) -> bool:
+        return self.is_of_type(complex)
+
+    def get_bytes(self) -> bytes:
+        self._assert_type(bytes)
+        return self.raw
+
+    def is_bytes(self) -> bool:
+        return self.is_of_type(bytes)
+
+    def get_set(self) -> set:
+        self._assert_type(set)
+        return self.raw
+
+    def is_set(self) -> bool:
+        return self.is_of_type(set)
+
+    def get_tuple(self) -> tuple:
+        self._assert_type(tuple)
+        return self.raw
+
+    def is_tuple(self) -> bool:
+        return self.is_of_type(tuple)
