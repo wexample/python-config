@@ -46,7 +46,7 @@ class ConfigValue(BaseModel):
     def execute_nested_method(self, method: Callable[[], Any]) -> Any:
         if isinstance(self.raw, ConfigValue):
             return getattr(self.raw, method.__name__)(type_check=False)
-        return method()
+        return self.raw
 
     def resolve_nested(self) -> "ConfigValue":
         if isinstance(self.raw, ConfigValue):
