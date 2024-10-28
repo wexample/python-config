@@ -4,11 +4,9 @@ from pydantic import BaseModel
 from wexample_config.const.types import DictConfig
 from wexample_config.option.abstract_option import AbstractOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
-from wexample_config.src.config_manager import ConfigManager
 
 
 class MultipleOptionsProvidersMixin(BaseModel):
-    config_manager: Optional[ConfigManager] = None
     options: Dict[str, AbstractOption] = {}
 
     def __init__(self, config: Optional[DictConfig] = None, **data):
@@ -23,8 +21,6 @@ class MultipleOptionsProvidersMixin(BaseModel):
         return config or {}
 
     def configure(self, config: Optional[DictConfig]) -> None:
-        from wexample_config.src.config_manager import ConfigManager
-
         options = self.get_all_options()
         valid_option_names = {option_class.get_name() for option_class in options}
 
@@ -44,8 +40,6 @@ class MultipleOptionsProvidersMixin(BaseModel):
                 self.options[option_name] = option_class(
                     value=config[option_name]
                 )
-
-        self.config_manager = ConfigManager(config=config)
 
     @abstractmethod
     def get_options_providers(self) -> List[Type["AbstractOptionsProvider"]]:
