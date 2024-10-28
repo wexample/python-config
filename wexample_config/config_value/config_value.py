@@ -60,6 +60,9 @@ class ConfigValue(BaseModel):
         return self.raw is None
 
     # Type checking methods
+    def is_callable(self) -> bool:
+        return self.is_of_type(Callable, self._get_nested_raw())
+
     def is_str(self) -> bool:
         return self.is_of_type(str, self._get_nested_raw())
 
@@ -102,6 +105,9 @@ class ConfigValue(BaseModel):
         self._assert_type(expected_type, value, type_check)
         return value
 
+    def get_callable(self, type_check: bool = True) -> Callable:
+        return self._get_value(Callable, self.get_callable, type_check)
+
     def get_str(self, type_check: bool = True) -> str:
         return self._get_value(str, self.get_str, type_check)
 
@@ -133,6 +139,10 @@ class ConfigValue(BaseModel):
         return self._get_value(tuple, self.get_tuple, type_check)
 
     # Setters
+    def set_callable(self, value: Callable, type_check: bool = True) -> None:
+        self._assert_type(Callable, value, type_check)
+        self.raw = value
+
     def set_str(self, value: str, type_check: bool = True) -> None:
         self._assert_type(str, value, type_check)
         self.raw = value
@@ -174,6 +184,9 @@ class ConfigValue(BaseModel):
         self.raw = value
 
     # Conversion methods
+    def to_callable(self) -> Callable:
+        return self.execute_nested_method(self.get_callable)
+
     def to_str(self) -> str:
         return str(self.execute_nested_method(self.get_str))
 

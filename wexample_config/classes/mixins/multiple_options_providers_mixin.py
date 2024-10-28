@@ -6,6 +6,7 @@ from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
 from wexample_config.option.abstract_option import AbstractOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
+from wexample_filestate.config_value.callback_option_value import CallbackOptionValue
 
 
 class MultipleOptionsProvidersMixin(BaseModel):
@@ -33,6 +34,15 @@ class MultipleOptionsProvidersMixin(BaseModel):
         # This will modify config before using it, with extra configuration keys.
         for option_class in options:
             config = option_class.resolve_config(config)
+
+        # Resolve callables and process children recursively
+        for key, value in list(config.items()):
+            from types import FunctionType
+
+            if isinstance(value, FunctionType):
+                config[key] = value(self, config)
+            elif isinstance(value, CallbackOptionValue):
+                config[key] = value.get_callable()(self, config)
 
         for option_class in options:
             option_name = option_class.get_name()
