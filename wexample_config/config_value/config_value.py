@@ -72,6 +72,12 @@ class ConfigValue(BaseModel):
     def is_bool(self) -> bool:
         return self.is_of_type(bool, self._get_nested_raw())
 
+    def is_false(self) -> bool:
+        return self.get_bool() == False
+
+    def is_true(self) -> bool:
+        return self.get_bool() == True
+
     def is_complex(self) -> bool:
         return self.is_of_type(complex, self._get_nested_raw())
 
