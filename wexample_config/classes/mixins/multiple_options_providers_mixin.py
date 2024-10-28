@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, Type, cast, Optional, Dict, Any
+from typing import List, Type, cast, Optional, Dict, Any, Union
 from pydantic import BaseModel
 
 from wexample_config.config_value.config_value import ConfigValue
@@ -11,7 +11,7 @@ from wexample_config.options_provider.abstract_options_provider import AbstractO
 class MultipleOptionsProvidersMixin(BaseModel):
     options: Dict[str, AbstractOption] = {}
 
-    def autoconfigure(self, config: Optional[DictConfig] = None):
+    def autoconfigure(self, config: Optional[Union[DictConfig]] = None):
         config = self.build_config(config)
 
         if config:
