@@ -1,6 +1,8 @@
 from abc import abstractmethod
 from typing import List, Type, cast, Optional, Dict, Any
 from pydantic import BaseModel
+
+from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
 from wexample_config.option.abstract_option import AbstractOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
@@ -62,9 +64,9 @@ class MultipleOptionsProvidersMixin(BaseModel):
 
         return None
 
-    def get_option_value(self, option_type: Type["AbstractOption"], default: Any = None) -> Any:
+    def get_option_value(self, option_type: Type["AbstractOption"], default: Any = None) -> ConfigValue:
         option = self.get_option(option_type)
         if option:
             return option.value
 
-        return default
+        return ConfigValue(raw=default)
