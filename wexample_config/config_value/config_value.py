@@ -1,4 +1,4 @@
-from typing import Any, Type
+from typing import Any, Type, Callable
 from pydantic import BaseModel
 from wexample_helpers.const.types import StringKeysDict, AnyList
 from wexample_config.exception.option import InvalidOptionValueTypeException
@@ -39,9 +39,14 @@ class ConfigValue(BaseModel):
     def is_of_type(self, value_type: Type, value: Any) -> bool:
         return isinstance(value, value_type)
 
-    def _assert_type(self, expected_type: Type, value: Any) -> None:
-        if not self.is_of_type(expected_type, value):
+    def _assert_type(self, expected_type: Type, value: Any, type_check: bool = True) -> None:
+        if type_check and not self.is_of_type(expected_type, value):
             raise TypeError(f'Expected {expected_type} but got {type(value)}')
+
+    def execute_nested_method(self, method: Callable[[], Any]) -> Any:
+        if isinstance(self.raw, ConfigValue):
+            return getattr(self.raw, method.__name__)(type_check=False)
+        return method()
 
     def resolve_nested(self) -> "ConfigValue":
         if isinstance(self.raw, ConfigValue):
@@ -86,83 +91,68 @@ class ConfigValue(BaseModel):
         return self.is_of_type(tuple, self._get_nested_raw())
 
     # Getter methods
-    def get_str(self) -> str:
-        value = self._get_nested_raw()
-        self._assert_type(str, value)
+    def _get_value(self, expected_type: Type, method: Callable[[], Any], type_check: bool = True) -> Any:
+        value = self.execute_nested_method(method)
+        self._assert_type(expected_type, value, type_check)
         return value
 
-    def get_int(self) -> int:
-        value = self._get_nested_raw()
-        self._assert_type(int, value)
-        return value
+    def get_str(self, type_check: bool = True) -> str:
+        return self._get_value(str, self.get_str, type_check)
 
-    def get_float(self) -> float:
-        value = self._get_nested_raw()
-        self._assert_type(float, value)
-        return value
+    def get_int(self, type_check: bool = True) -> int:
+        return self._get_value(int, self.get_int, type_check)
 
-    def get_bool(self) -> bool:
-        value = self._get_nested_raw()
-        self._assert_type(bool, value)
-        return value
+    def get_float(self, type_check: bool = True) -> float:
+        return self._get_value(float, self.get_float, type_check)
 
-    def get_complex(self) -> complex:
-        value = self._get_nested_raw()
-        self._assert_type(complex, value)
-        return value
+    def get_bool(self, type_check: bool = True) -> bool:
+        return self._get_value(bool, self.get_bool, type_check)
 
-    def get_bytes(self) -> bytes:
-        value = self._get_nested_raw()
-        self._assert_type(bytes, value)
-        return value
+    def get_complex(self, type_check: bool = True) -> complex:
+        return self._get_value(complex, self.get_complex, type_check)
 
-    def get_dict(self) -> StringKeysDict:
-        value = self._get_nested_raw()
-        self._assert_type(dict, value)
-        return value
+    def get_bytes(self, type_check: bool = True) -> bytes:
+        return self._get_value(bytes, self.get_bytes, type_check)
 
-    def get_list(self) -> AnyList:
-        value = self._get_nested_raw()
-        self._assert_type(list, value)
-        return value
+    def get_dict(self, type_check: bool = True) -> StringKeysDict:
+        return self._get_value(dict, self.get_dict, type_check)
 
-    def get_set(self) -> set:
-        value = self._get_nested_raw()
-        self._assert_type(set, value)
-        return value
+    def get_list(self, type_check: bool = True) -> AnyList:
+        return self._get_value(list, self.get_list, type_check)
 
-    def get_tuple(self) -> tuple:
-        value = self._get_nested_raw()
-        self._assert_type(tuple, value)
-        return value
+    def get_set(self, type_check: bool = True) -> set:
+        return self._get_value(set, self.get_set, type_check)
+
+    def get_tuple(self, type_check: bool = True) -> tuple:
+        return self._get_value(tuple, self.get_tuple, type_check)
 
     # Conversion methods
     def to_str(self) -> str:
-        return str(self._get_nested_raw())
+        return str(self.execute_nested_method(self.get_str))
 
     def to_int(self) -> int:
-        return int(self._get_nested_raw())
+        return int(self.execute_nested_method(self.get_int))
 
     def to_float(self) -> float:
-        return float(self._get_nested_raw())
+        return float(self.execute_nested_method(self.get_float))
 
     def to_bool(self) -> bool:
-        return bool(self._get_nested_raw())
+        return bool(self.execute_nested_method(self.get_bool))
 
     def to_complex(self) -> complex:
-        return complex(self._get_nested_raw())
+        return complex(self.execute_nested_method(self.get_complex))
 
     def to_bytes(self) -> bytes:
-        return bytes(self._get_nested_raw())
+        return bytes(self.execute_nested_method(self.get_bytes))
 
     def to_dict(self) -> StringKeysDict:
-        return dict(self._get_nested_raw())
+        return dict(self.execute_nested_method(self.get_dict))
 
     def to_list(self) -> AnyList:
-        return list(self._get_nested_raw())
+        return list(self.execute_nested_method(self.get_list))
 
     def to_set(self) -> set:
-        return set(self._get_nested_raw())
+        return set(self.execute_nested_method(self.get_set))
 
     def to_tuple(self) -> tuple:
-        return tuple(self._get_nested_raw())
+        return tuple(self.execute_nested_method(self.get_tuple))
