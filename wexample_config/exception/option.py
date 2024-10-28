@@ -2,5 +2,5 @@ class InvalidOptionException(Exception):
     pass
 
 
-class InvalidOptionTypeException(Exception):
+class InvalidOptionValueTypeException(Exception):
     pass
