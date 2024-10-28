@@ -126,6 +126,47 @@ class ConfigValue(BaseModel):
     def get_tuple(self, type_check: bool = True) -> tuple:
         return self._get_value(tuple, self.get_tuple, type_check)
 
+    # Setters
+    def set_str(self, value: str, type_check: bool = True) -> None:
+        self._assert_type(str, value, type_check)
+        self.raw = value
+
+    def set_int(self, value: int, type_check: bool = True) -> None:
+        self._assert_type(int, value, type_check)
+        self.raw = value
+
+    def set_float(self, value: float, type_check: bool = True) -> None:
+        self._assert_type(float, value, type_check)
+        self.raw = value
+
+    def set_bool(self, value: bool, type_check: bool = True) -> None:
+        self._assert_type(bool, value, type_check)
+        self.raw = value
+
+    def set_complex(self, value: complex, type_check: bool = True) -> None:
+        self._assert_type(complex, value, type_check)
+        self.raw = value
+
+    def set_bytes(self, value: bytes, type_check: bool = True) -> None:
+        self._assert_type(bytes, value, type_check)
+        self.raw = value
+
+    def set_dict(self, value: StringKeysDict, type_check: bool = True) -> None:
+        self._assert_type(dict, value, type_check)
+        self.raw = value
+
+    def set_list(self, value: AnyList, type_check: bool = True) -> None:
+        self._assert_type(list, value, type_check)
+        self.raw = value
+
+    def set_set(self, value: set, type_check: bool = True) -> None:
+        self._assert_type(set, value, type_check)
+        self.raw = value
+
+    def set_tuple(self, value: tuple, type_check: bool = True) -> None:
+        self._assert_type(tuple, value, type_check)
+        self.raw = value
+
     # Conversion methods
     def to_str(self) -> str:
         return str(self.execute_nested_method(self.get_str))
