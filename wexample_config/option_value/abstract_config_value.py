@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from types import UnionType
 from typing import Any, Type
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from wexample_helpers.const.types import StringKeysDict, AnyList
 
@@ -11,7 +11,9 @@ class AbstractConfigValue(BaseModel):
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
+        self._validate_raw_type()
 
+    def _validate_raw_type(self):
         value_type = self.get_value_type()
 
         if hasattr(value_type, '__args__'):
