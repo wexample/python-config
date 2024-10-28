@@ -2,8 +2,8 @@ from abc import abstractmethod
 from types import UnionType
 from typing import Any, Type
 from pydantic import BaseModel, validator
-
 from wexample_helpers.const.types import StringKeysDict, AnyList
+from wexample_config.exception.option import InvalidOptionValueTypeException
 
 
 class AbstractConfigValue(BaseModel):
@@ -11,45 +11,36 @@ class AbstractConfigValue(BaseModel):
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        self._validate_raw_type()
+        self._validate_value_type(self.raw)
 
-    def _validate_raw_type(self):
-        value_type = self.get_value_type()
+    def _validate_value_type(self, value: Any):
+        expected_type = self.get_value_type()
 
-        if hasattr(value_type, '__args__'):
-            expected_types = value_type.__args__
+        if hasattr(expected_type, '__args__'):
+            expected_types = expected_type.__args__
         else:
-            expected_types = (value_type,)
+            expected_types = (expected_type,)
 
-        valid = False
-        for expected_type in expected_types:
-            if isinstance(expected_type, type):
-                if isinstance(self.raw, expected_type) or (
-                    isinstance(self.raw, type) and issubclass(self.raw, expected_type)):
-                    valid = True
-                    break
-            else:
-                if isinstance(self.raw, expected_type):
-                    valid = True
-                    break
-
-        if not valid:
-            from wexample_config.exception.option import InvalidOptionValueTypeException
+        if not any(isinstance(value, t) for t in expected_types):
             raise InvalidOptionValueTypeException(
-                f'Invalid type for value "{type(self.raw)}": '
-                f'expected {value_type}')
+                f'Invalid type for value "{type(value)}": expected {expected_type}'
+            )
+        return value
 
     @staticmethod
     @abstractmethod
     def get_value_type() -> Type | UnionType:
         pass
 
-    def is_of_type(self, value_type: type) -> bool:
+    def is_of_type(self, value_type: Type) -> bool:
         return isinstance(self.raw, value_type)
 
-    def get_str(self) -> str:
-        assert self.is_of_type(str)
+    def _assert_type(self, expected_type: Type) -> None:
+        if self.is_of_type(expected_type):
+            raise TypeError(f'Expected {expected_type} but got {type(self.raw)}')
 
+    def get_str(self) -> str:
+        self._assert_type(int)
         return self.raw
 
     def is_none(self) -> bool:
@@ -59,35 +50,35 @@ class AbstractConfigValue(BaseModel):
         return self.is_of_type(str)
 
     def get_int(self) -> int:
-        assert self.is_of_type(int)
+        self._assert_type(int)
         return self.raw
 
     def is_int(self) -> bool:
         return self.is_of_type(int)
 
     def get_dict(self) -> StringKeysDict:
-        assert self.is_of_type(dict)
+        self._assert_type(dict)
         return self.raw
 
     def is_dict(self) -> bool:
         return self.is_of_type(dict)
 
     def get_list(self) -> AnyList:
-        assert self.is_of_type(list)
+        self._assert_type(list)
         return self.raw
 
     def is_list(self) -> bool:
         return self.is_of_type(list)
 
     def get_float(self) -> float:
-        assert self.is_of_type(float)
+        self._assert_type(float)
         return self.raw
 
     def is_float(self) -> bool:
         return self.is_of_type(float)
 
     def get_bool(self) -> bool:
-        assert self.is_of_type(bool)
+        self._assert_type(bool)
         return self.raw
 
     def is_bool(self) -> bool:
