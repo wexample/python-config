@@ -11,6 +11,12 @@ class ConfigValue(BaseModel):
         super().__init__(**data)
         self._validate_value_type(self.raw)
 
+    def __repr__(self) -> str:
+        return f"<{ConfigValue.__name__}(type={type(self.raw).__name__}, value={self.raw})>"
+
+    def __str__(self) -> str:
+        return f"{self.raw}"
+
     def _validate_value_type(self, value: Any):
         expected_type = self.get_value_type()
         if expected_type is Any:
