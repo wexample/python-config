@@ -13,7 +13,7 @@ class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     def __init__(self, value: Any, **data) -> None:
         super().__init__(**data)
 
-        self.value = (self.get_value_class_type())(raw=value)
+        self.value = (self.get_value_class_type())(raw=value) if not isinstance(value, ConfigValue) else value
 
     def get_value_class_type(self) -> Type:
         return ConfigValue
@@ -33,4 +33,3 @@ class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     @staticmethod
     def get_value_allowed_type() -> Type | UnionType:
         return ConfigValue
-
