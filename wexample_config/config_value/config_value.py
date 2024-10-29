@@ -1,4 +1,4 @@
-from typing import Any, Type, Callable, Union, get_origin, get_args
+from typing import Any, Type, Callable, Union, get_origin, get_args, List, Dict
 from pydantic import BaseModel
 from wexample_helpers.const.types import StringKeysDict, AnyList
 from wexample_config.exception.option import InvalidOptionValueTypeException
@@ -21,7 +21,7 @@ class ConfigValue(BaseModel):
         return f"{self.__repr__}"
 
     @classmethod
-    def flatten_union_types(cls, allowed_type: Type) -> set[Type]:
+    def flatten_union_types(cls, allowed_type: type) -> set[type]:
         """Recursively extract all base types from a potentially nested Union."""
         if get_origin(allowed_type) is Union:
             # Flatten all nested Union types into a set of base types
@@ -30,48 +30,26 @@ class ConfigValue(BaseModel):
         return {get_origin(allowed_type) or allowed_type}
 
     @classmethod
-    def validate_value_type(cls, raw_value: Any, allowed_type: Type) -> None:
+    def validate_value_type(cls, raw_value: Any, allowed_type: type) -> None:
+        from wexample_helpers.helpers.type_helper import type_is_generic, type_generic_value_is_valid
+
         if allowed_type is Any:
             return
 
-        allowed_types = cls.flatten_union_types(allowed_type)
-
         # Check if the raw value matches any allowed base type
-        for t in allowed_types:
-            origin = get_origin(t) or t
-            args = get_args(t)
-
-            print(f"Checking type {t} with origin {origin} and args {args}")
-
-            # Check isinstance for non-generic types
-            if origin is None:
-                if isinstance(raw_value, t):
-                    return
-
-            # Validate generic types
-            elif cls._validate_generic(raw_value, origin, args):
+        if not type_is_generic(allowed_type):
+            # Explicit check for simple types without get_origin
+            if isinstance(raw_value, allowed_type):
                 return
 
-        # Raise an error if no type matches
-        allowed_types_str = ", ".join(t.__name__ for t in allowed_types)
+        # Handle generic types
+        if type_generic_value_is_valid(raw_value, allowed_type):
+            return
+
+        # If none of the checks passed, raise an exception
         raise InvalidOptionValueTypeException(
-            f"Invalid type for value \"{type(raw_value).__name__}\", allowed types: {allowed_types_str}"
+            f"Invalid type for value \"{type(raw_value).__name__}\", allowed types: {allowed_type}"
         )
-
-    @classmethod
-    def _validate_generic(cls, raw_value: Any, origin: type, args: tuple[type, ...]) -> bool:
-        """Helper to validate parameter types for generics like Dict, List, etc."""
-        if origin is dict and len(args) == 2:
-            # Validate key and value types for dicts
-            return all(isinstance(k, args[0]) and isinstance(v, args[1]) for k, v in raw_value.items())
-        elif origin is list and len(args) == 1:
-            # Validate item types for lists
-            return all(isinstance(item, args[0]) for item in raw_value)
-        elif origin is tuple and len(args) > 0:
-            # Validate item types for tuples
-            return len(raw_value) == len(args) and all(isinstance(item, arg) for item, arg in zip(raw_value, args))
-        return False
-
 
     @staticmethod
     def get_allowed_types() -> Any:
