@@ -38,8 +38,9 @@ class ConfigValue(BaseModel):
 
         # Validate against each allowed type, simplified with base types precomputed
         if not any(isinstance(raw_value, t) for t in allowed_types):
+            allowed_types_str = ", ".join(t.__name__ for t in allowed_types)  # Format allowed types as a string
             raise InvalidOptionValueTypeException(
-                f"Invalid type for value \"{type(raw_value)}\", allowed types: {allowed_types}"
+                f"Invalid type for value \"{type(raw_value).__name__}\", allowed types: {allowed_types_str}"
             )
 
     @staticmethod
