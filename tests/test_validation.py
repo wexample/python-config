@@ -1,5 +1,5 @@
 from types import NoneType
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
 
 import pytest
 
@@ -23,6 +23,7 @@ class TestConfigManager:
             ({}, Dict),
             ({"lorem": "ipsum"}, Dict[str, str]),
             ({"lorem": 123}, Dict[str, int]),
+            ({}, Union[str, Dict[str, Any]])
         ]
 
         failure_cases = [
@@ -32,6 +33,7 @@ class TestConfigManager:
             ({}, list),
             ([], dict),
             ({"lorem": 123}, Dict[str, str]),
+            (123, Union[str, Dict[str, Any]])
         ]
 
         # Success cases: should not raise exceptions

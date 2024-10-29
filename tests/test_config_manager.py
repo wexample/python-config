@@ -83,15 +83,27 @@ class TestConfigManager:
         assert self.test_object.get_option(DemoCustomValueConfigOption).value.is_str()
 
     def test_configure_nested_dict_type(self):
-        self.test_object.configure({
-            "demo_dict": {
-                "lorem": "ipsum",
-                "dolor": ["sit"],
-                "amet": {
-                    "this_is_a_bool": True,
-                    "this_is_an_int": 123
+        self.test_object.configure(
+            nested=True,
+            config={
+                "demo_dict": {
+                    "name": "FIRST_LEVEL_DICT",
+                    "lorem": "ipsum",
+                    "dolor": ["sit"],
+                    "demo_union": 123,
+                    "demo_dict": {
+                        "name": "SECOND_LEVEL_DICT",
+                        "this_is_a_bool": True,
+                        "this_is_an_int": 123,
+                        "demo_list": [],
+                        "demo_custom_value": CustomTypeConfigValue(raw="yeah")
+                    }
                 }
             }
-        })
+        )
 
         assert self.test_object.get_option(DemoDictConfigOption).value.is_dict()
+        option = self.test_object.get_option(DemoDictConfigOption)
+
+        assert option.value.is_dict()
+
