@@ -2,6 +2,7 @@ import pytest
 
 from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
 from wexample_config.option.demo_custom_value_config_option import DemoCustomValueConfigOption
+from wexample_config.option.demo_dict_config_option import DemoDictConfigOption
 from wexample_config.option.demo_list_config_option import DemoListConfigOption
 from wexample_config.option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.src.demo_config_class import DemoConfigClass
@@ -83,5 +84,14 @@ class TestConfigManager:
 
     def test_configure_nested_dict_type(self):
         self.test_object.configure({
-            "demo_dict": {}
+            "demo_dict": {
+                "lorem": "ipsum",
+                "dolor": ["sit"],
+                "amet": {
+                    "this_is_a_bool": True,
+                    "this_is_an_int": 123
+                }
+            }
         })
+
+        assert self.test_object.get_option(DemoDictConfigOption).value.is_dict()
