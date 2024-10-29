@@ -27,7 +27,7 @@ class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         return cls.get_snake_short_class_name()
 
     @staticmethod
-    def resolve_config(config: "DictConfig") -> "DictConfig":
+    def resolve_config(config: DictConfig) -> DictConfig:
         return config
 
     @staticmethod
