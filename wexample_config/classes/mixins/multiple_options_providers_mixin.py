@@ -1,12 +1,14 @@
 from abc import abstractmethod
-from typing import List, Type, cast, Optional, Dict, Any, Union
+from typing import List, Type, cast, Optional, Dict, Any, Union, TYPE_CHECKING
 from pydantic import BaseModel
 
-from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
 from wexample_config.option.abstract_option import AbstractOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
 from wexample_filestate.config_value.callback_option_value import CallbackOptionValue
+
+if TYPE_CHECKING:
+    from wexample_filestate.config_value.item_config_value import ItemConfigValue
 
 
 class MultipleOptionsProvidersMixin(BaseModel):
@@ -72,9 +74,11 @@ class MultipleOptionsProvidersMixin(BaseModel):
 
         return None
 
-    def get_option_value(self, option_type: Type["AbstractOption"], default: Any = None) -> ConfigValue:
+    def get_option_value(self, option_type: Type["AbstractOption"], default: Any = None) -> "ItemConfigValue":
+        from wexample_filestate.config_value.item_config_value import ItemConfigValue
+
         option = self.get_option(option_type)
         if option:
-            return option.value
+            return cast("ItemConfigValue", option.value)
 
-        return ConfigValue(raw=default)
+        return ItemConfigValue(raw=default)
