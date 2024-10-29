@@ -1,4 +1,4 @@
-from typing import Any, Type, Callable, List, Union
+from typing import Any, Type, Callable, Union, get_origin, get_args
 from pydantic import BaseModel
 from wexample_helpers.const.types import StringKeysDict, AnyList
 from wexample_config.exception.option import InvalidOptionValueTypeException
@@ -21,23 +21,25 @@ class ConfigValue(BaseModel):
         return f"{self.__repr__}"
 
     @classmethod
-    def validate_value_type(
-        cls,
-        raw_value: Any,
-        allowed_type: Type
-    ) -> None:
-        from typing import Any, get_origin, get_args
+    def flatten_union_types(cls, allowed_type: Type) -> set[Type]:
+        """Recursively extract all base types from a potentially nested Union."""
+        if get_origin(allowed_type) is Union:
+            # Flatten all nested Union types into a set of base types
+            return {base for sub_type in get_args(allowed_type) for base in cls.flatten_union_types(sub_type)}
+        # Return the base type or its origin
+        return {get_origin(allowed_type) or allowed_type}
 
+    @classmethod
+    def validate_value_type(cls, raw_value: Any, allowed_type: Type) -> None:
         if allowed_type is Any:
             return
 
-        # Use get_args for modern type hint handling
-        origin_type = get_origin(allowed_type)
-        allowed_types = get_args(allowed_type) if origin_type is Union else (allowed_type,)
+        allowed_types = cls.flatten_union_types(allowed_type)
 
+        # Validate against each allowed type, simplified with base types precomputed
         if not any(isinstance(raw_value, t) for t in allowed_types):
             raise InvalidOptionValueTypeException(
-                f"Invalid type for value \"{type(raw_value)}\", allowed type: {allowed_type}"
+                f"Invalid type for value \"{type(raw_value)}\", allowed types: {allowed_types}"
             )
 
     @staticmethod
