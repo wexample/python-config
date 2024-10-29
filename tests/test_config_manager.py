@@ -1,6 +1,9 @@
 import pytest
 
 from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
+from wexample_config.option.demo_custom_value_config_option import DemoCustomValueConfigOption
+from wexample_config.option.demo_list_config_option import DemoListConfigOption
+from wexample_config.option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.src.demo_config_class import DemoConfigClass
 from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
 
@@ -46,6 +49,8 @@ class TestConfigManager:
             "demo_list": []
         })
 
+        assert self.test_object.get_option(DemoListConfigOption).value.is_list()
+
     def test_configure_union_type(self):
         with pytest.raises(InvalidOptionValueTypeException):
             self.test_object.configure({
@@ -56,9 +61,13 @@ class TestConfigManager:
             "demo_union": "hey"
         })
 
+        assert self.test_object.get_option(DemoUnionConfigOption).value.is_str()
+
         self.test_object.configure({
             "demo_union": {}
         })
+
+        assert self.test_object.get_option(DemoUnionConfigOption).value.is_dict()
 
     def test_configure_custom_value_type(self):
         with pytest.raises(InvalidOptionValueTypeException):
@@ -68,4 +77,11 @@ class TestConfigManager:
 
         self.test_object.configure({
             "demo_custom_value": CustomTypeConfigValue(raw="yeah")
+        })
+
+        assert self.test_object.get_option(DemoCustomValueConfigOption).value.is_str()
+
+    def test_configure_nested_dict_type(self):
+        self.test_object.configure({
+            "demo_dict": {}
         })

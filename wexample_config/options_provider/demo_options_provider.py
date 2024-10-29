@@ -1,6 +1,7 @@
 from typing import List, Type, TYPE_CHECKING
 
 from wexample_config.option.demo_custom_value_config_option import DemoCustomValueConfigOption
+from wexample_config.option.demo_dict_config_option import DemoDictConfigOption
 from wexample_config.option.demo_list_config_option import DemoListConfigOption
 from wexample_config.option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
@@ -16,6 +17,7 @@ class DemoOptionsProvider(AbstractOptionsProvider):
 
         return [
             DemoCustomValueConfigOption,
+            DemoDictConfigOption,
             DemoListConfigOption,
             DemoUnionConfigOption,
             NameConfigOption,
