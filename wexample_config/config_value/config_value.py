@@ -1,4 +1,4 @@
-from typing import Any, Type, Callable
+from typing import Any, Type, Callable, List, Union
 from pydantic import BaseModel
 from wexample_helpers.const.types import StringKeysDict, AnyList
 from wexample_config.exception.option import InvalidOptionValueTypeException
@@ -9,7 +9,10 @@ class ConfigValue(BaseModel):
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        self._validate_value_type(self.raw)
+        self.validate_value_type(
+            raw_value=self.raw,
+            allowed_type=self.get_allowed_types()
+        )
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}(type={type(self.raw).__name__}, value={self.raw})>"
@@ -17,23 +20,28 @@ class ConfigValue(BaseModel):
     def __str__(self) -> str:
         return f"{self.__repr__}"
 
-    def _validate_value_type(self, value: Any):
-        expected_type = self.get_value_type()
+    @classmethod
+    def validate_value_type(
+        cls,
+        raw_value: Any,
+        allowed_type: Type
+    ) -> None:
+        from typing import Any, get_origin, get_args
 
-        if expected_type is Any:
-            return value
-        if hasattr(expected_type, '__args__'):
-            expected_types = expected_type.__args__
-        else:
-            expected_types = (expected_type,)
-        if not any(isinstance(value, t) for t in expected_types):
+        if allowed_type is Any:
+            return
+
+        # Use get_args for modern type hint handling
+        origin_type = get_origin(allowed_type)
+        allowed_types = get_args(allowed_type) if origin_type is Union else (allowed_type,)
+
+        if not any(isinstance(raw_value, t) for t in allowed_types):
             raise InvalidOptionValueTypeException(
-                f'Invalid type for value "{type(value)}": expected {expected_type}'
+                f"Invalid type for value \"{type(raw_value)}\", allowed type: {allowed_type}"
             )
-        return value
 
     @staticmethod
-    def get_value_type() -> Any:
+    def get_allowed_types() -> Any:
         return Any
 
     def is_of_type(self, value_type: Type, value: Any) -> bool:

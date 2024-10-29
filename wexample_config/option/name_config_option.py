@@ -6,5 +6,5 @@ from wexample_config.option.abstract_config_option import AbstractConfigOption
 
 class NameConfigOption(AbstractConfigOption):
     @staticmethod
-    def get_value_type() -> Type | UnionType:
+    def get_value_allowed_type() -> Type | UnionType:
         return str

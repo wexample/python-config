@@ -13,9 +13,18 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     def __init__(self, value: Any, **data) -> None:
         super().__init__(**data)
 
-        self.value = (self.get_value_class_type())(raw=value) if not isinstance(value, ConfigValue) else value
+        config_value_class = self.get_value_class_type()
 
-    def get_value_class_type(self) -> Type:
+        # Check if value is valid for the config option,
+        # reuse same method to validate types.
+        config_value_class.validate_value_type(
+            raw_value=value,
+            allowed_type=self.get_value_allowed_type()
+        )
+
+        self.value = config_value_class(raw=value) if not isinstance(value, ConfigValue) else value
+
+    def get_value_class_type(self) -> Type[ConfigValue]:
         return ConfigValue
 
     @classmethod
