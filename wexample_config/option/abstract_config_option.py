@@ -7,7 +7,7 @@ from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import HasSnakeShortClassNameClassMixin
 
 
-class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
+class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     value: Optional[ConfigValue] = None
 
     def __init__(self, value: Any, **data) -> None:
@@ -20,7 +20,7 @@ class AbstractOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
 
     @classmethod
     def get_class_name_suffix(cls) -> Optional[str]:
-        return 'Option'
+        return 'ConfigOption'
 
     @classmethod
     def get_name(cls) -> str:

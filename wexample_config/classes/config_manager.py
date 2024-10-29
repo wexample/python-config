@@ -3,7 +3,7 @@ from typing import List, Type, cast, Optional, Dict, Any, Union, TYPE_CHECKING
 from pydantic import BaseModel
 
 from wexample_config.const.types import DictConfig
-from wexample_config.option.abstract_option import AbstractOption
+from wexample_config.option.abstract_config_option import AbstractConfigOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
 from wexample_filestate.config_value.callback_option_value import CallbackOptionValue
 
@@ -11,26 +11,25 @@ if TYPE_CHECKING:
     from wexample_filestate.config_value.item_config_value import ItemConfigValue
 
 
-class MultipleOptionsProvidersMixin(BaseModel):
-    options: Dict[str, AbstractOption] = {}
-
-    def autoconfigure(self, config: Optional[Union[DictConfig]] = None):
-        config = self.build_config(config)
-
-        if config:
-            self.configure(config)
+class ConfigManager(BaseModel):
+    options: Dict[str, AbstractConfigOption] = {}
 
     def build_config(self, config: Optional[DictConfig] = None) -> DictConfig:
         return config or {}
 
     def configure(self, config: Optional[DictConfig]) -> None:
+        config = self.build_config(config)
         options = self.get_all_options()
         valid_option_names = {option_class.get_name() for option_class in options}
 
         unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
             from wexample_config.exception.option import InvalidOptionException
-            raise InvalidOptionException(f'Unknown configuration option name: {unknown_keys}')
+
+            raise InvalidOptionException(
+                f"Unknown configuration option name: {', '.join(sorted(unknown_keys))}, "
+                f"allowed options are: {', '.join(valid_option_names)}"
+            )
 
         # Loop over options classes to execute option_class.resolve_config(config)
         # This will modify config before using it, with extra configuration keys.
@@ -57,7 +56,7 @@ class MultipleOptionsProvidersMixin(BaseModel):
     def get_options_providers(self) -> List[Type["AbstractOptionsProvider"]]:
         pass
 
-    def get_all_options(self) -> List[Type["AbstractOption"]]:
+    def get_all_options(self) -> List[Type["AbstractConfigOption"]]:
         providers = self.get_options_providers()
         options = []
 
@@ -66,7 +65,7 @@ class MultipleOptionsProvidersMixin(BaseModel):
 
         return options
 
-    def get_option(self, option_type: Type["AbstractOption"]) -> Optional["AbstractOption"]:
+    def get_option(self, option_type: Type["AbstractConfigOption"]) -> Optional["AbstractConfigOption"]:
         option_name = option_type.get_name()
 
         if option_name in self.options:
@@ -74,7 +73,7 @@ class MultipleOptionsProvidersMixin(BaseModel):
 
         return None
 
-    def get_option_value(self, option_type: Type["AbstractOption"], default: Any = None) -> "ItemConfigValue":
+    def get_option_value(self, option_type: Type["AbstractConfigOption"], default: Any = None) -> "ItemConfigValue":
         from wexample_filestate.config_value.item_config_value import ItemConfigValue
 
         option = self.get_option(option_type)

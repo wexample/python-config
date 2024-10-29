@@ -1,10 +1,10 @@
 from typing import Type
 from types import UnionType
 
-from wexample_config.option.abstract_option import AbstractOption
+from wexample_config.option.abstract_config_option import AbstractConfigOption
 
 
-class NameOption(AbstractOption):
+class NameConfigOption(AbstractConfigOption):
     @staticmethod
     def get_value_type() -> Type | UnionType:
         return str
