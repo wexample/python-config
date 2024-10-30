@@ -57,3 +57,6 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
         return Any
+
+    def dump(self) -> Any:
+        return self.value.raw

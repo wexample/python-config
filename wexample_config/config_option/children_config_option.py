@@ -6,6 +6,8 @@ from wexample_config.config_option.abstract_nested_config_option import Abstract
 
 
 class ChildrenConfigOption(AbstractNestedConfigOption):
+    children: List["AbstractConfigOption"] = []
+
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
         return List[dict[str, Any]]
@@ -21,4 +23,19 @@ class ChildrenConfigOption(AbstractNestedConfigOption):
             return
 
         for child_config in raw_value:
-            self.create_child(child_config=child_config)
+            self.children.append(
+                AbstractNestedConfigOption(
+                    value=child_config,
+                    parent=self
+                )
+            )
+
+    def dump(self) -> Any:
+        output = []
+
+        for child in self.children:
+            print(child.get_name())
+
+            output.append(child.dump())
+
+        return output

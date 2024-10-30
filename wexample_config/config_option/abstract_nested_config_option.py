@@ -31,7 +31,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         self.create_child(child_config=raw_value)
 
-    def create_child(self, child_config: DictConfig) -> None:
+    def create_child(self, child_config: DictConfig) -> List["AbstractConfigOption"]:
         options = self.get_available_options()
         valid_option_names = {option_class.get_name() for option_class in options}
 
@@ -56,12 +56,17 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             if isinstance(child_raw_value, CallbackRenderConfigValue):
                 child_config[key] = child_raw_value.render()
 
+        new_options = []
         for option_class in options:
             option_name = option_class.get_name()
             if option_name in child_config:
                 self.options[option_name] = option_class(
                     value=child_config[option_name], parent=self
                 )
+
+                new_options.append(self.options[option_name])
+
+        return new_options
 
     def get_options_providers(self) -> list[type["AbstractOptionsProvider"]]:
         if self.parent:
