@@ -1,5 +1,6 @@
 import pytest
 
+from wexample_config.demo.config_option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
 from wexample_config.config_option.name_config_option import NameConfigOption
@@ -54,3 +55,21 @@ class TestConfigManager:
         })
 
         assert self.config_manager.get_option(DemoListConfigOption).value.is_list()
+
+    def test_configure_union_type(self):
+        with pytest.raises(InvalidOptionValueTypeException):
+            self.config_manager.set_value({
+                "demo_union": 123
+            })
+
+        self.config_manager.set_value({
+            "demo_union": "hey"
+        })
+
+        assert self.config_manager.get_option(DemoUnionConfigOption).value.is_str()
+
+        self.config_manager.set_value({
+            "demo_union": {}
+        })
+
+        assert self.config_manager.get_option(DemoUnionConfigOption).value.is_dict()
