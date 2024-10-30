@@ -27,13 +27,10 @@ class ConfigValue(BaseModel):
     def validate_value_type(
         cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
-        try:
-            type_validate_or_fail(
-                value=raw_value,
-                allowed_type=allowed_type,
-            )
-        except TypeError as e:
-            raise BadConfigurationClassTypeException(f"{cls}: {e}")
+        type_validate_or_fail(
+            value=raw_value,
+            allowed_type=allowed_type,
+        )
 
     @staticmethod
     def get_allowed_types() -> Any:

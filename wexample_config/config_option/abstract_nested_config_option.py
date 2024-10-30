@@ -4,6 +4,7 @@ from wexample_config.config_option.abstract_config_option import AbstractConfigO
 from wexample_config.config_value.callback_render_config_value import (
     CallbackRenderConfigValue,
 )
+from wexample_config.const.types import DictConfig
 from wexample_config.options_provider.abstract_options_provider import (
     AbstractOptionsProvider,
 )
@@ -28,11 +29,14 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         if raw_value is None:
             return
 
+        self.create_child(child_config=raw_value)
+
+    def create_child(self, child_config: DictConfig) -> None:
         options = self.get_available_options()
         valid_option_names = {option_class.get_name() for option_class in options}
 
         if not self.allow_undefined_keys:
-            unknown_keys = set(raw_value.keys()) - valid_option_names
+            unknown_keys = set(child_config.keys()) - valid_option_names
             if unknown_keys:
                 from wexample_config.exception.option import InvalidOptionException
 
@@ -45,18 +49,18 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         # Loop over options classes to execute option_class.resolve_config(config)
         # This will modify config before using it, with extra configuration keys.
         for option_class in options:
-            raw_value = option_class.resolve_config(raw_value)
+            child_config = option_class.resolve_config(child_config)
 
         # Resolve callables and process children recursively
-        for key, child_raw_value in list(raw_value.items()):
+        for key, child_raw_value in list(child_config.items()):
             if isinstance(child_raw_value, CallbackRenderConfigValue):
-                raw_value[key] = child_raw_value.render()
+                child_config[key] = child_raw_value.render()
 
         for option_class in options:
             option_name = option_class.get_name()
-            if option_name in raw_value:
+            if option_name in child_config:
                 self.options[option_name] = option_class(
-                    value=raw_value[option_name], parent=self
+                    value=child_config[option_name], parent=self
                 )
 
     def get_options_providers(self) -> list[type["AbstractOptionsProvider"]]:
