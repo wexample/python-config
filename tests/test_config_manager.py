@@ -43,10 +43,10 @@ class TestConfigManager:
     def test_configure_name(self):
         self.config_manager.set_value({"name": "yes", "children": []})
 
-        assert self.config_manager.value.is_dict()
+        assert self.config_manager.get_value().is_dict()
         assert self.config_manager.get_name() == "demo_config_manager"
         assert len(self.config_manager.options)
-        assert self.config_manager.get_option("name").value.is_str()
+        assert self.config_manager.get_option("name").get_value().is_str()
         assert self.config_manager.get_option_value(NameConfigOption).get_str() == "yes"
         assert self.config_manager.get_option_value(ChildrenConfigOption).is_list()
 
@@ -56,7 +56,7 @@ class TestConfigManager:
 
         self.config_manager.set_value({"name": CallbackRenderConfigValue(raw=_name)})
 
-        assert self.config_manager.get_option("name").value.is_str()
+        assert self.config_manager.get_option("name").get_value().is_str()
 
     def test_configure_unexpected(self):
         with pytest.raises(InvalidOptionException):
@@ -75,7 +75,7 @@ class TestConfigManager:
 
         self.config_manager.set_value({"demo_list": []})
 
-        assert self.config_manager.get_option(DemoListConfigOption).value.is_list()
+        assert self.config_manager.get_option(DemoListConfigOption).get_value().is_list()
 
     def test_configure_union_type(self):
         with pytest.raises(InvalidOptionValueTypeException):
@@ -83,11 +83,11 @@ class TestConfigManager:
 
         self.config_manager.set_value({"demo_union": "hey"})
 
-        assert self.config_manager.get_option(DemoUnionConfigOption).value.is_str()
+        assert self.config_manager.get_option(DemoUnionConfigOption).get_value().is_str()
 
         self.config_manager.set_value({"demo_union": {}})
 
-        assert self.config_manager.get_option(DemoUnionConfigOption).value.is_dict()
+        assert self.config_manager.get_option(DemoUnionConfigOption).get_value().is_dict()
 
     def test_configure_custom_value_type(self):
         with pytest.raises(InvalidOptionValueTypeException):
@@ -101,9 +101,9 @@ class TestConfigManager:
 
         assert self.config_manager.get_option(
             DemoCustomValueConfigOption
-        ).value.is_str()
+        ).get_value().is_str()
         assert (
-            self.config_manager.get_option(DemoCustomValueConfigOption).value.get_str()
+            self.config_manager.get_option(DemoCustomValueConfigOption).get_value().get_str()
             == "yeah"
         )
 
@@ -122,7 +122,7 @@ class TestConfigManager:
 
         assert self.config_manager.get_option(
             DemoExtensibleConfigOption
-        ).value.is_dict()
+        ).get_value().is_dict()
 
         # Unexpected option fails on current
         with pytest.raises(InvalidOptionException):
@@ -157,7 +157,7 @@ class TestConfigManager:
         )
 
         # Main dict is saved
-        assert isinstance(self.config_manager.value.get_dict(), dict)
+        assert isinstance(self.config_manager.get_value().get_dict(), dict)
 
         option = self.config_manager.get_option(DemoNestedConfigOption)
         assert isinstance(option, DemoNestedConfigOption)
@@ -166,4 +166,4 @@ class TestConfigManager:
         option = self.config_manager.get_option_recursive(DemoDictConfigOption)
 
         assert isinstance(option, DemoDictConfigOption)
-        assert isinstance(option.value.get_dict().get("lorem"), dict)
+        assert isinstance(option.get_value().get_dict().get("lorem"), dict)
