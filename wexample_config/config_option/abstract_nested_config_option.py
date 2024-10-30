@@ -1,20 +1,38 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
+from types import UnionType
+from typing import Any, Dict, List, Optional, Type, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
+
 
 class AbstractNestedConfigOption(AbstractConfigOption):
     options: Dict[str, AbstractConfigOption] = {}
     parent: Optional["AbstractNestedConfigOption"] = None
     options_providers: Optional[List[Type["AbstractOptionsProvider"]]] = None
 
+    @staticmethod
+    def get_raw_value_allowed_type() -> Type | UnionType:
+        return Dict[str, Any]
+
     def set_value(self, raw_value: Any) -> None:
         super().set_value(raw_value)
 
-        options = self.get_all_available_options()
-
         if self.value is None:
             return
+
+        options = self.get_available_options()
+
+        # Loop over options classes to execute option_class.resolve_config(config)
+        # This will modify config before using it, with extra configuration keys.
+        for option_class in options:
+            raw_value = option_class.resolve_config(raw_value)
+
+        for option_class in options:
+            option_name = option_class.get_name()
+            if option_name in raw_value:
+                self.options[option_name] = option_class(
+                    value=raw_value[option_name]
+                )
 
     def get_options_providers(self) -> List[Type["AbstractOptionsProvider"]]:
         if self.parent:
@@ -25,7 +43,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return []
 
-    def get_all_available_options(self) -> List[Type["AbstractConfigOption"]]:
+    def get_available_options(self) -> List[Type["AbstractConfigOption"]]:
         providers = self.get_options_providers()
         options = []
 
