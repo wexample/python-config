@@ -2,21 +2,12 @@ from types import UnionType
 from typing import (
     Any,
     Callable,
-    Dict,
-    List,
     Type,
-    Union,
-    cast,
-    get_args,
-    get_origin,
-    get_type_hints,
 )
 
 from pydantic import BaseModel
-from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type_helper import (
-    type_is_compatible,
     type_validate_or_fail,
 )
 
