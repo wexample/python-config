@@ -51,3 +51,13 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             options.extend(cast("AbstractOptionsProvider", provider).get_options())
 
         return options
+
+    def get_option(
+        self,
+        option_type: Union[Type["AbstractConfigOption"], str]) -> Optional["AbstractConfigOption"]:
+        option_name = option_type.get_name() if not isinstance(option_type, str) else option_type
+
+        if option_name in self.options:
+            return self.options[option_name]
+
+        return None
