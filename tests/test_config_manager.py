@@ -10,4 +10,11 @@ class TestConfigManager:
         self.config_manager = DemoConfigManager()
 
     def test_setup(self):
-        assert self.config_manager is not None
+        assert isinstance(self.config_manager, DemoConfigManager)
+
+    def test_configure_name(self):
+        self.config_manager.set_value({
+            "name": "yes"
+        })
+
+        assert self.config_manager.value.is_dict()
