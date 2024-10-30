@@ -1,8 +1,7 @@
 from types import NoneType
-from typing import List, Dict, Any, Union
+from typing import Any, Dict, List, Union
 
 import pytest
-
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.exception.option import InvalidOptionValueTypeException
 

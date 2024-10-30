@@ -1,5 +1,4 @@
 import pytest
-
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 
 

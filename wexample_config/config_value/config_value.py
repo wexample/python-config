@@ -1,7 +1,9 @@
-from typing import Any, Type, Callable, Union, get_origin, get_args, List, Dict
+from types import UnionType
+from typing import Any, Callable, Dict, List, Type, Union, get_args, get_origin
+
 from pydantic import BaseModel
-from wexample_helpers.const.types import StringKeysDict, AnyList
 from wexample_config.exception.option import InvalidOptionValueTypeException
+from wexample_helpers.const.types import AnyList, StringKeysDict
 
 
 class ConfigValue(BaseModel):
@@ -21,8 +23,9 @@ class ConfigValue(BaseModel):
         return f"{self.__repr__}"
 
     @classmethod
-    def validate_value_type(cls, raw_value: Any, allowed_type: type) -> None:
-        from wexample_helpers.helpers.type_helper import type_is_generic, type_generic_value_is_valid
+    def validate_value_type(cls, raw_value: Any, allowed_type: Type | UnionType) -> None:
+        from wexample_helpers.helpers.type_helper import (
+            type_generic_value_is_valid, type_is_generic)
 
         if allowed_type is Any:
             return
@@ -48,10 +51,14 @@ class ConfigValue(BaseModel):
     def get_allowed_types() -> Any:
         return Any
 
-    def is_of_type(self, value_type: Type, value: Any) -> bool:
-        return isinstance(value, value_type)
+    def is_of_type(self, value_type: Any, value: Any) -> bool:
+        if value_type is Callable:
+            return callable(value)
+        if isinstance(value_type, type):
+            return isinstance(value, value_type)
+        return False
 
-    def _assert_type(self, expected_type: Type, value: Any, type_check: bool = True) -> None:
+    def _assert_type(self, expected_type: Any, value: Any, type_check: bool = True) -> None:
         if type_check and not self.is_of_type(expected_type, value):
             raise TypeError(f'Expected {expected_type} but got {type(value)}')
 
@@ -73,7 +80,7 @@ class ConfigValue(BaseModel):
 
     # Type checking methods
     def is_callable(self) -> bool:
-        return self.is_of_type(Callable, self._get_nested_raw())
+        return self.is_of_type(Callable[..., Any], self._get_nested_raw())
 
     def is_str(self) -> bool:
         return self.is_of_type(str, self._get_nested_raw())
@@ -112,43 +119,43 @@ class ConfigValue(BaseModel):
         return self.is_of_type(tuple, self._get_nested_raw())
 
     # Getter methods
-    def _get_value(self, expected_type: Type, method: Callable[[], Any], type_check: bool = True) -> Any:
+    def _get_value_from_callback(self, expected_type: Any, method: Callable[..., Any], type_check: bool = True) -> Any:
         value = self._execute_nested_method(method)
         self._assert_type(expected_type, value, type_check)
         return value
 
     def get_callable(self, type_check: bool = True) -> Callable:
-        return self._get_value(Callable, self.get_callable, type_check)
+        return self._get_value_from_callback(Callable[..., Any], self.get_callable, type_check)
 
     def get_str(self, type_check: bool = True) -> str:
-        return self._get_value(str, self.get_str, type_check)
+        return self._get_value_from_callback(str, self.get_str, type_check)
 
     def get_int(self, type_check: bool = True) -> int:
-        return self._get_value(int, self.get_int, type_check)
+        return self._get_value_from_callback(int, self.get_int, type_check)
 
     def get_float(self, type_check: bool = True) -> float:
-        return self._get_value(float, self.get_float, type_check)
+        return self._get_value_from_callback(float, self.get_float, type_check)
 
     def get_bool(self, type_check: bool = True) -> bool:
-        return self._get_value(bool, self.get_bool, type_check)
+        return self._get_value_from_callback(bool, self.get_bool, type_check)
 
     def get_complex(self, type_check: bool = True) -> complex:
-        return self._get_value(complex, self.get_complex, type_check)
+        return self._get_value_from_callback(complex, self.get_complex, type_check)
 
     def get_bytes(self, type_check: bool = True) -> bytes:
-        return self._get_value(bytes, self.get_bytes, type_check)
+        return self._get_value_from_callback(bytes, self.get_bytes, type_check)
 
     def get_dict(self, type_check: bool = True) -> StringKeysDict:
-        return self._get_value(dict, self.get_dict, type_check)
+        return self._get_value_from_callback(dict, self.get_dict, type_check)
 
     def get_list(self, type_check: bool = True) -> AnyList:
-        return self._get_value(list, self.get_list, type_check)
+        return self._get_value_from_callback(list, self.get_list, type_check)
 
     def get_set(self, type_check: bool = True) -> set:
-        return self._get_value(set, self.get_set, type_check)
+        return self._get_value_from_callback(set, self.get_set, type_check)
 
     def get_tuple(self, type_check: bool = True) -> tuple:
-        return self._get_value(tuple, self.get_tuple, type_check)
+        return self._get_value_from_callback(tuple, self.get_tuple, type_check)
 
     # Setters
     def set_callable(self, value: Callable, type_check: bool = True) -> None:

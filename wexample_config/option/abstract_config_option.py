@@ -1,11 +1,11 @@
 from abc import ABC
 from types import UnionType
-
 from typing import Any, Optional, Type
 
 from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
-from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import HasSnakeShortClassNameClassMixin
+from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import \
+    HasSnakeShortClassNameClassMixin
 
 
 class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
@@ -38,5 +38,5 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         return ConfigValue
 
     @staticmethod
-    def get_value_allowed_type() -> Type | UnionType:
+    def get_value_allowed_type() -> Any | Type | UnionType:
         return Any
