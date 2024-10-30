@@ -1,4 +1,3 @@
-from types import UnionType
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
@@ -26,7 +25,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     def set_value(self, raw_value: Any) -> None:
         super().set_value(raw_value)
 
-        if self.value is None:
+        if raw_value is None:
             return
 
         options = self.get_available_options()
