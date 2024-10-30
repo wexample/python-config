@@ -1,5 +1,5 @@
-from pydantic import BaseModel
+from wexample_config.classes.config_manager import ConfigManager
 
 
-class DemoConfigClass(BaseModel):
+class DemoConfigClass(ConfigManager):
     pass
