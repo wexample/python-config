@@ -8,5 +8,5 @@ class DemoNestedConfigOption(AbstractNestedConfigOption):
     nested: bool = True
 
     @staticmethod
-    def get_raw_value_allowed_type() -> Type | UnionType:
+    def get_raw_value_allowed_type() -> Any:
         return Any

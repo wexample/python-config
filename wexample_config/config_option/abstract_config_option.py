@@ -48,5 +48,5 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         return config
 
     @staticmethod
-    def get_raw_value_allowed_type() -> Any | Type | UnionType:
+    def get_raw_value_allowed_type() -> Any:
         return Any

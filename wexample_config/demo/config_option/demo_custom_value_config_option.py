@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Any
 from types import UnionType
 
 from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
@@ -7,5 +7,5 @@ from wexample_config.config_option.abstract_config_option import AbstractConfigO
 
 class DemoCustomValueConfigOption(AbstractConfigOption):
     @staticmethod
-    def get_raw_value_allowed_type() -> Type | UnionType:
+    def get_raw_value_allowed_type() -> Any:
         return CustomTypeConfigValue

@@ -1,18 +1,22 @@
 from types import UnionType
-from typing import Any, Dict, List, Optional, Type, Union, cast
+from typing import Any, Dict, List, Optional, Type, Union, cast, TYPE_CHECKING
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.config_value.callback_render_config_value import CallbackRenderConfigValue
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
+
+if TYPE_CHECKING:
+    from wexample_filestate.config_value.item_config_value import ItemConfigValue
 
 
 class AbstractNestedConfigOption(AbstractConfigOption):
     allow_undefined_keys: bool = False
     options: Dict[str, AbstractConfigOption] = {}
     options_providers: Optional[List[Type["AbstractOptionsProvider"]]] = None
+    parent: Optional["AbstractNestedConfigOption"] = None
 
     @staticmethod
-    def get_raw_value_allowed_type() -> Type | UnionType:
+    def get_raw_value_allowed_type() -> Any:
         return Dict[str, Any]
 
     def set_value(self, raw_value: Any) -> None:
@@ -94,6 +98,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                 found_option = option.get_option_recursive(option_type)
                 if found_option is not None:
                     return found_option
+
+        return None
 
     def get_option_value(self, option_type: Type["AbstractConfigOption"], default: Any = None) -> "ItemConfigValue":
         from wexample_filestate.config_value.item_config_value import ItemConfigValue
