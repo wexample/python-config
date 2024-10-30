@@ -2,6 +2,8 @@ import pytest
 
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
+from wexample_config.config_option.name_config_option import NameConfigOption
+from wexample_config.demo.config_option.demo_list_config_option import DemoListConfigOption
 
 
 class TestConfigManager:
@@ -14,8 +16,6 @@ class TestConfigManager:
         assert isinstance(self.config_manager, DemoConfigManager)
 
     def test_configure_name(self):
-        from wexample_config.config_option.name_config_option import NameConfigOption
-
         self.config_manager.set_value({
             "name": "yes"
         })
@@ -42,3 +42,15 @@ class TestConfigManager:
             self.config_manager.set_value({
                 "name": []
             })
+
+    def test_configure_list_type(self):
+        with pytest.raises(InvalidOptionValueTypeException):
+            self.config_manager.set_value({
+                "demo_list": 123
+            })
+
+        self.config_manager.set_value({
+            "demo_list": []
+        })
+
+        assert self.config_manager.get_option(DemoListConfigOption).value.is_list()
