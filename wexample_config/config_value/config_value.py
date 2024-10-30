@@ -21,15 +21,6 @@ class ConfigValue(BaseModel):
         return f"{self.__repr__}"
 
     @classmethod
-    def flatten_union_types(cls, allowed_type: type) -> set[type]:
-        """Recursively extract all base types from a potentially nested Union."""
-        if get_origin(allowed_type) is Union:
-            # Flatten all nested Union types into a set of base types
-            return {base for sub_type in get_args(allowed_type) for base in cls.flatten_union_types(sub_type)}
-        # Return the base type or its origin
-        return {get_origin(allowed_type) or allowed_type}
-
-    @classmethod
     def validate_value_type(cls, raw_value: Any, allowed_type: type) -> None:
         from wexample_helpers.helpers.type_helper import type_is_generic, type_generic_value_is_valid
 
@@ -64,18 +55,18 @@ class ConfigValue(BaseModel):
         if type_check and not self.is_of_type(expected_type, value):
             raise TypeError(f'Expected {expected_type} but got {type(value)}')
 
-    def execute_nested_method(self, method: Callable[[], Any]) -> Any:
+    def _execute_nested_method(self, method: Callable[[], Any]) -> Any:
         if isinstance(self.raw, ConfigValue):
             return getattr(self.raw, method.__name__)(type_check=False)
         return self.raw
 
-    def resolve_nested(self) -> "ConfigValue":
+    def _resolve_nested(self) -> "ConfigValue":
         if isinstance(self.raw, ConfigValue):
-            return self.raw.resolve_nested()
+            return self.raw._resolve_nested()
         return self
 
     def _get_nested_raw(self) -> Any:
-        return self.resolve_nested().raw
+        return self._resolve_nested().raw
 
     def is_none(self) -> bool:
         return self.raw is None
@@ -122,7 +113,7 @@ class ConfigValue(BaseModel):
 
     # Getter methods
     def _get_value(self, expected_type: Type, method: Callable[[], Any], type_check: bool = True) -> Any:
-        value = self.execute_nested_method(method)
+        value = self._execute_nested_method(method)
         self._assert_type(expected_type, value, type_check)
         return value
 
@@ -206,34 +197,34 @@ class ConfigValue(BaseModel):
 
     # Conversion methods
     def to_callable(self) -> Callable:
-        return self.execute_nested_method(self.get_callable)
+        return self._execute_nested_method(self.get_callable)
 
     def to_str(self) -> str:
-        return str(self.execute_nested_method(self.get_str))
+        return str(self._execute_nested_method(self.get_str))
 
     def to_int(self) -> int:
-        return int(self.execute_nested_method(self.get_int))
+        return int(self._execute_nested_method(self.get_int))
 
     def to_float(self) -> float:
-        return float(self.execute_nested_method(self.get_float))
+        return float(self._execute_nested_method(self.get_float))
 
     def to_bool(self) -> bool:
-        return bool(self.execute_nested_method(self.get_bool))
+        return bool(self._execute_nested_method(self.get_bool))
 
     def to_complex(self) -> complex:
-        return complex(self.execute_nested_method(self.get_complex))
+        return complex(self._execute_nested_method(self.get_complex))
 
     def to_bytes(self) -> bytes:
-        return bytes(self.execute_nested_method(self.get_bytes))
+        return bytes(self._execute_nested_method(self.get_bytes))
 
     def to_dict(self) -> StringKeysDict:
-        return dict(self.execute_nested_method(self.get_dict))
+        return dict(self._execute_nested_method(self.get_dict))
 
     def to_list(self) -> AnyList:
-        return list(self.execute_nested_method(self.get_list))
+        return list(self._execute_nested_method(self.get_list))
 
     def to_set(self) -> set:
-        return set(self.execute_nested_method(self.get_set))
+        return set(self._execute_nested_method(self.get_set))
 
     def to_tuple(self) -> tuple:
-        return tuple(self.execute_nested_method(self.get_tuple))
+        return tuple(self._execute_nested_method(self.get_tuple))
