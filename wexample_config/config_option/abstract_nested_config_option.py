@@ -10,7 +10,7 @@ from wexample_config.options_provider.abstract_options_provider import (
 )
 
 if TYPE_CHECKING:
-    from wexample_filestate.config_value.item_config_value import ItemConfigValue
+    from wexample_config.config_value.config_value import ConfigValue
 
 
 class AbstractNestedConfigOption(AbstractConfigOption):
@@ -108,11 +108,11 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
     def get_option_value(
         self, option_type: type["AbstractConfigOption"], default: Any = None
-    ) -> "ItemConfigValue":
-        from wexample_filestate.config_value.item_config_value import ItemConfigValue
+    ) -> "ConfigValue":
+        from wexample_config.config_value.config_value import ConfigValue
 
         option = self.get_option(option_type)
         if option:
-            return cast("ItemConfigValue", option.value)
+            return cast("ConfigValue", option.value)
 
-        return ItemConfigValue(raw=default)
+        return ConfigValue(raw=default)
