@@ -12,7 +12,7 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 
 class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     parent: Optional["AbstractConfigOption"] = None
-    value: Optional[ConfigValue] = None
+    config_value: Optional[ConfigValue] = None
 
     def __init__(self, value: Any = None, **data) -> None:
         BaseModel.__init__(self, **data)
@@ -32,13 +32,16 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
                 raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
             )
 
-            self.value = (
+            self.config_value = (
                 config_value_class(raw=raw_value)
                 if not isinstance(raw_value, ConfigValue)
                 else raw_value
             )
         except TypeError as e:
             raise BadConfigurationClassTypeException(f"{self.__class__.__name__}: {e}")
+
+    def get_value(self):
+         return self.config_value
 
     def prepare_value(self, raw_value: Any) -> Any:
         return raw_value
@@ -59,4 +62,8 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         return Any
 
     def dump(self) -> Any:
-        return self.value.raw
+        return self.get_value().raw
+
+    def get_parent(self) -> "AbstractConfigOption":
+        assert self.parent is not None
+        return self.parent

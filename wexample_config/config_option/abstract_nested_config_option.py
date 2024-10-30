@@ -17,7 +17,10 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     allow_undefined_keys: bool = False
     options: dict[str, AbstractConfigOption] = {}
     options_providers: Optional[list[type["AbstractOptionsProvider"]]] = None
-    parent: Optional["AbstractConfigOption"] = None
+    parent: Optional["AbstractNestedConfigOption"] = None
+
+    def __init__(self, value: Any, **data):
+        super().__init__(value, **data)
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
@@ -121,6 +124,14 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         option = self.get_option(option_type)
         if option:
-            return cast("ConfigValue", option.value)
+            return cast("ConfigValue", option.get_value())
 
         return ConfigValue(raw=default)
+
+    def dump(self) -> Any:
+        output = {}
+
+        for name, option in self.options.items():
+            output[name] = option.dump()
+
+        return output

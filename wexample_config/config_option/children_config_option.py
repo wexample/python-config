@@ -17,6 +17,7 @@ class ChildrenConfigOption(AbstractNestedConfigOption):
         return List[dict[str, Any]]
 
     def set_value(self, raw_value: Any) -> None:
+        # Skip direct parent which creates only one item.
         AbstractConfigOption.set_value(self, raw_value)
 
         if raw_value is None:
