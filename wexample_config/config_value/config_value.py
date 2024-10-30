@@ -1,12 +1,24 @@
 from types import UnionType
-from typing import (Any, Callable, Dict, List, Type, Union, cast, get_args,
-                    get_origin, get_type_hints)
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Type,
+    Union,
+    cast,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 from pydantic import BaseModel
 from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_helpers.const.types import AnyList, StringKeysDict
-from wexample_helpers.helpers.type_helper import (type_is_compatible,
-                                                  type_validate_or_fail)
+from wexample_helpers.helpers.type_helper import (
+    type_is_compatible,
+    type_validate_or_fail,
+)
 
 
 class ConfigValue(BaseModel):
@@ -15,8 +27,7 @@ class ConfigValue(BaseModel):
     def __init__(self, **data) -> None:
         super().__init__(**data)
         self.validate_value_type(
-            raw_value=self.raw,
-            allowed_type=self.get_allowed_types()
+            raw_value=self.raw, allowed_type=self.get_allowed_types()
         )
 
     def __repr__(self) -> str:
@@ -26,7 +37,9 @@ class ConfigValue(BaseModel):
         return f"{self.__repr__}"
 
     @classmethod
-    def validate_value_type(cls, raw_value: Any, allowed_type: Type | UnionType) -> None:
+    def validate_value_type(
+        cls, raw_value: Any, allowed_type: Type | UnionType
+    ) -> None:
         type_validate_or_fail(
             value=raw_value,
             allowed_type=allowed_type,
@@ -43,9 +56,11 @@ class ConfigValue(BaseModel):
             return isinstance(value, value_type)
         return False
 
-    def _assert_type(self, expected_type: Any, value: Any, type_check: bool = True) -> None:
+    def _assert_type(
+        self, expected_type: Any, value: Any, type_check: bool = True
+    ) -> None:
         if type_check and not self.is_of_type(expected_type, value):
-            raise TypeError(f'Expected {expected_type} but got {type(value)}')
+            raise TypeError(f"Expected {expected_type} but got {type(value)}")
 
     def _execute_nested_method(self, method: Callable[[], Any]) -> Any:
         if isinstance(self.raw, ConfigValue):
@@ -104,13 +119,17 @@ class ConfigValue(BaseModel):
         return self.is_of_type(tuple, self._get_nested_raw())
 
     # Getter methods
-    def _get_value_from_callback(self, expected_type: Any, method: Callable[..., Any], type_check: bool = True) -> Any:
+    def _get_value_from_callback(
+        self, expected_type: Any, method: Callable[..., Any], type_check: bool = True
+    ) -> Any:
         value = self._execute_nested_method(method)
         self._assert_type(expected_type, value, type_check)
         return value
 
     def get_callable(self, type_check: bool = True) -> Callable:
-        return self._get_value_from_callback(Callable[..., Any], self.get_callable, type_check)
+        return self._get_value_from_callback(
+            Callable[..., Any], self.get_callable, type_check
+        )
 
     def get_str(self, type_check: bool = True) -> str:
         return self._get_value_from_callback(str, self.get_str, type_check)

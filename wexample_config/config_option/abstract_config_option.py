@@ -4,8 +4,9 @@ from typing import Any, Optional, Type
 from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
-from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import \
-    HasSnakeShortClassNameClassMixin
+from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
+    HasSnakeShortClassNameClassMixin,
+)
 
 
 class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
@@ -26,11 +27,14 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         # Check if value is valid for the config option,
         # reuse same method to validate types.
         config_value_class.validate_value_type(
-            raw_value=raw_value,
-            allowed_type=self.get_raw_value_allowed_type()
+            raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
         )
 
-        self.value = config_value_class(raw=raw_value) if not isinstance(raw_value, ConfigValue) else raw_value
+        self.value = (
+            config_value_class(raw=raw_value)
+            if not isinstance(raw_value, ConfigValue)
+            else raw_value
+        )
 
     def prepare_value(self, raw_value: Any) -> Any:
         return raw_value
@@ -40,7 +44,7 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
 
     @classmethod
     def get_class_name_suffix(cls) -> Optional[str]:
-        return 'ConfigOption'
+        return "ConfigOption"
 
     @staticmethod
     def resolve_config(config: DictConfig) -> DictConfig:

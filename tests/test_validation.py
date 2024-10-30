@@ -27,7 +27,7 @@ class TestConfigManager:
             ({}, Union[str, Dict[str, Any]]),
             (_test_callable, Callable),
             (_test_callable, Callable[..., Any]),
-            (_test_callable, Callable[..., bool])
+            (_test_callable, Callable[..., bool]),
         ]
 
         failure_cases = [
@@ -38,7 +38,7 @@ class TestConfigManager:
             ([], dict),
             ({"lorem": 123}, Dict[str, str]),
             (123, Union[str, Dict[str, Any]]),
-            (_test_callable, Callable[..., str])
+            (_test_callable, Callable[..., str]),
         ]
 
         # Success cases: should not raise exceptions

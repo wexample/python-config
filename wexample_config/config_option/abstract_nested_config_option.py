@@ -1,16 +1,16 @@
 from types import UnionType
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
-from wexample_config.config_option.abstract_config_option import \
-    AbstractConfigOption
-from wexample_config.config_value.callback_render_config_value import \
-    CallbackRenderConfigValue
-from wexample_config.options_provider.abstract_options_provider import \
-    AbstractOptionsProvider
+from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_value.callback_render_config_value import (
+    CallbackRenderConfigValue,
+)
+from wexample_config.options_provider.abstract_options_provider import (
+    AbstractOptionsProvider,
+)
 
 if TYPE_CHECKING:
-    from wexample_filestate.config_value.item_config_value import \
-        ItemConfigValue
+    from wexample_filestate.config_value.item_config_value import ItemConfigValue
 
 
 class AbstractNestedConfigOption(AbstractConfigOption):
@@ -35,12 +35,11 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         if not self.allow_undefined_keys:
             unknown_keys = set(raw_value.keys()) - valid_option_names
             if unknown_keys:
-                from wexample_config.exception.option import \
-                    InvalidOptionException
+                from wexample_config.exception.option import InvalidOptionException
 
                 raise InvalidOptionException(
                     f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
-                    f"in \"{self.__class__.__name__}\", "
+                    f'in "{self.__class__.__name__}", '
                     f"allowed options are: {', '.join(valid_option_names)}"
                 )
 
@@ -58,8 +57,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             option_name = option_class.get_name()
             if option_name in raw_value:
                 self.options[option_name] = option_class(
-                    value=raw_value[option_name],
-                    parent=self
+                    value=raw_value[option_name], parent=self
                 )
 
     def get_options_providers(self) -> List[Type["AbstractOptionsProvider"]]:
@@ -81,9 +79,11 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_option(
-        self,
-        option_type: Union[Type["AbstractConfigOption"], str]) -> Optional["AbstractConfigOption"]:
-        option_name = option_type.get_name() if not isinstance(option_type, str) else option_type
+        self, option_type: Union[Type["AbstractConfigOption"], str]
+    ) -> Optional["AbstractConfigOption"]:
+        option_name = (
+            option_type.get_name() if not isinstance(option_type, str) else option_type
+        )
 
         if option_name in self.options:
             return self.options[option_name]
@@ -91,8 +91,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_recursive(
-        self,
-        option_type: Union[Type["AbstractConfigOption"], str]) -> Optional["AbstractConfigOption"]:
+        self, option_type: Union[Type["AbstractConfigOption"], str]
+    ) -> Optional["AbstractConfigOption"]:
         option = self.get_option(option_type)
 
         if option is not None:
@@ -106,9 +106,10 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return None
 
-    def get_option_value(self, option_type: Type["AbstractConfigOption"], default: Any = None) -> "ItemConfigValue":
-        from wexample_filestate.config_value.item_config_value import \
-            ItemConfigValue
+    def get_option_value(
+        self, option_type: Type["AbstractConfigOption"], default: Any = None
+    ) -> "ItemConfigValue":
+        from wexample_filestate.config_value.item_config_value import ItemConfigValue
 
         option = self.get_option(option_type)
         if option:
