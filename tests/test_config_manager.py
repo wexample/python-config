@@ -18,3 +18,4 @@ class TestConfigManager:
         })
 
         assert self.config_manager.value.is_dict()
+        assert self.config_manager.get_name() == "demo_config_manager"
