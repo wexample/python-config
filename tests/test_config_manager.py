@@ -1,5 +1,7 @@
 import pytest
 
+from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
+from wexample_config.demo.config_option.demo_custom_value_config_option import DemoCustomValueConfigOption
 from wexample_config.demo.config_option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
@@ -73,3 +75,16 @@ class TestConfigManager:
         })
 
         assert self.config_manager.get_option(DemoUnionConfigOption).value.is_dict()
+
+    def test_configure_custom_value_type(self):
+        with pytest.raises(InvalidOptionValueTypeException):
+            self.config_manager.set_value({
+                "demo_custom_value": CustomTypeConfigValue(raw=123)
+            })
+
+        self.config_manager.set_value({
+            "demo_custom_value": CustomTypeConfigValue(raw="yeah")
+        })
+
+        assert self.config_manager.get_option(DemoCustomValueConfigOption).value.is_str()
+        assert self.config_manager.get_option(DemoCustomValueConfigOption).value.get_str() == "yeah"
