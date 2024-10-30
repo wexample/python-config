@@ -6,9 +6,10 @@ from wexample_config.options_provider.abstract_options_provider import AbstractO
 
 
 class AbstractNestedConfigOption(AbstractConfigOption):
+    allow_undefined_keys: bool = False
     options: Dict[str, AbstractConfigOption] = {}
-    parent: Optional["AbstractNestedConfigOption"] = None
     options_providers: Optional[List[Type["AbstractOptionsProvider"]]] = None
+    parent: Optional["AbstractNestedConfigOption"] = None
 
     @staticmethod
     def get_raw_value_allowed_type() -> Type | UnionType:
@@ -21,6 +22,18 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             return
 
         options = self.get_available_options()
+        valid_option_names = {option_class.get_name() for option_class in options}
+
+        if not self.allow_undefined_keys:
+            unknown_keys = set(raw_value.keys()) - valid_option_names
+            if unknown_keys:
+                from wexample_config.exception.option import InvalidOptionException
+
+                raise InvalidOptionException(
+                    f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
+                    f"in \"{self.__class__.__name__}\", "
+                    f"allowed options are: {', '.join(valid_option_names)}"
+                )
 
         # Loop over options classes to execute option_class.resolve_config(config)
         # This will modify config before using it, with extra configuration keys.

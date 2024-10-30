@@ -1,6 +1,7 @@
 import pytest
 
 from wexample_config.demo.demo_config_manager import DemoConfigManager
+from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
 
 
 class TestConfigManager:
@@ -24,3 +25,9 @@ class TestConfigManager:
         assert len(self.config_manager.options)
         assert self.config_manager.get_option("name").value.is_str()
         assert self.config_manager.get_option(NameConfigOption).value.is_str()
+
+    def test_configure_unexpected(self):
+        with pytest.raises(InvalidOptionException):
+            self.config_manager.set_value({
+                "unexpected_option": "yes"
+            })
