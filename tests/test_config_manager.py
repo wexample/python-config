@@ -31,3 +31,14 @@ class TestConfigManager:
             self.config_manager.set_value({
                 "unexpected_option": "yes"
             })
+
+    def test_configure_unexpected_type(self):
+        with pytest.raises(InvalidOptionValueTypeException):
+            self.config_manager.set_value({
+                "name": 123
+            })
+
+        with pytest.raises(InvalidOptionValueTypeException):
+            self.config_manager.set_value({
+                "name": []
+            })
