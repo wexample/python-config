@@ -2,7 +2,9 @@ import pytest
 
 from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
 from wexample_config.demo.config_option.demo_custom_value_config_option import DemoCustomValueConfigOption
+from wexample_config.demo.config_option.demo_dict_config_option import DemoDictConfigOption
 from wexample_config.demo.config_option.demo_extensible_config_option import DemoExtensibleConfigOption
+from wexample_config.demo.config_option.demo_nested_config_option import DemoNestedConfigOption
 from wexample_config.demo.config_option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
@@ -28,7 +30,7 @@ class TestConfigManager:
         assert self.config_manager.get_name() == "demo_config_manager"
         assert len(self.config_manager.options)
         assert self.config_manager.get_option("name").value.is_str()
-        assert self.config_manager.get_option(NameConfigOption).value.is_str()
+        assert self.config_manager.get_option_value(NameConfigOption).is_str()
 
     def test_configure_unexpected(self):
         with pytest.raises(InvalidOptionException):
@@ -125,3 +127,33 @@ class TestConfigManager:
             })
 
         self.config_manager.allow_undefined_keys = False
+
+    def test_configure_nested_dict_type(self):
+        self.config_manager.set_value(
+            {
+                "demo_nested": {
+                    "name": "FIRST_LEVEL_DICT",
+                    "demo_dict": {
+                        "lorem": {
+                            "info": "As the demo_dict is typed, we should have sub dicts"
+                                    "the type is like: Dict[str, Dict[str, Any]]",
+                            "other": 123,
+                            "demo_custom_value": CustomTypeConfigValue(raw="yeah")
+                        },
+                    }
+                }
+            }
+        )
+
+        # Main dict is saved
+        assert isinstance(self.config_manager.value.get_dict(), dict)
+
+        option = self.config_manager.get_option(DemoNestedConfigOption)
+        assert isinstance(option, DemoNestedConfigOption)
+
+        # Subclass has been created
+        option = self.config_manager.get_option_recursive(DemoDictConfigOption)
+
+        assert isinstance(option, DemoDictConfigOption)
+        assert isinstance(option.value.get_dict().get("lorem"), dict)
+

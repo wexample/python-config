@@ -1,7 +1,8 @@
 from abc import ABC
 from types import UnionType
-from typing import Any, Optional, Type
+from typing import Any, Optional, Type, TYPE_CHECKING
 from pydantic import BaseModel
+
 from wexample_config.const.types import DictConfig
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import \
@@ -9,6 +10,7 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 
 
 class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
+    parent: Optional["AbstractConfigOption"] = None
     value: Optional[ConfigValue] = None
 
     def __init__(self, value: Any = None, **data) -> None:
