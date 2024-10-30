@@ -2,6 +2,7 @@ from types import UnionType
 from typing import Any, Dict, List, Optional, Type, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_value.callback_render_config_value import CallbackRenderConfigValue
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
 
 
@@ -38,6 +39,11 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         # This will modify config before using it, with extra configuration keys.
         for option_class in options:
             raw_value = option_class.resolve_config(raw_value)
+
+        # Resolve callables and process children recursively
+        for key, child_raw_value in list(raw_value.items()):
+            if isinstance(child_raw_value, CallbackRenderConfigValue):
+                raw_value[key] = child_raw_value.render()
 
         for option_class in options:
             option_name = option_class.get_name()

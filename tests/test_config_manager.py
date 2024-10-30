@@ -30,7 +30,17 @@ class TestConfigManager:
         assert self.config_manager.get_name() == "demo_config_manager"
         assert len(self.config_manager.options)
         assert self.config_manager.get_option("name").value.is_str()
-        assert self.config_manager.get_option_value(NameConfigOption).is_str()
+        assert self.config_manager.get_option_value(NameConfigOption).get_str() == "yes"
+
+    def test_configure_callback(self):
+        def _name():
+            return "yes"
+
+        self.config_manager.set_value({
+            "name": CallbackRenderConfigValue(raw=_name)
+        })
+
+        assert self.config_manager.get_option("name").value.is_str()
 
     def test_configure_unexpected(self):
         with pytest.raises(InvalidOptionException):
@@ -156,4 +166,3 @@ class TestConfigManager:
 
         assert isinstance(option, DemoDictConfigOption)
         assert isinstance(option.value.get_dict().get("lorem"), dict)
-

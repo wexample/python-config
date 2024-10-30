@@ -1,9 +1,10 @@
 from types import UnionType
-from typing import Any, Callable, Dict, List, Type, Union, get_args, get_origin
+from typing import Any, Callable, Dict, List, Type, Union, get_args, get_origin, get_type_hints, cast
 
 from pydantic import BaseModel
 from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_helpers.const.types import AnyList, StringKeysDict
+from wexample_helpers.helpers.type_helper import type_is_compatible
 
 
 class ConfigValue(BaseModel):
@@ -30,10 +31,41 @@ class ConfigValue(BaseModel):
         if allowed_type is Any:
             return
 
+        if allowed_type is Callable:
+            if callable(raw_value):
+                return
+            raise InvalidOptionValueTypeException(
+                f"Invalid type \"{type(raw_value).__name__}\" for value, expected callable.")
+
         # Check if the raw value matches any allowed base type
         if not type_is_generic(allowed_type):
+            if isinstance(allowed_type, Callable):
+                if isinstance(raw_value, Callable):
+                    args = get_args(allowed_type)
+                    if args:
+                        return_type = args[-1]
+
+                        type_hints = get_type_hints(raw_value)
+                        actual_return_type_hint = type_hints.get('return', None)
+
+                        if actual_return_type_hint is None:
+                            return
+
+                        # # Handle generic types
+                        if type_is_compatible(
+                            actual_type=cast(Type, actual_return_type_hint),
+                            allowed_type=return_type,
+                        ):
+                            return
+
+                        raise InvalidOptionValueTypeException(
+                            f"Invalid return type in callable \"{raw_value.__name__}\" for value in \"{cls.__name__}\": "
+                            f"expected return type \"{return_type}\", but got \"{actual_return_type_hint}\"."
+                        )
+
+                    return
             # Explicit check for simple types without get_origin
-            if isinstance(raw_value, allowed_type):
+            elif isinstance(raw_value, allowed_type):
                 return
 
         # Handle generic types
