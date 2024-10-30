@@ -14,7 +14,7 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     value: Optional[ConfigValue] = None
 
     def __init__(self, value: Any = None, **data) -> None:
-        super().__init__(**data)
+        BaseModel.__init__(self, **data)
         self.set_value(value)
 
     def set_value(self, raw_value: Any):
