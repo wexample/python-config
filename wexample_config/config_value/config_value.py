@@ -48,7 +48,9 @@ class ConfigValue(BaseModel):
 
         # If none of the checks passed, raise an exception
         raise InvalidOptionValueTypeException(
-            f"Invalid type for value \"{type(raw_value).__name__}\", allowed types: {allowed_type}"
+            f"Invalid type \"{type(raw_value).__name__}\" for value, "
+            f"in \"{cls.__name__}\", allowed types: {allowed_type}, "
+            f"got: {str(raw_value)}"
         )
 
     @staticmethod
