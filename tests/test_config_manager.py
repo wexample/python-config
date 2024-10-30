@@ -2,6 +2,7 @@ import pytest
 
 from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
 from wexample_config.demo.config_option.demo_custom_value_config_option import DemoCustomValueConfigOption
+from wexample_config.demo.config_option.demo_extensible_config_option import DemoExtensibleConfigOption
 from wexample_config.demo.config_option.demo_union_config_option import DemoUnionConfigOption
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.option import InvalidOptionException, InvalidOptionValueTypeException
@@ -88,3 +89,39 @@ class TestConfigManager:
 
         assert self.config_manager.get_option(DemoCustomValueConfigOption).value.is_str()
         assert self.config_manager.get_option(DemoCustomValueConfigOption).value.get_str() == "yeah"
+
+    def test_configure_extensible(self):
+        # Extensible children option
+        self.config_manager.set_value({
+            "demo_extensible": {
+                "unexpected_option": "yes",
+                "unexpected_dict": {
+                    "unexpected_option": "yay",
+                }
+            }
+        })
+
+        assert self.config_manager.get_option(DemoExtensibleConfigOption).value.is_dict()
+
+        # Unexpected option fails on current
+        with pytest.raises(InvalidOptionException):
+            self.config_manager.set_value({
+                "lorem": "ipsum"
+            })
+
+        # Works if configured
+        self.config_manager.allow_undefined_keys = True
+        self.config_manager.set_value({
+            "lorem": "ipsum"
+        })
+
+        # In nested, unexpected keys for child are still not allowed, if not specified in class handler.
+        with pytest.raises(InvalidOptionException):
+            self.config_manager.allow_undefined_keys = True
+            self.config_manager.set_value({
+                "demo_nested": {
+                    "lorem": "ipsum"
+                }
+            })
+
+        self.config_manager.allow_undefined_keys = False
