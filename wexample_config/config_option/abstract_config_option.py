@@ -39,7 +39,7 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     def prepare_value(self, raw_value: Any) -> Any:
         return raw_value
 
-    def get_value_class_type(self) -> Type[ConfigValue]:
+    def get_value_class_type(self) -> type[ConfigValue]:
         return ConfigValue
 
     @classmethod

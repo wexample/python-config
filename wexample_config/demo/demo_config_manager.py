@@ -1,6 +1,5 @@
-from typing import List, Type
+from typing import TYPE_CHECKING, List, Type
 
-from typing_extensions import TYPE_CHECKING
 from wexample_config.classes.abstract_config_manager import AbstractConfigManager
 
 if TYPE_CHECKING:
@@ -10,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class DemoConfigManager(AbstractConfigManager):
-    def get_options_providers(self) -> List[Type["AbstractOptionsProvider"]]:
+    def get_options_providers(self) -> list[type["AbstractOptionsProvider"]]:
         from wexample_config.demo.option_provider.demo_options_provider import (
             DemoOptionsProvider,
         )

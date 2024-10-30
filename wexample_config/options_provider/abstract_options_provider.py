@@ -12,5 +12,5 @@ if TYPE_CHECKING:
 class AbstractOptionsProvider(BaseModel, ABC):
     @classmethod
     @abstractmethod
-    def get_options(cls) -> List[Type["AbstractConfigOption"]]:
+    def get_options(cls) -> list[type["AbstractConfigOption"]]:
         pass

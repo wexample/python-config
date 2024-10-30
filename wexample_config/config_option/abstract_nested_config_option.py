@@ -15,13 +15,13 @@ if TYPE_CHECKING:
 
 class AbstractNestedConfigOption(AbstractConfigOption):
     allow_undefined_keys: bool = False
-    options: Dict[str, AbstractConfigOption] = {}
-    options_providers: Optional[List[Type["AbstractOptionsProvider"]]] = None
+    options: dict[str, AbstractConfigOption] = {}
+    options_providers: Optional[list[type["AbstractOptionsProvider"]]] = None
     parent: Optional["AbstractNestedConfigOption"] = None
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
-        return Dict[str, Any]
+        return dict[str, Any]
 
     def set_value(self, raw_value: Any) -> None:
         super().set_value(raw_value)
@@ -60,7 +60,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                     value=raw_value[option_name], parent=self
                 )
 
-    def get_options_providers(self) -> List[Type["AbstractOptionsProvider"]]:
+    def get_options_providers(self) -> list[type["AbstractOptionsProvider"]]:
         if self.parent:
             return self.parent.get_options_providers()
 
@@ -69,7 +69,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return []
 
-    def get_available_options(self) -> List[Type["AbstractConfigOption"]]:
+    def get_available_options(self) -> list[type["AbstractConfigOption"]]:
         providers = self.get_options_providers()
         options = []
 
@@ -79,7 +79,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_option(
-        self, option_type: Union[Type["AbstractConfigOption"], str]
+        self, option_type: Union[type["AbstractConfigOption"], str]
     ) -> Optional["AbstractConfigOption"]:
         option_name = (
             option_type.get_name() if not isinstance(option_type, str) else option_type
@@ -91,7 +91,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_recursive(
-        self, option_type: Union[Type["AbstractConfigOption"], str]
+        self, option_type: Union[type["AbstractConfigOption"], str]
     ) -> Optional["AbstractConfigOption"]:
         option = self.get_option(option_type)
 
@@ -107,7 +107,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_value(
-        self, option_type: Type["AbstractConfigOption"], default: Any = None
+        self, option_type: type["AbstractConfigOption"], default: Any = None
     ) -> "ItemConfigValue":
         from wexample_filestate.config_value.item_config_value import ItemConfigValue
 

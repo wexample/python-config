@@ -23,7 +23,7 @@ class ConfigValue(BaseModel):
 
     @classmethod
     def validate_value_type(
-        cls, raw_value: Any, allowed_type: Type | UnionType
+        cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
         type_validate_or_fail(
             value=raw_value,
