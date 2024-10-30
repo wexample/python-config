@@ -1,15 +1,9 @@
 from types import UnionType
-from typing import (
-    Any,
-    Callable,
-    Type,
-)
+from typing import Any, Callable, Type
 
 from pydantic import BaseModel
 from wexample_helpers.const.types import AnyList, StringKeysDict
-from wexample_helpers.helpers.type_helper import (
-    type_validate_or_fail,
-)
+from wexample_helpers.helpers.type_helper import type_validate_or_fail
 
 
 class ConfigValue(BaseModel):
