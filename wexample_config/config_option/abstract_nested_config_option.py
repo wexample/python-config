@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
-from wexample_config.option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
 
 class AbstractNestedConfigOption(AbstractConfigOption):
