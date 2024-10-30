@@ -1,5 +1,6 @@
 import pytest
 
+from wexample_config.config_value.callback_render_config_value import CallbackRenderConfigValue
 from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
 from wexample_config.demo.config_option.demo_custom_value_config_option import DemoCustomValueConfigOption
 from wexample_config.demo.config_option.demo_dict_config_option import DemoDictConfigOption
