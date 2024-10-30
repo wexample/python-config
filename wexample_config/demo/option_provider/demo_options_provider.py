@@ -14,6 +14,7 @@ class DemoOptionsProvider(AbstractOptionsProvider):
     @classmethod
     def get_options(cls) -> list[type["AbstractConfigOption"]]:
         from wexample_config.config_option.name_config_option import NameConfigOption
+        from wexample_config.config_option.children_config_option import ChildrenConfigOption
         from wexample_config.demo.config_option.demo_custom_value_config_option import (
             DemoCustomValueConfigOption,
         )
@@ -34,6 +35,7 @@ class DemoOptionsProvider(AbstractOptionsProvider):
         )
 
         return [
+            ChildrenConfigOption,
             DemoCustomValueConfigOption,
             DemoDictConfigOption,
             DemoExtensibleConfigOption,

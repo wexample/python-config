@@ -1,4 +1,6 @@
 import pytest
+
+from wexample_config.config_option.children_config_option import ChildrenConfigOption
 from wexample_config.config_option.name_config_option import NameConfigOption
 from wexample_config.config_value.callback_render_config_value import (
     CallbackRenderConfigValue,
@@ -39,13 +41,14 @@ class TestConfigManager:
         assert isinstance(self.config_manager, DemoConfigManager)
 
     def test_configure_name(self):
-        self.config_manager.set_value({"name": "yes"})
+        self.config_manager.set_value({"name": "yes", "children": []})
 
         assert self.config_manager.value.is_dict()
         assert self.config_manager.get_name() == "demo_config_manager"
         assert len(self.config_manager.options)
         assert self.config_manager.get_option("name").value.is_str()
         assert self.config_manager.get_option_value(NameConfigOption).get_str() == "yes"
+        assert self.config_manager.get_option_value(ChildrenConfigOption).is_list()
 
     def test_configure_callback(self):
         def _name():
@@ -144,7 +147,7 @@ class TestConfigManager:
                     "demo_dict": {
                         "lorem": {
                             "info": "As the demo_dict is typed, we should have sub dicts"
-                            "the type is like: Dict[str, Dict[str, Any]]",
+                                    "the type is like: Dict[str, Dict[str, Any]]",
                             "other": 123,
                             "demo_custom_value": CustomTypeConfigValue(raw="yeah"),
                         },
