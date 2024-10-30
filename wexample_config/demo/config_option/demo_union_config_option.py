@@ -1,7 +1,7 @@
-from typing import Type, Union, Dict, Any
-from types import UnionType
+from typing import Any, Dict, Union
 
-from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_option.abstract_config_option import \
+    AbstractConfigOption
 
 
 class DemoUnionConfigOption(AbstractConfigOption):

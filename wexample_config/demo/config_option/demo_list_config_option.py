@@ -1,7 +1,7 @@
-from typing import Type, List, Any
-from types import UnionType
+from typing import Any, List
 
-from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_option.abstract_config_option import \
+    AbstractConfigOption
 
 
 class DemoListConfigOption(AbstractConfigOption):

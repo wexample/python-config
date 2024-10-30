@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, List, Type
+
 from pydantic import BaseModel
-from typing import List, TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
-    from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+    from wexample_config.config_option.abstract_config_option import \
+        AbstractConfigOption
 
 
 class AbstractOptionsProvider(BaseModel, ABC):

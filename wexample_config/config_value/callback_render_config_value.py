@@ -1,4 +1,4 @@
-from typing import Callable, Any
+from typing import Any, Callable
 
 from wexample_config.config_value.config_value import ConfigValue
 

@@ -1,10 +1,9 @@
 from abc import ABC
-from types import UnionType
-from typing import Any, Optional, Type, TYPE_CHECKING
-from pydantic import BaseModel
+from typing import Any, Optional, Type
 
-from wexample_config.const.types import DictConfig
+from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
+from wexample_config.const.types import DictConfig
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import \
     HasSnakeShortClassNameClassMixin
 

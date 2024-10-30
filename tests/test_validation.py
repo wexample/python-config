@@ -1,10 +1,9 @@
 from types import NoneType
-from typing import Any, Dict, List, Union, Callable
+from typing import Any, Callable, Dict, List, Union
 
 import pytest
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.exception.option import InvalidOptionValueTypeException
-from wexample_helpers.helpers.type_helper import type_is_compatible
 
 
 class TestConfigManager:

@@ -1,12 +1,16 @@
 from types import UnionType
-from typing import Any, Dict, List, Optional, Type, Union, cast, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
-from wexample_config.config_option.abstract_config_option import AbstractConfigOption
-from wexample_config.config_value.callback_render_config_value import CallbackRenderConfigValue
-from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
+from wexample_config.config_option.abstract_config_option import \
+    AbstractConfigOption
+from wexample_config.config_value.callback_render_config_value import \
+    CallbackRenderConfigValue
+from wexample_config.options_provider.abstract_options_provider import \
+    AbstractOptionsProvider
 
 if TYPE_CHECKING:
-    from wexample_filestate.config_value.item_config_value import ItemConfigValue
+    from wexample_filestate.config_value.item_config_value import \
+        ItemConfigValue
 
 
 class AbstractNestedConfigOption(AbstractConfigOption):
@@ -31,7 +35,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         if not self.allow_undefined_keys:
             unknown_keys = set(raw_value.keys()) - valid_option_names
             if unknown_keys:
-                from wexample_config.exception.option import InvalidOptionException
+                from wexample_config.exception.option import \
+                    InvalidOptionException
 
                 raise InvalidOptionException(
                     f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
@@ -102,7 +107,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_value(self, option_type: Type["AbstractConfigOption"], default: Any = None) -> "ItemConfigValue":
-        from wexample_filestate.config_value.item_config_value import ItemConfigValue
+        from wexample_filestate.config_value.item_config_value import \
+            ItemConfigValue
 
         option = self.get_option(option_type)
         if option:
