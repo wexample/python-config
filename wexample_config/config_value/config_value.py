@@ -2,6 +2,8 @@ from types import UnionType
 from typing import Any, Callable, Type
 
 from pydantic import BaseModel
+
+from wexample_filestate.exception.config import BadConfigurationClassTypeException
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type_helper import type_validate_or_fail
 
@@ -25,10 +27,13 @@ class ConfigValue(BaseModel):
     def validate_value_type(
         cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
-        type_validate_or_fail(
-            value=raw_value,
-            allowed_type=allowed_type,
-        )
+        try:
+            type_validate_or_fail(
+                value=raw_value,
+                allowed_type=allowed_type,
+            )
+        except TypeError as e:
+            raise BadConfigurationClassTypeException(f"{cls}: {e}")
 
     @staticmethod
     def get_allowed_types() -> Any:

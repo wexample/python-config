@@ -16,7 +16,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     allow_undefined_keys: bool = False
     options: dict[str, AbstractConfigOption] = {}
     options_providers: Optional[list[type["AbstractOptionsProvider"]]] = None
-    parent: Optional["AbstractNestedConfigOption"] = None
+    parent: Optional["AbstractConfigOption"] = None
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
