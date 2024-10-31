@@ -1,10 +1,9 @@
 from abc import ABC
-from typing import Any, Optional, Type
+from typing import Any, Optional
 
 from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
-from wexample_filestate.exception.config import BadConfigurationClassTypeException
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
@@ -19,6 +18,8 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         self.set_value(value)
 
     def set_value(self, raw_value: Any):
+        from wexample_filestate.exception.config import BadConfigurationClassTypeException
+
         if raw_value is None:
             return
 
