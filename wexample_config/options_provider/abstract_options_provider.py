@@ -14,3 +14,7 @@ class AbstractOptionsProvider(BaseModel, ABC):
     @abstractmethod
     def get_options(cls) -> list[type["AbstractConfigOption"]]:
         pass
+
+    @classmethod
+    def get_options_registry(cls) -> dict[str, type["AbstractConfigOption"]]:
+        return {option.get_name(): option for option in cls.get_options()}

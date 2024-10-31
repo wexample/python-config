@@ -44,7 +44,7 @@ class TestConfigManager:
         self.config_manager.set_value({"name": "yes", "children": []})
 
         assert self.config_manager.get_value().is_dict()
-        assert self.config_manager.get_name() == "demo_config_manager"
+        assert self.config_manager.get_key() == "demo_config_manager"
         assert len(self.config_manager.options)
         assert self.config_manager.get_option("name").get_value().is_str()
         assert self.config_manager.get_option_value(NameConfigOption).get_str() == "yes"

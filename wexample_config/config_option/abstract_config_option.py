@@ -12,14 +12,19 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
     parent: Optional["AbstractConfigOption"] = None
     config_value: Optional[ConfigValue] = None
+    key: Optional[str] = None
 
     def __init__(self, value: Any = None, **data) -> None:
         BaseModel.__init__(self, **data)
+        self.key = self.key or self.get_name()
         self.set_value(value)
+
+    def get_key(self) -> str:
+        assert self.key is not None
+        return self.key
 
     def set_value(self, raw_value: Any):
         from wexample_filestate.exception.config import BadConfigurationClassTypeException
-
         if raw_value is None:
             return
 
@@ -42,7 +47,7 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
             raise BadConfigurationClassTypeException(f"{self.__class__.__name__}: {e}")
 
     def get_value(self):
-         return self.config_value
+        return self.config_value
 
     def prepare_value(self, raw_value: Any) -> Any:
         return raw_value
@@ -63,4 +68,8 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         return Any
 
     def dump(self) -> Any:
+        if self.get_key() == 'custom_name':
+            print(type(self.get_value().raw))
+            exit()
+
         return self.get_value().raw

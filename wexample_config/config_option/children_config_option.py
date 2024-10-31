@@ -37,8 +37,6 @@ class ChildrenConfigOption(AbstractNestedConfigOption):
         output = []
 
         for child in self.children:
-            print(child.get_name())
-
             output.append(child.dump())
 
         return output

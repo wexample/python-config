@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_option.config_option import ConfigOption
 from wexample_config.const.types import DictConfig
 from wexample_config.options_provider.abstract_options_provider import (
     AbstractOptionsProvider,
@@ -37,11 +38,18 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         from wexample_config.config_value.callback_render_config_value import (CallbackRenderConfigValue)
 
         options = self.get_available_options()
-        valid_option_names = {option_class.get_name() for option_class in options}
+        valid_option_names = set(options.keys())
+        new_options = []
 
-        if not self.allow_undefined_keys:
-            unknown_keys = set(child_config.keys()) - valid_option_names
-            if unknown_keys:
+        # Loop over all options classes to execute option_class.resolve_config(config)
+        # This will modify config before using it, with extra configuration keys.
+        # For instance, an option defining the content of a file may add the should_exist option to ensure existence.
+        for option_class in options.values():
+            child_config = option_class.resolve_config(child_config)
+
+        unknown_keys = set(child_config.keys()) - valid_option_names
+        if unknown_keys:
+            if not self.allow_undefined_keys:
                 from wexample_config.exception.option import InvalidOptionException
 
                 raise InvalidOptionException(
@@ -49,26 +57,31 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                     f'in "{self.__class__.__name__}", '
                     f"allowed options are: {', '.join(valid_option_names)}"
                 )
-
-        # Loop over options classes to execute option_class.resolve_config(config)
-        # This will modify config before using it, with extra configuration keys.
-        for option_class in options:
-            child_config = option_class.resolve_config(child_config)
+            else:
+                for option_name in unknown_keys:
+                    if not isinstance(child_config[option_name], AbstractConfigOption):
+                        # Wrap unknown options
+                        child_config[option_name] = ConfigOption(
+                            key=option_name,
+                            parent=self,
+                            value=child_config[option_name]
+                        )
 
         # Resolve callables and process children recursively
         for key, child_raw_value in list(child_config.items()):
             if isinstance(child_raw_value, CallbackRenderConfigValue):
                 child_config[key] = child_raw_value.render()
 
-        new_options = []
-        for option_class in options:
-            option_name = option_class.get_name()
-            if option_name in child_config:
-                self.options[option_name] = option_class(
-                    value=child_config[option_name], parent=self
+        for option_name, child_config in child_config.items():
+            if isinstance(child_config, AbstractConfigOption):
+                new_option = child_config
+            else:
+                new_option = options[option_name](
+                    value=child_config, parent=self
                 )
 
-                new_options.append(self.options[option_name])
+            self.options[new_option.get_key()] = new_option
+            new_options.append(new_option)
 
         return new_options
 
@@ -81,12 +94,12 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return []
 
-    def get_available_options(self) -> list[type["AbstractConfigOption"]]:
+    def get_available_options(self) -> dict[str, type["AbstractConfigOption"]]:
         providers = self.get_options_providers()
-        options = []
+        options = {}
 
         for provider in providers:
-            options.extend(cast("AbstractOptionsProvider", provider).get_options())
+            options.update(cast("AbstractOptionsProvider", provider).get_options_registry())
 
         return options
 
