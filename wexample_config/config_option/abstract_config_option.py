@@ -4,6 +4,8 @@ from typing import Any, Optional
 from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
+from wexample_config.exception.config_value import ConfigValueTypeException
+from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
@@ -31,18 +33,23 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
         raw_value = self.prepare_value(raw_value)
         config_value_class = self.get_value_class_type()
 
-        # Check if value is valid for the config option,
-        # reuse same method to validate types.
-        config_value_class.validate_value_type(
-            raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
-        )
+        try:
+            # Check if value is valid for the config option,
+            # reuse same method to validate types.
+            config_value_class.validate_value_type(
+                raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
+            )
+        except InvalidOptionValueTypeException as e:
+            raise ConfigValueTypeException(
+                f"Set value pre-check exception: \n"
+                f"{str(self)}: {e}"
+            )
 
         self.config_value = (
             config_value_class(raw=raw_value)
             if not isinstance(raw_value, ConfigValue)
             else raw_value
         )
-
 
     def get_value(self):
         return self.config_value
@@ -71,3 +78,7 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
             exit()
 
         return self.get_value().raw
+
+    def get_parent(self) -> "AbstractConfigOption":
+        assert self.parent is not None
+        return self.parent

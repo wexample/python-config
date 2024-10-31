@@ -30,9 +30,9 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         if raw_value is None:
             return
 
-        self.create_child(child_config=raw_value)
+        self._create_options(config=raw_value)
 
-    def create_child(self, child_config: DictConfig) -> List["AbstractConfigOption"]:
+    def _create_options(self, config: DictConfig) -> List["AbstractConfigOption"]:
         from wexample_config.config_value.callback_render_config_value import (CallbackRenderConfigValue)
 
         options = self.get_available_options()
@@ -43,9 +43,9 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         # This will modify config before using it, with extra configuration keys.
         # For instance, an option defining the content of a file may add the should_exist option to ensure existence.
         for option_class in options.values():
-            child_config = option_class.resolve_config(child_config)
+            config = option_class.resolve_config(config)
 
-        unknown_keys = set(child_config.keys()) - valid_option_names
+        unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
             if not self.allow_undefined_keys:
                 from wexample_config.exception.option import InvalidOptionException
@@ -57,26 +57,26 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                 )
             else:
                 for option_name in unknown_keys:
-                    if not isinstance(child_config[option_name], AbstractConfigOption):
+                    if not isinstance(config[option_name], AbstractConfigOption):
                         # Wrap unknown options
-                        child_config[option_name] = ConfigOption(
+                        config[option_name] = ConfigOption(
                             key=option_name,
                             parent=self,
-                            value=child_config[option_name]
+                            value=config[option_name]
                         )
 
         # Resolve callables and process children recursively
-        for key, child_raw_value in list(child_config.items()):
+        for key, child_raw_value in list(config.items()):
             if isinstance(child_raw_value, CallbackRenderConfigValue):
-                child_config[key] = child_raw_value.render()
+                config[key] = child_raw_value.render()
 
-        for option_name, child_config in child_config.items():
-            if isinstance(child_config, AbstractConfigOption):
-                new_option = child_config
-                child_config.parent = self
+        for option_name, config in config.items():
+            if isinstance(config, AbstractConfigOption):
+                new_option = config
+                config.parent = self
             else:
                 new_option = options[option_name](
-                    value=child_config, parent=self
+                    value=config, parent=self
                 )
 
             self.options[new_option.get_key()] = new_option

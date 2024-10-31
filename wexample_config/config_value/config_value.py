@@ -41,7 +41,7 @@ class ConfigValue(BaseModel):
                 allowed_type=allowed_type,
             )
         except TypeError as e:
-            raise InvalidOptionValueTypeException(f"{cls.__class__.__name__}: {e}")
+            raise InvalidOptionValueTypeException(f"{cls.__name__}: {e}")
 
     @staticmethod
     def get_allowed_types() -> Any:
