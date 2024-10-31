@@ -2,9 +2,11 @@ from types import UnionType
 from typing import Any, Callable, Type
 
 from pydantic import BaseModel
-
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type_helper import type_validate_or_fail
+
+from wexample_config.exception.option import InvalidOptionValueTypeException
+from wexample_config.exception.config_value import ConfigValueTypeException
 
 
 class ConfigValue(BaseModel):
@@ -12,9 +14,16 @@ class ConfigValue(BaseModel):
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        self.validate_value_type(
-            raw_value=self.raw, allowed_type=self.get_allowed_types()
-        )
+
+        try:
+            self.validate_value_type(
+                raw_value=self.raw, allowed_type=self.get_allowed_types()
+            )
+        except InvalidOptionValueTypeException as e:
+            raise ConfigValueTypeException(
+                f"Configuration value initialization exception: \n"
+                f"{self.__class__.__name__}: {e}"
+            )
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}(type={type(self.raw).__name__}, value={self.raw})>"
@@ -32,8 +41,6 @@ class ConfigValue(BaseModel):
                 allowed_type=allowed_type,
             )
         except TypeError as e:
-            from wexample_config.exception.option import InvalidOptionValueTypeException
-
             raise InvalidOptionValueTypeException(f"{cls.__class__.__name__}: {e}")
 
     @staticmethod
