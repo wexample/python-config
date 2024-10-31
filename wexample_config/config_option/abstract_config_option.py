@@ -73,10 +73,6 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
         return Any
 
     def dump(self) -> Any:
-        if self.get_key() == 'custom_name':
-            print(type(self.get_value().raw))
-            exit()
-
         return self.get_value().raw
 
     def get_parent(self) -> "AbstractConfigOption":
