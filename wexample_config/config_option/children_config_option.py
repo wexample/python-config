@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 from types import UnionType
-from typing import Type, List, Dict, Any
+from typing import Type, List, Any
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.config_option.abstract_nested_config_option import AbstractNestedConfigOption
 
 
 class ChildrenConfigOption(AbstractNestedConfigOption):
-    children: List["AbstractConfigOption"] = []
+    children: List[AbstractConfigOption] = []
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:

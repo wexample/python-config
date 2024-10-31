@@ -64,7 +64,3 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
 
     def dump(self) -> Any:
         return self.get_value().raw
-
-    def get_parent(self) -> "AbstractConfigOption":
-        assert self.parent is not None
-        return self.parent

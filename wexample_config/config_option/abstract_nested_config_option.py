@@ -1,9 +1,8 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
-from wexample_config.config_value.callback_render_config_value import (
-    CallbackRenderConfigValue,
-)
 from wexample_config.const.types import DictConfig
 from wexample_config.options_provider.abstract_options_provider import (
     AbstractOptionsProvider,
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 class AbstractNestedConfigOption(AbstractConfigOption):
     allow_undefined_keys: bool = False
     options: dict[str, AbstractConfigOption] = {}
-    options_providers: Optional[list[type["AbstractOptionsProvider"]]] = None
+    options_providers: Optional[list[type[AbstractOptionsProvider]]] = None
     parent: Optional["AbstractNestedConfigOption"] = None
 
     def __init__(self, value: Any, **data):
@@ -35,6 +34,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         self.create_child(child_config=raw_value)
 
     def create_child(self, child_config: DictConfig) -> List["AbstractConfigOption"]:
+        from wexample_config.config_value.callback_render_config_value import (CallbackRenderConfigValue)
+
         options = self.get_available_options()
         valid_option_names = {option_class.get_name() for option_class in options}
 
