@@ -4,12 +4,13 @@ from typing import Any, Optional
 from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
+from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
 
 
-class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
+class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel, ABC):
     parent: Optional["AbstractConfigOption"] = None
     config_value: Optional[ConfigValue] = None
     key: Optional[str] = None

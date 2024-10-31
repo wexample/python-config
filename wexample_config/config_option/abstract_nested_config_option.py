@@ -19,8 +19,6 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     options_providers: Optional[list[type[AbstractOptionsProvider]]] = None
     parent: Optional["AbstractNestedConfigOption"] = None
 
-    def __init__(self, value: Any, **data):
-        super().__init__(value, **data)
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
@@ -75,6 +73,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         for option_name, child_config in child_config.items():
             if isinstance(child_config, AbstractConfigOption):
                 new_option = child_config
+                child_config.parent = self
             else:
                 new_option = options[option_name](
                     value=child_config, parent=self
