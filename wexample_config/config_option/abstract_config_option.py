@@ -24,27 +24,24 @@ class AbstractConfigOption(BaseModel, HasSnakeShortClassNameClassMixin, ABC):
         return self.key
 
     def set_value(self, raw_value: Any):
-        from wexample_filestate.exception.config import BadConfigurationClassTypeException
         if raw_value is None:
             return
 
         raw_value = self.prepare_value(raw_value)
         config_value_class = self.get_value_class_type()
 
-        try:
-            # Check if value is valid for the config option,
-            # reuse same method to validate types.
-            config_value_class.validate_value_type(
-                raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
-            )
+        # Check if value is valid for the config option,
+        # reuse same method to validate types.
+        config_value_class.validate_value_type(
+            raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
+        )
 
-            self.config_value = (
-                config_value_class(raw=raw_value)
-                if not isinstance(raw_value, ConfigValue)
-                else raw_value
-            )
-        except TypeError as e:
-            raise BadConfigurationClassTypeException(f"{self.__class__.__name__}: {e}")
+        self.config_value = (
+            config_value_class(raw=raw_value)
+            if not isinstance(raw_value, ConfigValue)
+            else raw_value
+        )
+
 
     def get_value(self):
         return self.config_value
