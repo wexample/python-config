@@ -41,7 +41,7 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
             )
         except InvalidOptionValueTypeException as e:
             raise ConfigValueTypeException(
-                f"Set value pre-check exception: \n"
+                f"Set value pre-check exception in {self}: \n"
                 f"{str(self)}: {e}"
             )
 
