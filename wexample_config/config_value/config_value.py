@@ -1,7 +1,9 @@
 from types import UnionType
-from typing import Any, Callable, Type
+from typing import Any, Callable, Type, List, Optional
 
 from pydantic import BaseModel
+
+from wexample_config.config_value.filter.abstract_config_value_filter import AbstractConfigValueFilter
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type_helper import type_validate_or_fail
 
@@ -10,7 +12,20 @@ from wexample_config.exception.config_value import ConfigValueTypeException
 
 
 class ConfigValue(BaseModel):
+    filters: Optional[list[AbstractConfigValueFilter]] = []
     raw: Any
+
+    @staticmethod
+    def apply_filters(content, filters: list[AbstractConfigValueFilter]):
+        for value_filter in filters:
+            content = value_filter.apply_filter(content=content)
+
+        return content
+
+    def get_str(self, type_check: bool = True) -> str:
+        return self.apply_filters(
+            content=self.get_str(),
+            filters=self.filters)
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
@@ -77,6 +92,11 @@ class ConfigValue(BaseModel):
         return self.raw is None
 
     # Type checking methods
+    def is_class(self) -> bool:
+        import inspect
+        return inspect.isclass(self.raw)
+
+    # Type checking methods
     def is_callable(self) -> bool:
         return self.is_of_type(Callable[..., Any], self._get_nested_raw())
 
@@ -129,6 +149,11 @@ class ConfigValue(BaseModel):
             Callable[..., Any], self.get_callable, type_check
         )
 
+    def get_class(self, type_check: bool = True) -> Type[Any]:
+        if type_check:
+            assert self.is_class()
+        return self._get_nested_raw()
+
     def get_str(self, type_check: bool = True) -> str:
         return self._get_value_from_callback(str, self.get_str, type_check)
 
@@ -160,6 +185,10 @@ class ConfigValue(BaseModel):
         return self._get_value_from_callback(tuple, self.get_tuple, type_check)
 
     # Setters
+    def set_class(self, value: Type[Any], type_check: bool = True) -> None:
+        self._assert_type(Callable, value, type_check)
+        self.raw = value
+
     def set_callable(self, value: Callable, type_check: bool = True) -> None:
         self._assert_type(Callable, value, type_check)
         self.raw = value
@@ -205,9 +234,6 @@ class ConfigValue(BaseModel):
         self.raw = value
 
     # Conversion methods
-    def to_callable(self) -> Callable:
-        return self._execute_nested_method(self.get_callable)
-
     def to_str(self) -> str:
         return str(self._execute_nested_method(self.get_str))
 
