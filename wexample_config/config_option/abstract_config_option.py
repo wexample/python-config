@@ -18,7 +18,8 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
     key: Optional[str] = None
 
     def __init__(self, value: Any = None, **data) -> None:
-        BaseModel.__init__(self, **data)
+        super().__init__(**data)
+
         self.key = self.key or self.get_name()
         self.set_value(value)
 

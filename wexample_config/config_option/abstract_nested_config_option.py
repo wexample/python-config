@@ -69,13 +69,14 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             if isinstance(child_raw_value, CallbackRenderConfigValue):
                 config[key] = child_raw_value.render()
 
-        for option_name, config in config.items():
-            if isinstance(config, AbstractConfigOption):
-                new_option = config
-                config.parent = self
+        for option_name, option_config in config.items():
+            if isinstance(option_config, AbstractConfigOption):
+                new_option = option_config
+                new_option.parent = self
             else:
                 new_option = options[option_name](
-                    value=config, parent=self
+                    parent=self,
+                    value=option_config,
                 )
 
             self.options[new_option.get_key()] = new_option

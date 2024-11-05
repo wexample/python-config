@@ -25,6 +25,7 @@ from wexample_config.demo.config_option.demo_union_config_option import (
     DemoUnionConfigOption,
 )
 from wexample_config.demo.demo_config_manager import DemoConfigManager
+from wexample_config.exception.config_value import ConfigValueTypeException
 from wexample_config.exception.option import (
     InvalidOptionException,
     InvalidOptionValueTypeException,
@@ -63,14 +64,14 @@ class TestConfigManager:
             self.config_manager.set_value({"unexpected_option": "yes"})
 
     def test_configure_unexpected_type(self):
-        with pytest.raises(InvalidOptionValueTypeException):
+        with pytest.raises(ConfigValueTypeException):
             self.config_manager.set_value({"name": 123})
 
-        with pytest.raises(InvalidOptionValueTypeException):
+        with pytest.raises(ConfigValueTypeException):
             self.config_manager.set_value({"name": []})
 
     def test_configure_list_type(self):
-        with pytest.raises(InvalidOptionValueTypeException):
+        with pytest.raises(ConfigValueTypeException):
             self.config_manager.set_value({"demo_list": 123})
 
         self.config_manager.set_value({"demo_list": []})
@@ -78,7 +79,7 @@ class TestConfigManager:
         assert self.config_manager.get_option(DemoListConfigOption).get_value().is_list()
 
     def test_configure_union_type(self):
-        with pytest.raises(InvalidOptionValueTypeException):
+        with pytest.raises(ConfigValueTypeException):
             self.config_manager.set_value({"demo_union": 123})
 
         self.config_manager.set_value({"demo_union": "hey"})
@@ -90,7 +91,7 @@ class TestConfigManager:
         assert self.config_manager.get_option(DemoUnionConfigOption).get_value().is_dict()
 
     def test_configure_custom_value_type(self):
-        with pytest.raises(InvalidOptionValueTypeException):
+        with pytest.raises(ConfigValueTypeException):
             self.config_manager.set_value(
                 {"demo_custom_value": CustomTypeConfigValue(raw=123)}
             )
