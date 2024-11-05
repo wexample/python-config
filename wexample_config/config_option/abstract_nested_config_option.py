@@ -19,7 +19,6 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     options_providers: Optional[list[type[AbstractOptionsProvider]]] = None
     parent: Optional["AbstractNestedConfigOption"] = None
 
-
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
         return dict[str, Any]
