@@ -24,7 +24,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return dict[str, Any]
 
     def set_value(self, raw_value: Any) -> None:
-        super().set_value(raw_value)
+        # Config might have been modified
+        raw_value = super().set_value(raw_value)
 
         if raw_value is None:
             return

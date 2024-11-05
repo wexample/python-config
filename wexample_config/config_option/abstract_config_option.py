@@ -27,7 +27,7 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
         assert self.key is not None
         return self.key
 
-    def set_value(self, raw_value: Any):
+    def set_value(self, raw_value: Any) -> Any:
         if raw_value is None:
             return
 
@@ -51,6 +51,8 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
             if not isinstance(raw_value, ConfigValue)
             else raw_value
         )
+
+        return raw_value
 
     def get_value(self):
         return self.config_value
