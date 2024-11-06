@@ -50,7 +50,7 @@ class TestConfigManager:
         assert self.config_manager.get_option_value(ChildrenConfigOption).is_list()
 
     def test_configure_callback(self):
-        def _name():
+        def _name(option: "ItemTreeConfigOptionMixin"):
             return "yes"
 
         self.config_manager.set_value({"name": CallbackRenderConfigValue(raw=_name)})
