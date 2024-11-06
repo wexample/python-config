@@ -68,7 +68,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         # Resolve callables and process children recursively
         for key, child_raw_value in list(config.items()):
             if isinstance(child_raw_value, CallbackRenderConfigValue):
-                config[key] = child_raw_value.render()
+                config[key] = child_raw_value.render(self)
 
         for option_name, option_config in config.items():
             if isinstance(option_config, AbstractConfigOption):
