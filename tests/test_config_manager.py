@@ -26,10 +26,8 @@ from wexample_config.demo.config_option.demo_union_config_option import (
 )
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.config_value import ConfigValueTypeException
-from wexample_config.exception.option import (
-    InvalidOptionException,
-    InvalidOptionValueTypeException,
-)
+from wexample_config.exception.option import InvalidOptionException
+from wexample_filestate.config_option.mixin.item_config_option_mixin import ItemTreeConfigOptionMixin
 
 
 class TestConfigManager:
