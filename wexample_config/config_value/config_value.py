@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from wexample_config.config_value.filter.abstract_config_value_filter import AbstractConfigValueFilter
 from wexample_helpers.const.types import AnyList, StringKeysDict
-from wexample_helpers.helpers.type_helper import type_validate_or_fail
+from wexample_helpers.helpers.type import type_validate_or_fail
 
 from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_config.exception.config_value import ConfigValueTypeException
