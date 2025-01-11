@@ -1,19 +1,23 @@
 from types import UnionType
-from typing import Any, Callable, Type, List, Optional
+from typing import Any, Callable, Type, Optional, List
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 from wexample_config.config_value.filter.abstract_config_value_filter import AbstractConfigValueFilter
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type import type_validate_or_fail
-
 from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_config.exception.config_value import ConfigValueTypeException
 
 
 class ConfigValue(BaseModel):
-    filters: Optional[list[AbstractConfigValueFilter]] = []
-    raw: Any
+    filters: Optional[List['AbstractConfigValueFilter']] = Field(
+        default_factory=list,
+        description="Optional list of filters applied to the configuration value."
+    )
+    raw: Any = Field(
+        ...,
+        description="The raw value of the configuration."
+    )
 
     @staticmethod
     def apply_filters(content, filters: list[AbstractConfigValueFilter]):
