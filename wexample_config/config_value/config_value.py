@@ -179,6 +179,10 @@ class ConfigValue(BaseModel):
     def get_dict(self, type_check: bool = True) -> StringKeysDict:
         return self._get_value_from_callback(dict, self.get_dict, type_check)
 
+    def is_dict_containing_key(self, key:str) -> bool:
+        # Separate type check to gracefully return false if not dict.
+        return self.is_dict() and key in self.get_dict()
+
     def get_list(self, type_check: bool = True) -> AnyList:
         return self._get_value_from_callback(list, self.get_list, type_check)
 
