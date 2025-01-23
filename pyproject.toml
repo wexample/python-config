@@ -1,28 +1,38 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = [
+    "setuptools",
+    "wheel",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "wexample-config"
 version = "0.0.16"
 description = "Helpers to manage dict types configurations."
-readme = { file = "README.md", content-type = "text/markdown" }
-authors = [{name = "weeger", email = "contact@wexample.com"}]
-license = { text = "MIT" }
+authors = [
+    { name = "weeger", email = "contact@wexample.com" },
+]
 requires-python = ">=3.6"
-
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-
 dependencies = [
     "wexample-helpers",
 ]
 
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.license]
+text = "MIT"
+
 [project.urls]
 homepage = "https://github.com/wexample/python-config"
 
-[tool.setuptools.packages]
-find = { include = ["*"] }
+[tool.setuptools.packages.find]
+include = [
+    "*",
+]
