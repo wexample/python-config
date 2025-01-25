@@ -7,7 +7,7 @@ from wexample_config.config_option.abstract_nested_config_option import Abstract
 
 
 class ChildrenConfigOption(AbstractListConfigOption):
-    def _get_item_class_type(self):
+    def get_item_class_type(self):
         return AbstractNestedConfigOption
 
     def dump(self) -> Any:
