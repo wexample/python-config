@@ -24,17 +24,17 @@ class AbstractListConfigOption(AbstractConfigOption):
     def _get_item_class_type(self):
         return AbstractNestedConfigOption
 
-    def set_value(self, raw_value: Any) -> None:
-        # Skip direct parent which creates only one item.
-        AbstractConfigOption.set_value(self, raw_value)
-
-        if raw_value is None:
-            return
-
-        for child_config in raw_value:
-            self.children.append(
-                self._get_item_class_type()(
-                    value=child_config,
-                    parent=self
-                )
-            )
+    # def set_value(self, raw_value: Any) -> None:
+    #     # Skip direct parent which creates only one item.
+    #     AbstractConfigOption.set_value(self, raw_value)
+    #
+    #     if raw_value is None:
+    #         return
+    #
+    #     for child_config in raw_value:
+    #         self.children.append(
+    #             self._get_item_class_type()(
+    #                 value=child_config,
+    #                 parent=self
+    #             )
+    #         )
