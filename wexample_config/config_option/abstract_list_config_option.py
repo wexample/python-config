@@ -4,12 +4,13 @@ from types import UnionType
 from typing import TYPE_CHECKING, Any, List, Type
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_option.abstract_nested_config_option import AbstractNestedConfigOption
 
 if TYPE_CHECKING:
     pass
 
 
-class AbstractListConfigOption(AbstractConfigOption):
+class AbstractListConfigOption(AbstractNestedConfigOption):
     children: List[AbstractConfigOption] = []
 
     @staticmethod
