@@ -2,7 +2,7 @@
 
 Helpers to manage dict types configurations.
 
-Version: 0.0.21
+Version: 0.0.22
 
 ## Requirements
 
@@ -13,7 +13,7 @@ Version: 0.0.21
 - pip-tools
 - pydantic
 - pytest
-- wexample-helpers==0.0.21
+- wexample-helpers==0.0.22
 
 ## Installation
 
