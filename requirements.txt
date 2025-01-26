@@ -17,11 +17,15 @@ packaging==24.2
 #   build
 #   pytest
 pip-tools==7.4.1
-# via -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
+# via
+#   -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
+#   wexample-helpers
 pluggy==1.5.0
 # via pytest
 pydantic==2.10.4
-# via -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
+# via
+#   -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
+#   wexample-helpers
 pydantic-core==2.27.2
 # via pydantic
 pyproject-hooks==1.2.0
@@ -29,12 +33,14 @@ pyproject-hooks==1.2.0
 #   build
 #   pip-tools
 pytest==8.3.4
-# via -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
+# via
+#   -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
+#   wexample-helpers
 typing-extensions==4.12.2
 # via
 #   pydantic
 #   pydantic-core
-wexample-helpers==0.0.20
+wexample-helpers==0.0.21
 # via -r /home/weeger/Desktop/WIP/WEB/WEXAMPLE/PIP/pip/config/requirements.in
 wheel==0.45.1
 # via pip-tools
