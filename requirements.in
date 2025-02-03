@@ -1,4 +1,4 @@
 pip-tools
 pydantic
 pytest
-wexample-helpers==0.0.22
+wexample-helpers==0.0.25
