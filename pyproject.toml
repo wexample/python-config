@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wexample-config"
-version = "0.0.29"
+version = "0.0.30"
 description = "Helpers to manage dict types configurations."
 authors = [
     { name = "weeger", email = "contact@wexample.com" },
@@ -22,7 +22,7 @@ dependencies = [
     "pip-tools",
     "pydantic",
     "pytest",
-    "wexample-helpers==0.0.29",
+    "wexample-helpers==0.0.30",
 ]
 
 [project.readme]
