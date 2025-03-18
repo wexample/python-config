@@ -332,3 +332,54 @@ class ConfigValue(BaseModel):
 
     def to_tuple(self) -> tuple:
         return tuple(self._execute_nested_method(self.get_tuple))
+
+    # Conversion methods or None
+    def to_str_or_none(self) -> Optional[str]:
+        if self.is_none():
+            return None
+        return self.to_str()
+
+    def to_int_or_none(self) -> Optional[int]:
+        if self.is_none():
+            return None
+        return self.to_int()
+
+    def to_float_or_none(self) -> Optional[float]:
+        if self.is_none():
+            return None
+        return self.to_float()
+
+    def to_bool_or_none(self) -> Optional[bool]:
+        if self.is_none():
+            return None
+        return self.to_bool()
+
+    def to_complex_or_none(self) -> Optional[complex]:
+        if self.is_none():
+            return None
+        return self.to_complex()
+
+    def to_bytes_or_none(self) -> Optional[bytes]:
+        if self.is_none():
+            return None
+        return self.to_bytes()
+
+    def to_dict_or_none(self) -> Optional[StringKeysDict]:
+        if self.is_none():
+            return None
+        return self.to_dict()
+
+    def to_list_or_none(self) -> Optional[AnyList]:
+        if self.is_none():
+            return None
+        return self.to_list()
+
+    def to_set_or_none(self) -> Optional[set]:
+        if self.is_none():
+            return None
+        return self.to_set()
+
+    def to_tuple_or_none(self) -> Optional[tuple]:
+        if self.is_none():
+            return None
+        return self.to_tuple()
