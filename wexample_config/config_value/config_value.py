@@ -192,6 +192,67 @@ class ConfigValue(BaseModel):
     def get_tuple(self, type_check: bool = True) -> tuple:
         return self._get_value_from_callback(tuple, self.get_tuple, type_check)
 
+    # Getters or None
+    def get_callable_or_none(self) -> Optional[Callable]:
+        if self.is_callable():
+            return self.get_callable()
+        return None
+
+    def get_class_or_none(self) -> Optional[Type[Any]]:
+        if self.is_class():
+            return self.get_class()
+        return None
+
+    def get_str_or_none(self) -> Optional[str]:
+        if self.is_str():
+            return self.get_str()
+        return None
+
+    def get_int_or_none(self) -> Optional[int]:
+        if self.is_int():
+            return self.get_int()
+        return None
+
+    def get_float_or_none(self) -> Optional[float]:
+        if self.is_float():
+            return self.get_float()
+        return None
+
+    def get_bool_or_none(self) -> Optional[bool]:
+        if self.is_bool():
+            return self.get_bool()
+        return None
+
+    def get_complex_or_none(self) -> Optional[complex]:
+        if self.is_complex():
+            return self.get_complex()
+        return None
+
+    def get_bytes_or_none(self) -> Optional[bytes]:
+        if self.is_bytes():
+            return self.get_bytes()
+        return None
+
+    def get_dict_or_none(self) -> Optional[StringKeysDict]:
+        if self.is_dict():
+            return self.get_dict()
+        return None
+
+    def get_list_or_none(self) -> Optional[AnyList]:
+        if self.is_list():
+            return self.get_list()
+        return None
+
+    def get_set_or_none(self) -> Optional[set]:
+        if self.is_set():
+            return self.get_set()
+        return None
+
+    def get_tuple_or_none(self) -> Optional[tuple]:
+        if self.is_tuple():
+            return self.get_tuple()
+        return None
+
     # Setters
     def set_class(self, value: Type[Any], type_check: bool = True) -> None:
         self._assert_type(Callable, value, type_check)
