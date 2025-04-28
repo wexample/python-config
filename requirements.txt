@@ -40,7 +40,7 @@ typing-extensions==4.12.2
     # via
     #   pydantic
     #   pydantic-core
-wexample-helpers==0.0.31
+wexample-helpers==0.0.53
     # via -r requirements.in
 wheel==0.45.1
     # via pip-tools
