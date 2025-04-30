@@ -95,6 +95,12 @@ class ConfigValue(BaseModel):
     def is_none(self) -> bool:
         return self.raw is None
 
+    def is_empty(self) -> bool:
+        raw = self._get_nested_raw()
+        return (self.raw is None
+                or (self.is_of_type(list, raw) and len(raw) == 0)
+                or (self.is_of_type(str, raw) and raw == ""))
+
     # Type checking methods
     def is_class(self) -> bool:
         import inspect
