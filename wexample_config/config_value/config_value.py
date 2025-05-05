@@ -10,6 +10,47 @@ from wexample_config.exception.config_value import ConfigValueTypeException
 
 
 class ConfigValue(BaseModel):
+    """
+    Wraps a raw configuration value (with optional filters) and provides a consistent API for:
+
+      1. Type checks:
+         - is_int(), is_str(), is_list(), is_dict(), is_callable(), etc.
+           → Return True if the (nested) raw value is of the given type, else False.
+
+      2. Typed getters:
+         - get_int(), get_str(), get_list(), etc.
+           → Return the value as the requested type or raise TypeError if the type doesn’t match
+             (unless called with type_check=False).
+
+      3. Safe getters:
+         - get_int_or_none(), get_str_or_none(), …
+           → Return the value as the requested type if it matches, else None.
+         - get_int_or_default(default), get_str_or_default(default), …
+           → Return the value if it matches the type, else return the provided default.
+
+      4. Type-checked setters:
+         - set_int(value), set_str(value), …
+           → Verify the type before assigning to self.raw, else raise TypeError.
+
+      5. Conversions:
+         - to_int(), to_str(), to_list(), etc.
+           → Attempt to convert the raw value via the built-in constructor (e.g. int("123")),
+             raising ValueError/TypeError on failure.
+         - to_int_or_none(), to_str_or_none(), …
+           → Same as to_<type>(), but return None if the raw value is None.
+
+    Advanced utilities:
+
+      - apply_filters(content, filters): apply a list of AbstractConfigValueFilter to the content.
+      - validate_value_type(raw_value, allowed_type): generic type validation at init.
+
+    Examples:
+        cv = ConfigValue(raw="123")
+        cv.is_str()                # True
+        cv.get_str()               # "123"
+        cv.to_int()                # 123
+        cv.get_int_or_default(0)   # 0 (no exception)
+    """
     filters: Optional[List['AbstractConfigValueFilter']] = Field(
         default_factory=list,
         description="Optional list of filters applied to the configuration value."
