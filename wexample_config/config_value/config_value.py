@@ -403,10 +403,69 @@ class ConfigValue(BaseModel):
         except TypeError:
             return default
 
+    def get_str_or_default(
+            self,
+            default: Optional[str] = None,
+            type_check: bool = True
+    ) -> str:
+        default_str = default if default is not None else ""
+        return self._get_or_default(self.get_str, default_str, type_check)
+
+    def get_int_or_default(
+            self,
+            default: Optional[int] = None,
+            type_check: bool = True
+    ) -> int:
+        default_int = default if default is not None else 0
+        return self._get_or_default(self.get_int, default_int, type_check)
+
+    def get_float_or_default(
+            self,
+            default: Optional[float] = None,
+            type_check: bool = True
+    ) -> float:
+        default_float = default if default is not None else 0.0
+        return self._get_or_default(self.get_float, default_float, type_check)
+
+    def get_bool_or_default(
+            self,
+            default: Optional[bool] = None,
+            type_check: bool = True
+    ) -> bool:
+        default_bool = default if default is not None else False
+        return self._get_or_default(self.get_bool, default_bool, type_check)
+
+    def get_complex_or_default(
+            self,
+            default: Optional[complex] = None,
+            type_check: bool = True
+    ) -> complex:
+        default_complex = default if default is not None else 0+0j
+        return self._get_or_default(self.get_complex, default_complex, type_check)
+
+    def get_bytes_or_default(
+            self,
+            default: Optional[bytes] = None,
+            type_check: bool = True
+    ) -> bytes:
+        default_bytes = default if default is not None else b""
+        return self._get_or_default(self.get_bytes, default_bytes, type_check)
+
+    def get_dict_or_default(
+            self,
+            default: Optional[StringKeysDict] = None,
+            type_check: bool = True
+    ) -> StringKeysDict:
+        default_dict = default if default is not None else {}
+        return self._get_or_default(self.get_dict, default_dict, type_check)
+
+    def get_dict_or_empty(self) -> StringKeysDict:
+        return self.get_dict_or_default(default={})
+
     def get_list_or_default(
-        self,
-        default: Optional[AnyList] = None,
-        type_check: bool = True
+            self,
+            default: Optional[AnyList] = None,
+            type_check: bool = True
     ) -> AnyList:
         default_list = default if default is not None else []
         return self._get_or_default(self.get_list, default_list, type_check)
@@ -414,13 +473,18 @@ class ConfigValue(BaseModel):
     def get_list_or_empty(self) -> AnyList:
         return self.get_list_or_default(default=[])
 
-    def get_dict_or_default(
-        self,
-        default: Optional[StringKeysDict] = None,
-        type_check: bool = True
-    ) -> StringKeysDict:
-        default_dict = default if default is not None else {}
-        return self._get_or_default(self.get_dict, default_dict, type_check)
+    def get_set_or_default(
+            self,
+            default: Optional[set] = None,
+            type_check: bool = True
+    ) -> set:
+        default_set = default if default is not None else set()
+        return self._get_or_default(self.get_set, default_set, type_check)
 
-    def get_dict_or_empty(self) -> StringKeysDict:
-        return self.get_dict_or_default(default={})
+    def get_tuple_or_default(
+            self,
+            default: Optional[tuple] = None,
+            type_check: bool = True
+    ) -> tuple:
+        default_tuple = default if default is not None else ()
+        return self._get_or_default(self.get_tuple, default_tuple, type_check)
