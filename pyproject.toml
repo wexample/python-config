@@ -22,7 +22,7 @@ dependencies = [
     "pip-tools",
     "pydantic",
     "pytest",
-    "wexample-helpers==0.0.54",
+    "wexample-helpers==0.0.53",
 ]
 
 [project.readme]
