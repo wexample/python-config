@@ -2,11 +2,12 @@ from types import UnionType
 from typing import Any, Callable, Type, Optional, List
 
 from pydantic import BaseModel, Field
+
 from wexample_config.config_value.filter.abstract_config_value_filter import AbstractConfigValueFilter
+from wexample_config.exception.config_value import ConfigValueTypeException
+from wexample_config.exception.option import InvalidOptionValueTypeException
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type import type_validate_or_fail
-from wexample_config.exception.option import InvalidOptionValueTypeException
-from wexample_config.exception.config_value import ConfigValueTypeException
 
 
 class ConfigValue(BaseModel):
@@ -87,7 +88,7 @@ class ConfigValue(BaseModel):
 
     @classmethod
     def validate_value_type(
-        cls, raw_value: Any, allowed_type: type | UnionType
+            cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
         try:
             type_validate_or_fail(
@@ -109,7 +110,7 @@ class ConfigValue(BaseModel):
         return False
 
     def _assert_type(
-        self, expected_type: Any, value: Any, type_check: bool = True
+            self, expected_type: Any, value: Any, type_check: bool = True
     ) -> None:
         if type_check and not self.is_of_type(expected_type, value):
             raise TypeError(f"Expected {expected_type} but got {type(value)}")
@@ -133,15 +134,15 @@ class ConfigValue(BaseModel):
     def is_empty(self) -> bool:
         raw = self._get_nested_raw()
         return (
-            raw is None
-            or (self.is_of_type(list, raw) and len(raw) == 0)
-            or (self.is_of_type(str, raw) and raw == "")
-            or (self.is_of_type(dict, raw) and len(raw) == 0)
-            or (self.is_of_type(tuple, raw) and len(raw) == 0)
-            or (self.is_of_type(set, raw) and len(raw) == 0)
-            or raw == 0
-            or raw is False
-            or (hasattr(raw, '__len__') and len(raw) == 0)
+                raw is None
+                or (self.is_of_type(list, raw) and len(raw) == 0)
+                or (self.is_of_type(str, raw) and raw == "")
+                or (self.is_of_type(dict, raw) and len(raw) == 0)
+                or (self.is_of_type(tuple, raw) and len(raw) == 0)
+                or (self.is_of_type(set, raw) and len(raw) == 0)
+                or raw == 0
+                or raw is False
+                or (hasattr(raw, '__len__') and len(raw) == 0)
         )
 
     # Type checking methods
@@ -180,7 +181,7 @@ class ConfigValue(BaseModel):
     def is_dict(self) -> bool:
         return self.is_of_type(dict, self._get_nested_raw())
 
-    def is_dict_containing_key(self, key:str) -> bool:
+    def is_dict_containing_key(self, key: str) -> bool:
         # Separate type check to gracefully return false if not dict.
         return self.is_dict() and key in self.get_dict()
 
@@ -195,7 +196,7 @@ class ConfigValue(BaseModel):
 
     # Getter methods
     def _get_value_from_callback(
-        self, expected_type: Any, method: Callable[..., Any], type_check: bool = True
+            self, expected_type: Any, method: Callable[..., Any], type_check: bool = True
     ) -> Any:
         value = self._execute_nested_method(method)
         self._assert_type(expected_type, value, type_check)
@@ -434,10 +435,10 @@ class ConfigValue(BaseModel):
         return self.to_tuple()
 
     def _get_or_default(
-        self,
-        getter: Callable[[bool], Any],
-        default: Any,
-        type_check: bool = True
+            self,
+            getter: Callable[[bool], Any],
+            default: Any,
+            type_check: bool = True
     ) -> Any:
         try:
             return getter(type_check=type_check)
@@ -449,56 +450,49 @@ class ConfigValue(BaseModel):
             default: Optional[str] = None,
             type_check: bool = True
     ) -> str:
-        default_str = default if default is not None else ""
-        return self._get_or_default(self.get_str, default_str, type_check)
+        return self._get_or_default(self.get_str, default, type_check)
 
     def get_int_or_default(
             self,
             default: Optional[int] = None,
             type_check: bool = True
     ) -> int:
-        default_int = default if default is not None else 0
-        return self._get_or_default(self.get_int, default_int, type_check)
+        return self._get_or_default(self.get_int, default, type_check)
 
     def get_float_or_default(
             self,
             default: Optional[float] = None,
             type_check: bool = True
     ) -> float:
-        default_float = default if default is not None else 0.0
-        return self._get_or_default(self.get_float, default_float, type_check)
+        return self._get_or_default(self.get_float, default, type_check)
 
     def get_bool_or_default(
             self,
             default: Optional[bool] = None,
             type_check: bool = True
     ) -> bool:
-        default_bool = default if default is not None else False
-        return self._get_or_default(self.get_bool, default_bool, type_check)
+        return self._get_or_default(self.get_bool, default, type_check)
 
     def get_complex_or_default(
             self,
             default: Optional[complex] = None,
             type_check: bool = True
     ) -> complex:
-        default_complex = default if default is not None else 0+0j
-        return self._get_or_default(self.get_complex, default_complex, type_check)
+        return self._get_or_default(self.get_complex, default, type_check)
 
     def get_bytes_or_default(
             self,
             default: Optional[bytes] = None,
             type_check: bool = True
     ) -> bytes:
-        default_bytes = default if default is not None else b""
-        return self._get_or_default(self.get_bytes, default_bytes, type_check)
+        return self._get_or_default(self.get_bytes, default, type_check)
 
     def get_dict_or_default(
             self,
             default: Optional[StringKeysDict] = None,
             type_check: bool = True
     ) -> StringKeysDict:
-        default_dict = default if default is not None else {}
-        return self._get_or_default(self.get_dict, default_dict, type_check)
+        return self._get_or_default(self.get_dict, default, type_check)
 
     def get_dict_or_empty(self) -> StringKeysDict:
         return self.get_dict_or_default(default={})
@@ -508,8 +502,7 @@ class ConfigValue(BaseModel):
             default: Optional[AnyList] = None,
             type_check: bool = True
     ) -> AnyList:
-        default_list = default if default is not None else []
-        return self._get_or_default(self.get_list, default_list, type_check)
+        return self._get_or_default(self.get_list, default, type_check)
 
     def get_list_or_empty(self) -> AnyList:
         return self.get_list_or_default(default=[])
