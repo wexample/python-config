@@ -1,5 +1,5 @@
-from wexample_helpers.exception.abstract_exception import AbstractException
+from wexample_helpers.exception.undefined_exception import UndefinedException
 
 
-class InvalidOptionException(AbstractException):
+class InvalidOptionException(UndefinedException):
     pass
