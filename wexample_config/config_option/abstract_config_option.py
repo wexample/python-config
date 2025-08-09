@@ -4,8 +4,8 @@ from typing import Any, Optional
 from pydantic import BaseModel
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
-from wexample_config.exception.config_value import ConfigValueTypeException
-from wexample_config.exception.option import InvalidOptionValueTypeException
+from wexample_config.exception.config_value_type_exception import ConfigValueTypeException
+from wexample_config.exception.invalid_option_value_type_exception import InvalidOptionValueTypeException
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,

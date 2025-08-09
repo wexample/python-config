@@ -25,8 +25,8 @@ from wexample_config.demo.config_option.demo_union_config_option import (
     DemoUnionConfigOption,
 )
 from wexample_config.demo.demo_config_manager import DemoConfigManager
-from wexample_config.exception.config_value import ConfigValueTypeException
-from wexample_config.exception.option import InvalidOptionException
+from wexample_config.exception.config_value_type_exception import ConfigValueTypeException
+from wexample_config.exception.invalid_option_exception import InvalidOptionException
 from wexample_filestate.config_option.mixin.item_config_option_mixin import ItemTreeConfigOptionMixin
 
 
