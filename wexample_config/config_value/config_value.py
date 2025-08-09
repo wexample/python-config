@@ -4,8 +4,6 @@ from typing import Any, Callable, Type, Optional, List
 from pydantic import BaseModel, Field
 
 from wexample_config.config_value.filter.abstract_config_value_filter import AbstractConfigValueFilter
-from wexample_config.exception.config_value import ConfigValueTypeException
-from wexample_config.exception.invalid_option_value_type_exception import InvalidOptionValueTypeException
 from wexample_helpers.const.types import AnyList, StringKeysDict
 from wexample_helpers.helpers.type import type_validate_or_fail
 
@@ -69,16 +67,11 @@ class ConfigValue(BaseModel):
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        try:
-            self.validate_value_type(
-                raw_value=self.raw,
-                allowed_type=self.get_allowed_types()
-            )
-        except InvalidOptionValueTypeException as e:
-            raise ConfigValueTypeException(
-                f"Configuration value initialization exception:\n"
-                f"{self.__class__.__name__}: {e}"
-            )
+
+        self.validate_value_type(
+            raw_value=self.raw,
+            allowed_type=self.get_allowed_types()
+        )
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}(type={type(self.raw).__name__}, value={self.raw})>"
@@ -90,13 +83,10 @@ class ConfigValue(BaseModel):
     def validate_value_type(
             cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
-        try:
-            type_validate_or_fail(
-                value=raw_value,
-                allowed_type=allowed_type,
-            )
-        except TypeError as e:
-            raise InvalidOptionValueTypeException(f"{cls.__name__}: {e}")
+        type_validate_or_fail(
+            value=raw_value,
+            allowed_type=allowed_type,
+        )
 
     @staticmethod
     def get_allowed_types() -> Any:

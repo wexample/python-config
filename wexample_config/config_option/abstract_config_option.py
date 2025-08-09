@@ -34,17 +34,12 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
         raw_value = self.prepare_value(raw_value)
         config_value_class = self.get_value_class_type()
 
-        try:
-            # Check if value is valid for the config option,
-            # reuse same method to validate types.
-            config_value_class.validate_value_type(
-                raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
-            )
-        except InvalidOptionValueTypeException as e:
-            raise ConfigValueTypeException(
-                f"Set value pre-check exception in {self}: \n"
-                f"{str(self)}: {e}"
-            )
+        # Check if value is valid for the config option,
+        # reuse same method to validate types.
+        config_value_class.validate_value_type(
+            raw_value=raw_value,
+            allowed_type=self.get_raw_value_allowed_type()
+        )
 
         self.config_value = (
             config_value_class(raw=raw_value)
