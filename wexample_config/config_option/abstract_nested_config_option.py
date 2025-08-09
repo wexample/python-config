@@ -21,7 +21,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
-        return dict[str, Any]
+        return Union[dict[str, Any], set[Type[AbstractConfigOption]]]
 
     def set_value(self, raw_value: Any) -> None:
         # Config might have been modified
@@ -32,12 +32,22 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         self._create_options(config=raw_value)
 
-    def _create_options(self, config: DictConfig) -> List["AbstractConfigOption"]:
+    def _create_options(self, config: DictConfig | set[type[AbstractConfigOption]]) -> List["AbstractConfigOption"]:
         from wexample_config.config_value.callback_render_config_value import (CallbackRenderConfigValue)
 
         options = self.get_available_options()
         valid_option_names = set(options.keys())
         new_options = []
+
+        # Normalize: accept a set of option classes and convert to dict[name -> instance]
+        if isinstance(config, set):
+            normalized: Dict[str, AbstractConfigOption] = {}
+            for option_class in config:
+                instance = option_class(parent=self)
+                normalized[option_class.get_name()] = instance
+
+            # Reuse the rest of the logic by working with a dict
+            config = cast(DictConfig, normalized)
 
         # Loop over all options classes to execute option_class.resolve_config(config)
         # This will modify config before using it, with extra configuration keys.
@@ -45,6 +55,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         for option_class in options.values():
             config = option_class.resolve_config(config)
 
+        # Accept both dict configs and normalized set-of-types
         unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
             if not self.allow_undefined_keys:
@@ -138,7 +149,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         option = self.get_option(option_type)
         if option:
-            return cast("ConfigValue", option.get_value())
+            return cast(ConfigValue, option.get_value())
 
         return ConfigValue(raw=default)
 
