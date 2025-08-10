@@ -2,6 +2,7 @@ from abc import ABC
 from typing import Any, Optional
 
 from pydantic import BaseModel
+
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_config.const.types import DictConfig
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
@@ -47,7 +48,7 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
 
         return raw_value
 
-    def get_value(self):
+    def get_value(self) -> Optional[ConfigValue]:
         return self.config_value
 
     def prepare_value(self, raw_value: Any) -> Any:
@@ -74,3 +75,8 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
     def get_parent(self) -> "AbstractConfigOption":
         assert self.parent is not None
         return self.parent
+
+    def get_root(self) -> "AbstractConfigOption":
+        if self.parent is not None:
+            return self.parent.get_root()
+        return self
