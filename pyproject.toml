@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wexample-config"
-version = "0.0.46"
+version = "0.0.47"
 description = "Helpers to manage dict types configurations."
 authors = [
     { name = "weeger", email = "contact@wexample.com" },
