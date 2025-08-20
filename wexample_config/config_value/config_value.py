@@ -161,10 +161,6 @@ class ConfigValue(BaseModel):
     def is_dict(self) -> bool:
         return self.is_of_type(dict, self._get_nested_raw())
 
-    def is_dict_containing_key(self, key: str) -> bool:
-        # Separate type check to gracefully return false if not dict.
-        return self.is_dict() and key in self.get_dict()
-
     def is_list(self) -> bool:
         return self.is_of_type(list, self._get_nested_raw())
 
@@ -502,3 +498,10 @@ class ConfigValue(BaseModel):
     ) -> tuple:
         default_tuple = default if default is not None else ()
         return self._get_or_default(self.get_tuple, default_tuple, type_check)
+
+    def has_key_in_dict(self, key: str) -> bool:
+        # Separate type check to gracefully return false if not dict.
+        return self.is_dict() and key in self.get_dict()
+
+    def has_item_in_list(self, value:Any) -> bool:
+        return self.is_list() and value in self.get_list()
