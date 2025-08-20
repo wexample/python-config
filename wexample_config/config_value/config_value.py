@@ -1,11 +1,9 @@
 from types import UnionType
-from typing import Any, Callable, Type, Optional, List
+from typing import Any, Callable, Type, Optional, List, TYPE_CHECKING
 
 from pydantic import BaseModel, Field
 
-from wexample_config.config_value.filter.abstract_config_value_filter import AbstractConfigValueFilter
 from wexample_helpers.const.types import AnyList, StringKeysDict
-from wexample_helpers.helpers.type import type_validate_or_fail
 
 
 class ConfigValue(BaseModel):
@@ -39,8 +37,6 @@ class ConfigValue(BaseModel):
            → Same as to_<type>(), but return None if the raw value is None.
 
     Advanced utilities:
-
-      - apply_filters(content, filters): apply a list of AbstractConfigValueFilter to the content.
       - validate_value_type(raw_value, allowed_type): generic type validation at init.
 
     Examples:
@@ -50,20 +46,10 @@ class ConfigValue(BaseModel):
         cv.to_int()                # 123
         cv.get_int_or_default(0)   # 0 (no exception)
     """
-    filters: Optional[List['AbstractConfigValueFilter']] = Field(
-        default_factory=list,
-        description="Optional list of filters applied to the configuration value."
-    )
     raw: Any = Field(
         ...,
         description="The raw value of the configuration."
     )
-
-    @staticmethod
-    def apply_filters(content: Any, filters: List[AbstractConfigValueFilter]) -> Any:
-        for value_filter in filters:
-            content = value_filter.apply_filter(content=content)
-        return content
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
@@ -85,6 +71,8 @@ class ConfigValue(BaseModel):
             raw_value: Any,
             allowed_type: type | UnionType
     ) -> None:
+        from wexample_helpers.helpers.type import type_validate_or_fail
+
         type_validate_or_fail(
             value=raw_value,
             allowed_type=allowed_type,
