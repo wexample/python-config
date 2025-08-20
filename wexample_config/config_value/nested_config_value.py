@@ -37,9 +37,10 @@ class NestedConfigValue(ConfigValue):
             return cls(raw=dict(val))
 
         # Case 2: sequences (list/tuple), but not str/bytes
+        # Return a NestedConfigValue so traversal always hits a node
+        # capable of get_config_item. Element wrapping is handled in __init__.
         if isinstance(val, Sequence) and not isinstance(val, (str, bytes, bytearray)):
-            wrapped = [cls._wrap(v) for v in val]
-            return tuple(wrapped) if isinstance(val, tuple) else wrapped
+            return cls(raw=val)
 
         # Case 3: primitive / other types → unchanged
         return ConfigValue(raw=val)
@@ -72,35 +73,19 @@ class NestedConfigValue(ConfigValue):
     ) -> Optional["ConfigValue"]:
         """
         Traverse nested dict/list/tuple values by a separated path.
-        Example: search("first.second.0.third")
-
-        Returns a wrapped ConfigValue (or NestedConfigValue) if found, else None.
+        Example: search("first.second.0.third").
+        Returns a ConfigValue/NestedConfigValue if found, else None.
+        Assumes nested containers are wrapped as NestedConfigValue.
         """
         if not path:
             return self
 
         current: Optional[ConfigValue] = self
         for part in path.split(separator):
+            if not isinstance(current, NestedConfigValue):
+                return None
+            current = current.get_config_item(part)
             if current is None:
                 return None
-
-            # If we have a NestedConfigValue, use its accessor directly
-            if isinstance(current, NestedConfigValue):
-                next_val = current.get_config_item(part)
-            else:
-                # Resolve to the innermost ConfigValue
-                resolved = current._resolve_nested()
-                if isinstance(resolved, NestedConfigValue):
-                    next_val = resolved.get_config_item(part)
-                else:
-                    # Build a transient Nested wrapper over the raw to reuse logic
-                    temp = NestedConfigValue(raw=resolved.raw)
-                    next_val = temp.get_config_item(part)
-
-            if next_val is None:
-                return None
-
-            # Ensure we always carry a ConfigValue wrapper forward
-            current = next_val if isinstance(next_val, ConfigValue) else ConfigValue(raw=next_val)
 
         return current
