@@ -2,6 +2,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any, Optional
 
 from wexample_config.config_value.config_value import ConfigValue
+from wexample_helpers.helpers.dict import DICT_PATH_SEPARATOR_DEFAULT
 
 
 class NestedConfigValue(ConfigValue):
@@ -15,6 +16,13 @@ class NestedConfigValue(ConfigValue):
             # Iterate over a copy of items so we can safely modify in place
             for key, val in list(value_dict.items()):
                 self.raw[key] = self._wrap(val)
+        # If this ConfigValue holds a list/tuple,
+        # wrap each element consistently as ConfigValue/NestedConfigValue.
+        elif self.is_list() or self.is_tuple():
+            seq = self.raw
+            wrapped = [self._wrap(v) for v in seq]
+            # Preserve tuple/list type
+            self.raw = tuple(wrapped) if self.is_tuple() else wrapped
 
     @classmethod
     def _wrap(cls, val: Any) -> ConfigValue:
@@ -36,7 +44,63 @@ class NestedConfigValue(ConfigValue):
         # Case 3: primitive / other types → unchanged
         return ConfigValue(raw=val)
 
-    def get_config_item(self, key: str) -> Optional["ConfigValue"]:
-        if self.is_dict() and key in self.raw:
+    def get_config_item(self, key: Any) -> Optional["ConfigValue"]:
+        # Dict access by string key
+        if self.is_dict() and isinstance(key, str) and key in self.raw:
             return self.raw[key]
+
+        # List/Tuple access by integer index (also accept str indices like "0")
+        if (self.is_list() or self.is_tuple()):
+            idx: Optional[int] = None
+            if isinstance(key, int):
+                idx = key
+            elif isinstance(key, str) and (key.isdigit() or (key.startswith("-") and key[1:].isdigit())):
+                try:
+                    idx = int(key)
+                except ValueError:
+                    idx = None
+            if idx is not None:
+                seq = self.raw
+                if -len(seq) <= idx < len(seq):
+                    return seq[idx]
         return None
+
+    def search(
+        self,
+        path: str,
+        separator: str = DICT_PATH_SEPARATOR_DEFAULT,
+    ) -> Optional["ConfigValue"]:
+        """
+        Traverse nested dict/list/tuple values by a separated path.
+        Example: search("first.second.0.third")
+
+        Returns a wrapped ConfigValue (or NestedConfigValue) if found, else None.
+        """
+        if not path:
+            return self
+
+        current: Optional[ConfigValue] = self
+        for part in path.split(separator):
+            if current is None:
+                return None
+
+            # If we have a NestedConfigValue, use its accessor directly
+            if isinstance(current, NestedConfigValue):
+                next_val = current.get_config_item(part)
+            else:
+                # Resolve to the innermost ConfigValue
+                resolved = current._resolve_nested()
+                if isinstance(resolved, NestedConfigValue):
+                    next_val = resolved.get_config_item(part)
+                else:
+                    # Build a transient Nested wrapper over the raw to reuse logic
+                    temp = NestedConfigValue(raw=resolved.raw)
+                    next_val = temp.get_config_item(part)
+
+            if next_val is None:
+                return None
+
+            # Ensure we always carry a ConfigValue wrapper forward
+            current = next_val if isinstance(next_val, ConfigValue) else ConfigValue(raw=next_val)
+
+        return current
