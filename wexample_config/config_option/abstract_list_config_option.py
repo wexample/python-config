@@ -4,7 +4,9 @@ from types import UnionType
 from typing import TYPE_CHECKING, Any, List, Type
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
-from wexample_config.config_option.abstract_nested_config_option import AbstractNestedConfigOption
+from wexample_config.config_option.abstract_nested_config_option import (
+    AbstractNestedConfigOption,
+)
 
 if TYPE_CHECKING:
     pass
@@ -33,8 +35,5 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
 
         for child_config in raw_value:
             self.children.append(
-                self.get_item_class_type()(
-                    value=child_config,
-                    parent=self
-                )
+                self.get_item_class_type()(value=child_config, parent=self)
             )

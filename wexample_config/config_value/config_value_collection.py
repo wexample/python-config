@@ -4,14 +4,15 @@ from pydantic import BaseModel, Field
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.const.types import AnyList
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class ConfigValueCollection(BaseModel, Generic[T]):
     """A collection of ConfigValue objects that provides utility methods for working with collections."""
+
     items: List[ConfigValue] = Field(
         default_factory=list,
-        description="List of ConfigValue objects in the collection."
+        description="List of ConfigValue objects in the collection.",
     )
 
     def __init__(self, **data) -> None:
@@ -118,13 +119,13 @@ class ConfigValueCollection(BaseModel, Generic[T]):
 
     # Factory methods
     @classmethod
-    def from_config_values(cls, values: List[ConfigValue]) -> 'ConfigValueCollection':
+    def from_config_values(cls, values: List[ConfigValue]) -> "ConfigValueCollection":
         """Create a ConfigValueCollection from a list of ConfigValue objects."""
         collection = cls()
         collection.extend(values)
         return collection
 
     @classmethod
-    def from_raw_values(cls, values: List[Any]) -> 'ConfigValueCollection':
+    def from_raw_values(cls, values: List[Any]) -> "ConfigValueCollection":
         """Create a ConfigValueCollection from a list of raw values."""
         return cls.from_config_values([ConfigValue(raw=value) for value in values])

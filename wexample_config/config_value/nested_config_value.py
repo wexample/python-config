@@ -45,17 +45,19 @@ class NestedConfigValue(ConfigValue):
         # Case 3: primitive / other types → unchanged
         return ConfigValue(raw=val)
 
-    def get_config_item(self, key: Any, default:Any = None) -> Optional["ConfigValue"]:
+    def get_config_item(self, key: Any, default: Any = None) -> Optional["ConfigValue"]:
         # Dict access by string key
         if self.is_dict() and isinstance(key, str) and key in self.raw:
             return self.raw[key]
 
         # List/Tuple access by integer index (also accept str indices like "0")
-        if (self.is_list() or self.is_tuple()):
+        if self.is_list() or self.is_tuple():
             idx: Optional[int] = None
             if isinstance(key, int):
                 idx = key
-            elif isinstance(key, str) and (key.isdigit() or (key.startswith("-") and key[1:].isdigit())):
+            elif isinstance(key, str) and (
+                key.isdigit() or (key.startswith("-") and key[1:].isdigit())
+            ):
                 try:
                     idx = int(key)
                 except ValueError:

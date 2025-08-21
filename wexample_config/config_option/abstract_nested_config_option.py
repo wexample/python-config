@@ -32,8 +32,12 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         self._create_options(config=raw_value)
 
-    def _create_options(self, config: DictConfig | set[type[AbstractConfigOption]]) -> List["AbstractConfigOption"]:
-        from wexample_config.config_value.callback_render_config_value import (CallbackRenderConfigValue)
+    def _create_options(
+        self, config: DictConfig | set[type[AbstractConfigOption]]
+    ) -> List["AbstractConfigOption"]:
+        from wexample_config.config_value.callback_render_config_value import (
+            CallbackRenderConfigValue,
+        )
 
         options = self.get_available_options()
         valid_option_names = set(options.keys())
@@ -59,7 +63,9 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
             if not self.allow_undefined_keys:
-                from wexample_config.exception.invalid_option_exception import InvalidOptionException
+                from wexample_config.exception.invalid_option_exception import (
+                    InvalidOptionException,
+                )
 
                 raise InvalidOptionException(
                     f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
@@ -71,9 +77,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                     if not isinstance(config[option_name], AbstractConfigOption):
                         # Wrap unknown options
                         config[option_name] = ConfigOption(
-                            key=option_name,
-                            parent=self,
-                            value=config[option_name]
+                            key=option_name, parent=self, value=config[option_name]
                         )
 
         # Resolve callables and process children recursively
@@ -110,7 +114,9 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         options = {}
 
         for provider in providers:
-            options.update(cast("AbstractOptionsProvider", provider).get_options_registry())
+            options.update(
+                cast("AbstractOptionsProvider", provider).get_options_registry()
+            )
 
         return options
 

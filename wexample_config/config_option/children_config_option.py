@@ -2,8 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from wexample_config.config_option.abstract_list_config_option import AbstractListConfigOption
-from wexample_config.config_option.abstract_nested_config_option import AbstractNestedConfigOption
+from wexample_config.config_option.abstract_list_config_option import (
+    AbstractListConfigOption,
+)
+from wexample_config.config_option.abstract_nested_config_option import (
+    AbstractNestedConfigOption,
+)
 
 
 class ChildrenConfigOption(AbstractListConfigOption):

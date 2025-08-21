@@ -11,7 +11,9 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 )
 
 
-class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel, ABC):
+class AbstractConfigOption(
+    HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel, ABC
+):
     parent: Optional["AbstractConfigOption"] = None
     config_value: Optional[ConfigValue] = None
     key: Optional[str] = None
@@ -36,8 +38,7 @@ class AbstractConfigOption(HasSnakeShortClassNameClassMixin, HasSimpleReprMixin,
         # Check if value is valid for the config option,
         # reuse same method to validate types.
         config_value_class.validate_value_type(
-            raw_value=raw_value,
-            allowed_type=self.get_raw_value_allowed_type()
+            raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
         )
 
         self.config_value = (

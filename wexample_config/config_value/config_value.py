@@ -46,17 +46,14 @@ class ConfigValue(BaseModel):
         cv.to_int()                # 123
         cv.get_int_or_default(0)   # 0 (no exception)
     """
-    raw: Any = Field(
-        ...,
-        description="The raw value of the configuration."
-    )
+
+    raw: Any = Field(..., description="The raw value of the configuration.")
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
 
         self.validate_value_type(
-            raw_value=self.raw,
-            allowed_type=self.get_allowed_types()
+            raw_value=self.raw, allowed_type=self.get_allowed_types()
         )
 
     def __repr__(self) -> str:
@@ -67,9 +64,7 @@ class ConfigValue(BaseModel):
 
     @classmethod
     def validate_value_type(
-            cls,
-            raw_value: Any,
-            allowed_type: type | UnionType
+        cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
         from wexample_helpers.helpers.type import type_validate_or_fail
 
@@ -90,7 +85,7 @@ class ConfigValue(BaseModel):
         return False
 
     def _assert_type(
-            self, expected_type: Any, value: Any, type_check: bool = True
+        self, expected_type: Any, value: Any, type_check: bool = True
     ) -> None:
         if type_check and not self.is_of_type(expected_type, value):
             raise TypeError(f"Expected {expected_type} but got {type(value)}")
@@ -114,20 +109,21 @@ class ConfigValue(BaseModel):
     def is_empty(self) -> bool:
         raw = self._get_nested_raw()
         return (
-                raw is None
-                or (self.is_of_type(list, raw) and len(raw) == 0)
-                or (self.is_of_type(str, raw) and raw == "")
-                or (self.is_of_type(dict, raw) and len(raw) == 0)
-                or (self.is_of_type(tuple, raw) and len(raw) == 0)
-                or (self.is_of_type(set, raw) and len(raw) == 0)
-                or raw == 0
-                or raw is False
-                or (hasattr(raw, '__len__') and len(raw) == 0)
+            raw is None
+            or (self.is_of_type(list, raw) and len(raw) == 0)
+            or (self.is_of_type(str, raw) and raw == "")
+            or (self.is_of_type(dict, raw) and len(raw) == 0)
+            or (self.is_of_type(tuple, raw) and len(raw) == 0)
+            or (self.is_of_type(set, raw) and len(raw) == 0)
+            or raw == 0
+            or raw is False
+            or (hasattr(raw, "__len__") and len(raw) == 0)
         )
 
     # Type checking methods
     def is_class(self) -> bool:
         import inspect
+
         return inspect.isclass(self.raw)
 
     # Type checking methods
@@ -172,7 +168,7 @@ class ConfigValue(BaseModel):
 
     # Getter methods
     def _get_value_from_callback(
-            self, expected_type: Any, method: Callable[..., Any], type_check: bool = True
+        self, expected_type: Any, method: Callable[..., Any], type_check: bool = True
     ) -> Any:
         value = self._execute_nested_method(method)
         self._assert_type(expected_type, value, type_check)
@@ -411,10 +407,7 @@ class ConfigValue(BaseModel):
         return self.to_tuple()
 
     def _get_or_default(
-            self,
-            getter: Callable[[bool], Any],
-            default: Any,
-            type_check: bool = True
+        self, getter: Callable[[bool], Any], default: Any, type_check: bool = True
     ) -> Any:
         try:
             return getter(type_check=type_check)
@@ -422,51 +415,37 @@ class ConfigValue(BaseModel):
             return default
 
     def get_str_or_default(
-            self,
-            default: Optional[str] = None,
-            type_check: bool = True
+        self, default: Optional[str] = None, type_check: bool = True
     ) -> str:
         return self._get_or_default(self.get_str, default, type_check)
 
     def get_int_or_default(
-            self,
-            default: Optional[int] = None,
-            type_check: bool = True
+        self, default: Optional[int] = None, type_check: bool = True
     ) -> int:
         return self._get_or_default(self.get_int, default, type_check)
 
     def get_float_or_default(
-            self,
-            default: Optional[float] = None,
-            type_check: bool = True
+        self, default: Optional[float] = None, type_check: bool = True
     ) -> float:
         return self._get_or_default(self.get_float, default, type_check)
 
     def get_bool_or_default(
-            self,
-            default: Optional[bool] = None,
-            type_check: bool = True
+        self, default: Optional[bool] = None, type_check: bool = True
     ) -> bool:
         return self._get_or_default(self.get_bool, default, type_check)
 
     def get_complex_or_default(
-            self,
-            default: Optional[complex] = None,
-            type_check: bool = True
+        self, default: Optional[complex] = None, type_check: bool = True
     ) -> complex:
         return self._get_or_default(self.get_complex, default, type_check)
 
     def get_bytes_or_default(
-            self,
-            default: Optional[bytes] = None,
-            type_check: bool = True
+        self, default: Optional[bytes] = None, type_check: bool = True
     ) -> bytes:
         return self._get_or_default(self.get_bytes, default, type_check)
 
     def get_dict_or_default(
-            self,
-            default: Optional[StringKeysDict] = None,
-            type_check: bool = True
+        self, default: Optional[StringKeysDict] = None, type_check: bool = True
     ) -> StringKeysDict:
         return self._get_or_default(self.get_dict, default, type_check)
 
@@ -474,9 +453,7 @@ class ConfigValue(BaseModel):
         return self.get_dict_or_default(default={})
 
     def get_list_or_default(
-            self,
-            default: Optional[AnyList] = None,
-            type_check: bool = True
+        self, default: Optional[AnyList] = None, type_check: bool = True
     ) -> AnyList:
         return self._get_or_default(self.get_list, default, type_check)
 
@@ -484,17 +461,13 @@ class ConfigValue(BaseModel):
         return self.get_list_or_default(default=[])
 
     def get_set_or_default(
-            self,
-            default: Optional[set] = None,
-            type_check: bool = True
+        self, default: Optional[set] = None, type_check: bool = True
     ) -> set:
         default_set = default if default is not None else set()
         return self._get_or_default(self.get_set, default_set, type_check)
 
     def get_tuple_or_default(
-            self,
-            default: Optional[tuple] = None,
-            type_check: bool = True
+        self, default: Optional[tuple] = None, type_check: bool = True
     ) -> tuple:
         default_tuple = default if default is not None else ()
         return self._get_or_default(self.get_tuple, default_tuple, type_check)
@@ -503,5 +476,5 @@ class ConfigValue(BaseModel):
         # Separate type check to gracefully return false if not dict.
         return self.is_dict() and key in self.get_dict()
 
-    def has_item_in_list(self, value:Any) -> bool:
+    def has_item_in_list(self, value: Any) -> bool:
         return self.is_list() and value in self.get_list()
