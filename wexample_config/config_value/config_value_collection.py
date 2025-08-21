@@ -1,4 +1,4 @@
-from typing import List, TypeVar, Generic, Optional, Any, Iterator, Callable
+from typing import Any, Callable, Generic, Iterator, List, Optional, TypeVar
 
 from pydantic import BaseModel, Field
 from wexample_config.config_value.config_value import ConfigValue

@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
 
-from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_config.config_option.abstract_config_option import \
+    AbstractConfigOption
 from wexample_config.config_option.config_option import ConfigOption
 from wexample_config.const.types import DictConfig
-from wexample_config.options_provider.abstract_options_provider import (
-    AbstractOptionsProvider,
-)
+from wexample_config.options_provider.abstract_options_provider import \
+    AbstractOptionsProvider
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -35,9 +35,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     def _create_options(
         self, config: DictConfig | set[type[AbstractConfigOption]]
     ) -> List["AbstractConfigOption"]:
-        from wexample_config.config_value.callback_render_config_value import (
-            CallbackRenderConfigValue,
-        )
+        from wexample_config.config_value.callback_render_config_value import \
+            CallbackRenderConfigValue
 
         options = self.get_available_options()
         valid_option_names = set(options.keys())
@@ -63,9 +62,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
             if not self.allow_undefined_keys:
-                from wexample_config.exception.invalid_option_exception import (
-                    InvalidOptionException,
-                )
+                from wexample_config.exception.invalid_option_exception import \
+                    InvalidOptionException
 
                 raise InvalidOptionException(
                     f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "

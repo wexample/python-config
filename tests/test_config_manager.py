@@ -1,37 +1,30 @@
 import pytest
-
-from wexample_config.config_option.children_config_option import ChildrenConfigOption
+from wexample_config.config_option.children_config_option import \
+    ChildrenConfigOption
 from wexample_config.config_option.name_config_option import NameConfigOption
-from wexample_config.config_value.callback_render_config_value import (
-    CallbackRenderConfigValue,
-)
-from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
-from wexample_config.demo.config_option.demo_custom_value_config_option import (
-    DemoCustomValueConfigOption,
-)
-from wexample_config.demo.config_option.demo_dict_config_option import (
-    DemoDictConfigOption,
-)
-from wexample_config.demo.config_option.demo_extensible_config_option import (
-    DemoExtensibleConfigOption,
-)
-from wexample_config.demo.config_option.demo_list_config_option import (
-    DemoListConfigOption,
-)
-from wexample_config.demo.config_option.demo_nested_config_option import (
-    DemoNestedConfigOption,
-)
-from wexample_config.demo.config_option.demo_union_config_option import (
-    DemoUnionConfigOption,
-)
+from wexample_config.config_value.callback_render_config_value import \
+    CallbackRenderConfigValue
+from wexample_config.config_value.custom_type_config_value import \
+    CustomTypeConfigValue
+from wexample_config.demo.config_option.demo_custom_value_config_option import \
+    DemoCustomValueConfigOption
+from wexample_config.demo.config_option.demo_dict_config_option import \
+    DemoDictConfigOption
+from wexample_config.demo.config_option.demo_extensible_config_option import \
+    DemoExtensibleConfigOption
+from wexample_config.demo.config_option.demo_list_config_option import \
+    DemoListConfigOption
+from wexample_config.demo.config_option.demo_nested_config_option import \
+    DemoNestedConfigOption
+from wexample_config.demo.config_option.demo_union_config_option import \
+    DemoUnionConfigOption
 from wexample_config.demo.demo_config_manager import DemoConfigManager
-from wexample_config.exception.invalid_option_exception import InvalidOptionException
-from wexample_filestate.config_option.mixin.item_config_option_mixin import (
-    ItemTreeConfigOptionMixin,
-)
-from wexample_helpers.exception.not_allowed_variable_type_exception import (
-    NotAllowedVariableTypeException,
-)
+from wexample_config.exception.invalid_option_exception import \
+    InvalidOptionException
+from wexample_filestate.config_option.mixin.item_config_option_mixin import \
+    ItemTreeConfigOptionMixin
+from wexample_helpers.exception.not_allowed_variable_type_exception import \
+    NotAllowedVariableTypeException
 
 
 class TestConfigManager:
