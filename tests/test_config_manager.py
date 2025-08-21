@@ -26,8 +26,12 @@ from wexample_config.demo.config_option.demo_union_config_option import (
 )
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.invalid_option_exception import InvalidOptionException
-from wexample_filestate.config_option.mixin.item_config_option_mixin import ItemTreeConfigOptionMixin
-from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+from wexample_filestate.config_option.mixin.item_config_option_mixin import (
+    ItemTreeConfigOptionMixin,
+)
+from wexample_helpers.exception.not_allowed_variable_type_exception import (
+    NotAllowedVariableTypeException,
+)
 
 
 class TestConfigManager:
@@ -74,7 +78,9 @@ class TestConfigManager:
 
         self.config_manager.set_value({"demo_list": []})
 
-        assert self.config_manager.get_option(DemoListConfigOption).get_value().is_list()
+        assert (
+            self.config_manager.get_option(DemoListConfigOption).get_value().is_list()
+        )
 
     def test_configure_union_type(self):
         with pytest.raises(NotAllowedVariableTypeException):
@@ -82,11 +88,15 @@ class TestConfigManager:
 
         self.config_manager.set_value({"demo_union": "hey"})
 
-        assert self.config_manager.get_option(DemoUnionConfigOption).get_value().is_str()
+        assert (
+            self.config_manager.get_option(DemoUnionConfigOption).get_value().is_str()
+        )
 
         self.config_manager.set_value({"demo_union": {}})
 
-        assert self.config_manager.get_option(DemoUnionConfigOption).get_value().is_dict()
+        assert (
+            self.config_manager.get_option(DemoUnionConfigOption).get_value().is_dict()
+        )
 
     def test_configure_custom_value_type(self):
         with pytest.raises(NotAllowedVariableTypeException):
@@ -98,11 +108,15 @@ class TestConfigManager:
             {"demo_custom_value": CustomTypeConfigValue(raw="yeah")}
         )
 
-        assert self.config_manager.get_option(
-            DemoCustomValueConfigOption
-        ).get_value().is_str()
         assert (
-            self.config_manager.get_option(DemoCustomValueConfigOption).get_value().get_str()
+            self.config_manager.get_option(DemoCustomValueConfigOption)
+            .get_value()
+            .is_str()
+        )
+        assert (
+            self.config_manager.get_option(DemoCustomValueConfigOption)
+            .get_value()
+            .get_str()
             == "yeah"
         )
 
@@ -119,9 +133,11 @@ class TestConfigManager:
             }
         )
 
-        assert self.config_manager.get_option(
-            DemoExtensibleConfigOption
-        ).get_value().is_dict()
+        assert (
+            self.config_manager.get_option(DemoExtensibleConfigOption)
+            .get_value()
+            .is_dict()
+        )
 
         # Unexpected option fails on current
         with pytest.raises(InvalidOptionException):
@@ -146,7 +162,7 @@ class TestConfigManager:
                     "demo_dict": {
                         "lorem": {
                             "info": "As the demo_dict is typed, we should have sub dicts"
-                                    "the type is like: Dict[str, Dict[str, Any]]",
+                            "the type is like: Dict[str, Dict[str, Any]]",
                             "other": 123,
                             "demo_custom_value": CustomTypeConfigValue(raw="yeah"),
                         },
