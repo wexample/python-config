@@ -1,5 +1,5 @@
-from typing import Any, Union
 from collections.abc import Callable
+from typing import Any, Union
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.config_value.callback_render_config_value import (

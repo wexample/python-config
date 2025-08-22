@@ -1,6 +1,6 @@
+from collections.abc import Callable
 from types import UnionType
 from typing import TYPE_CHECKING, Any, List, Optional, Type
-from collections.abc import Callable
 
 from pydantic import BaseModel, Field
 from wexample_helpers.const.types import AnyList, StringKeysDict
