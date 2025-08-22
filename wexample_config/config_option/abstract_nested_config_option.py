@@ -148,7 +148,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
     def get_option_value(
         self, option_type: type[AbstractConfigOption], default: Any = None
-    ) -> ConfigValue:
+    ) -> "ConfigValue":
         from wexample_config.config_value.config_value import ConfigValue
 
         option = self.get_option(option_type)
