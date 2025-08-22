@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class DemoOptionsProvider(AbstractOptionsProvider):
     @classmethod
-    def get_options(cls) -> list[type["AbstractConfigOption"]]:
+    def get_options(cls) -> list[type[AbstractConfigOption]]:
         from wexample_config.config_option.children_config_option import (
             ChildrenConfigOption,
         )

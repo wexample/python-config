@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 class DemoConfigManager(AbstractConfigManager):
-    def get_options_providers(self) -> list[type["AbstractOptionsProvider"]]:
+    def get_options_providers(self) -> list[type[AbstractOptionsProvider]]:
         from wexample_config.demo.option_provider.demo_options_provider import (
             DemoOptionsProvider,
         )

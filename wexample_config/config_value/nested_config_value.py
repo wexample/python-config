@@ -47,7 +47,7 @@ class NestedConfigValue(ConfigValue):
         # Case 3: primitive / other types → unchanged
         return ConfigValue(raw=val)
 
-    def get_config_item(self, key: Any, default: Any = None) -> Optional["ConfigValue"]:
+    def get_config_item(self, key: Any, default: Any = None) -> ConfigValue | None:
         # Dict access by string key
         if self.is_dict() and isinstance(key, str) and key in self.raw:
             return self.raw[key]
@@ -74,7 +74,7 @@ class NestedConfigValue(ConfigValue):
         self,
         path: str,
         separator: str = DICT_PATH_SEPARATOR_DEFAULT,
-    ) -> Optional["ConfigValue"]:
+    ) -> ConfigValue | None:
         """
         Traverse nested dict/list/tuple values by a separated path.
         Example: search("first.second.0.third").

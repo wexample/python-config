@@ -15,7 +15,7 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
 class AbstractConfigOption(
     HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel, ABC
 ):
-    parent: Optional["AbstractConfigOption"] = None
+    parent: AbstractConfigOption | None = None
     config_value: ConfigValue | None = None
     key: str | None = None
 

@@ -14,9 +14,9 @@ if TYPE_CHECKING:
 class AbstractOptionsProvider(BaseModel, ABC):
     @classmethod
     @abstractmethod
-    def get_options(cls) -> list[type["AbstractConfigOption"]]:
+    def get_options(cls) -> list[type[AbstractConfigOption]]:
         pass
 
     @classmethod
-    def get_options_registry(cls) -> dict[str, type["AbstractConfigOption"]]:
+    def get_options_registry(cls) -> dict[str, type[AbstractConfigOption]]:
         return {option.get_name(): option for option in cls.get_options()}
