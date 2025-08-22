@@ -97,7 +97,7 @@ class ConfigValue(BaseModel):
             return getattr(self.raw, method.__name__)(type_check=False)
         return self.raw
 
-    def _resolve_nested(self) -> "ConfigValue":
+    def _resolve_nested(self) -> ConfigValue:
         if isinstance(self.raw, ConfigValue):
             return self.raw._resolve_nested()
         return self

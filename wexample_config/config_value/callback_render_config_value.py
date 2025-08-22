@@ -16,5 +16,5 @@ class CallbackRenderConfigValue(ConfigValue):
     def get_allowed_types() -> Any:
         return Callable[..., Any]
 
-    def render(self, option: "AbstractNestedConfigOption") -> str:
+    def render(self, option: AbstractNestedConfigOption) -> str:
         return self.raw(option)

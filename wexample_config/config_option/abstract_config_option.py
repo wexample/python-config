@@ -74,11 +74,11 @@ class AbstractConfigOption(
     def dump(self) -> Any:
         return self.get_value().raw
 
-    def get_parent(self) -> "AbstractConfigOption":
+    def get_parent(self) -> AbstractConfigOption:
         assert self.parent is not None
         return self.parent
 
-    def get_root(self) -> "AbstractConfigOption":
+    def get_root(self) -> AbstractConfigOption:
         if self.parent is not None:
             return self.parent.get_root()
         return self

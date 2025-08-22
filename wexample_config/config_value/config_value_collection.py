@@ -122,13 +122,13 @@ class ConfigValueCollection(BaseModel, Generic[T]):
 
     # Factory methods
     @classmethod
-    def from_config_values(cls, values: list[ConfigValue]) -> "ConfigValueCollection":
+    def from_config_values(cls, values: list[ConfigValue]) -> ConfigValueCollection:
         """Create a ConfigValueCollection from a list of ConfigValue objects."""
         collection = cls()
         collection.extend(values)
         return collection
 
     @classmethod
-    def from_raw_values(cls, values: list[Any]) -> "ConfigValueCollection":
+    def from_raw_values(cls, values: list[Any]) -> ConfigValueCollection:
         """Create a ConfigValueCollection from a list of raw values."""
         return cls.from_config_values([ConfigValue(raw=value) for value in values])
