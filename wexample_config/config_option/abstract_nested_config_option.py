@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type, Union, cast
+from typing import TYPE_CHECKING, Any, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.config_option.config_option import ConfigOption

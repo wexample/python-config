@@ -1,5 +1,5 @@
 from collections.abc import Callable, Iterator
-from typing import Any, Generic, List, Optional, TypeVar
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, Field
 from wexample_config.config_value.config_value import ConfigValue

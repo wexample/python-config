@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 

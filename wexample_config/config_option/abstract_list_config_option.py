@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from types import UnionType
-from typing import TYPE_CHECKING, Any, List, Type
+from typing import TYPE_CHECKING, Any
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_config.config_option.abstract_nested_config_option import (

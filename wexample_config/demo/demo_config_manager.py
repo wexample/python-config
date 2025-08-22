@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Type
+from typing import TYPE_CHECKING
 
 from wexample_config.classes.abstract_config_manager import AbstractConfigManager
 
