@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from typing import Any, Optional
+from typing import Any
 
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.helpers.dict import DICT_PATH_SEPARATOR_DEFAULT
