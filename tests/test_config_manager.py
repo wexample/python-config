@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from wexample_config.config_option.children_config_option import ChildrenConfigOption
 from wexample_config.config_option.name_config_option import NameConfigOption

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from wexample_helpers.const.types import BasicValue, StringKeysDict
 
 # Can't define key list as it can ben dynamic when using more options.
