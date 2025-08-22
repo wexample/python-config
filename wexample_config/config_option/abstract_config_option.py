@@ -14,8 +14,8 @@ class AbstractConfigOption(
     HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel, ABC
 ):
     parent: Optional["AbstractConfigOption"] = None
-    config_value: Optional[ConfigValue] = None
-    key: Optional[str] = None
+    config_value: ConfigValue | None = None
+    key: str | None = None
 
     def __init__(self, value: Any = None, **data) -> None:
         super().__init__(**data)
@@ -48,7 +48,7 @@ class AbstractConfigOption(
 
         return raw_value
 
-    def get_value(self) -> Optional[ConfigValue]:
+    def get_value(self) -> ConfigValue | None:
         return self.config_value
 
     def prepare_value(self, raw_value: Any) -> Any:
@@ -58,7 +58,7 @@ class AbstractConfigOption(
         return ConfigValue
 
     @classmethod
-    def get_class_name_suffix(cls) -> Optional[str]:
+    def get_class_name_suffix(cls) -> str | None:
         return "ConfigOption"
 
     @staticmethod

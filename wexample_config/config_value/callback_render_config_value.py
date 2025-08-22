@@ -1,6 +1,7 @@
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
-from typing_extensions import TYPE_CHECKING
+from typing import TYPE_CHECKING
 from wexample_config.config_value.config_value import ConfigValue
 
 if TYPE_CHECKING:

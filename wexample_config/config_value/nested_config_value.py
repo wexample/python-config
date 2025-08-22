@@ -52,7 +52,7 @@ class NestedConfigValue(ConfigValue):
 
         # List/Tuple access by integer index (also accept str indices like "0")
         if self.is_list() or self.is_tuple():
-            idx: Optional[int] = None
+            idx: int | None = None
             if isinstance(key, int):
                 idx = key
             elif isinstance(key, str) and (
@@ -82,7 +82,7 @@ class NestedConfigValue(ConfigValue):
         if not path:
             return self
 
-        current: Optional[ConfigValue] = self
+        current: ConfigValue | None = self
         for part in path.split(separator):
             if not isinstance(current, NestedConfigValue):
                 return None

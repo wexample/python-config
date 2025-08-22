@@ -13,15 +13,15 @@ if TYPE_CHECKING:
 
 
 class AbstractListConfigOption(AbstractNestedConfigOption):
-    children: List[AbstractConfigOption] = []
+    children: list[AbstractConfigOption] = []
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
-        return List[dict[str, Any]]
+        return list[dict[str, Any]]
 
     @staticmethod
-    def get_allowed_types() -> Type | UnionType:
-        return List[dict[str, Any]]
+    def get_allowed_types() -> type | UnionType:
+        return list[dict[str, Any]]
 
     def get_item_class_type(self):
         return AbstractConfigOption

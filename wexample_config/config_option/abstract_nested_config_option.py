@@ -16,12 +16,12 @@ if TYPE_CHECKING:
 class AbstractNestedConfigOption(AbstractConfigOption):
     allow_undefined_keys: bool = False
     options: dict[str, AbstractConfigOption] = {}
-    options_providers: Optional[list[type[AbstractOptionsProvider]]] = None
-    parent: Optional["AbstractConfigOption"] = None
+    options_providers: list[type[AbstractOptionsProvider]] | None = None
+    parent: AbstractConfigOption | None = None
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
-        return Union[dict[str, Any], set[Type[AbstractConfigOption]]]
+        return Union[dict[str, Any], set[type[AbstractConfigOption]]]
 
     def set_value(self, raw_value: Any) -> None:
         # Config might have been modified
@@ -34,7 +34,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
     def _create_options(
         self, config: DictConfig | set[type[AbstractConfigOption]]
-    ) -> List["AbstractConfigOption"]:
+    ) -> list[AbstractConfigOption]:
         from wexample_config.config_value.callback_render_config_value import (
             CallbackRenderConfigValue,
         )
@@ -45,7 +45,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         # Normalize: accept a set of option classes and convert to dict[name -> instance]
         if isinstance(config, set):
-            normalized: Dict[str, AbstractConfigOption] = {}
+            normalized: dict[str, AbstractConfigOption] = {}
             for option_class in config:
                 instance = option_class(parent=self)
                 normalized[option_class.get_name()] = instance
@@ -100,7 +100,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return new_options
 
-    def get_options_providers(self) -> list[type["AbstractOptionsProvider"]]:
+    def get_options_providers(self) -> list[type[AbstractOptionsProvider]]:
         if self.parent:
             return self.parent.get_options_providers()
 
@@ -109,7 +109,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return []
 
-    def get_available_options(self) -> dict[str, type["AbstractConfigOption"]]:
+    def get_available_options(self) -> dict[str, type[AbstractConfigOption]]:
         providers = self.get_options_providers()
         options = {}
 
@@ -121,8 +121,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_option(
-        self, option_type: Union[type["AbstractConfigOption"], str]
-    ) -> Optional["AbstractConfigOption"]:
+        self, option_type: type[AbstractConfigOption] | str
+    ) -> AbstractConfigOption | None:
         option_name = (
             option_type.get_name() if not isinstance(option_type, str) else option_type
         )
@@ -133,8 +133,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_recursive(
-        self, option_type: Union[type["AbstractConfigOption"], str]
-    ) -> Optional["AbstractConfigOption"]:
+        self, option_type: type[AbstractConfigOption] | str
+    ) -> AbstractConfigOption | None:
         option = self.get_option(option_type)
 
         if option is not None:
@@ -149,8 +149,8 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_value(
-        self, option_type: type["AbstractConfigOption"], default: Any = None
-    ) -> "ConfigValue":
+        self, option_type: type[AbstractConfigOption], default: Any = None
+    ) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
 
         option = self.get_option(option_type)
