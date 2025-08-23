@@ -21,7 +21,6 @@ classifiers = [
 dependencies = [
     "pip-tools",
     "pydantic",
-    "pytest",
     "wexample-helpers",
 ]
 
@@ -35,6 +34,8 @@ text = "MIT"
 [project.urls]
 homepage = "https://github.com/wexample/python-config"
 
+[project.optional-dependencies]
+dev = ["pytest"]
 [tool.setuptools.packages.find]
 include = [
     "*",
