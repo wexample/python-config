@@ -38,9 +38,9 @@ include = [
 ]
 
 [tool.pdm.build]
-includes = ["src/python_package_workdir/py.typed"]
+includes = ["src/wexample_config/py.typed"]
 package-dir = "src"
 
 [[tool.pdm.build.packages]]
-include = "python_package_workdir"
+include = "wexample_config"
 from = "src"
