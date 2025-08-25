@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = [
     "pydantic>=2,<3",
-    "wexample-helpers",
+    "wexample-helpers==0.0.64",
 ]
 
 [project.readme]
