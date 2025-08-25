@@ -93,3 +93,45 @@ class NestedConfigValue(ConfigValue):
                 return None
 
         return current
+
+    def _unwrap(self, value: Any) -> Any:
+        """Return a native Python object from any ConfigValue/NestedConfigValue.
+
+        - NestedConfigValue(dict)  -> dict with unwrapped children
+        - NestedConfigValue(list/tuple) -> list with unwrapped children
+        - ConfigValue(primitives) -> primitive raw value
+        - Bare Mapping/Sequence (shouldn't happen after wrapping) -> recurse best-effort
+        """
+        if isinstance(value, NestedConfigValue):
+            if value.is_dict():
+                return value.to_dict()
+            if value.is_list() or value.is_tuple():
+                return value.to_list()
+            return value._get_nested_raw()
+        if isinstance(value, ConfigValue):
+            return value._get_nested_raw()
+        # Best-effort for unexpected raw containers
+        if isinstance(value, Mapping):
+            return {k: self._unwrap(v) for k, v in value.items()}
+        if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+            return [self._unwrap(v) for v in value]
+        return value
+
+    def to_dict(self) -> dict[str, Any]:
+        """Recursively dump to a native dict.
+
+        If the underlying value isn't a dict, fallback to the base conversion.
+        """
+        if not self.is_dict():
+            # Fallback – may still contain wrapped values; ensure we unwrap keys
+            raw = super().to_dict()
+            return {k: self._unwrap(v) for k, v in raw.items()}
+        return {k: self._unwrap(v) for k, v in self.raw.items()}
+
+    def to_list(self) -> list[Any]:
+        """Recursively dump to a native list (tuples become lists)."""
+        if self.is_list() or self.is_tuple():
+            return [self._unwrap(v) for v in self.raw]
+        # Fallback to base, then unwrap any items just in case
+        base_list = super().to_list()
+        return [self._unwrap(v) for v in base_list]
