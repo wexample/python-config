@@ -113,7 +113,9 @@ class NestedConfigValue(ConfigValue):
         # Best-effort for unexpected raw containers
         if isinstance(value, Mapping):
             return {k: self._unwrap(v) for k, v in value.items()}
-        if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        if isinstance(value, Sequence) and not isinstance(
+            value, (str, bytes, bytearray)
+        ):
             return [self._unwrap(v) for v in value]
         return value
 

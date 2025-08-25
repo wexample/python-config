@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from wexample_config.config_option.children_config_option import ChildrenConfigOption
 from wexample_config.config_option.name_config_option import NameConfigOption
 from wexample_config.config_value.callback_render_config_value import (
