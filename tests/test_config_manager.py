@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
+
 from wexample_config.config_option.children_config_option import ChildrenConfigOption
 from wexample_config.config_option.name_config_option import NameConfigOption
 from wexample_config.config_value.callback_render_config_value import (
@@ -27,9 +30,6 @@ from wexample_config.demo.config_option.demo_union_config_option import (
 )
 from wexample_config.demo.demo_config_manager import DemoConfigManager
 from wexample_config.exception.invalid_option_exception import InvalidOptionException
-from wexample_filestate.config_option.mixin.item_config_option_mixin import (
-    ItemTreeConfigOptionMixin,
-)
 from wexample_helpers.exception.not_allowed_variable_type_exception import (
     NotAllowedVariableTypeException,
 )
@@ -54,8 +54,8 @@ class TestConfigManager:
         assert self.config_manager.get_option_value(NameConfigOption).get_str() == "yes"
         assert self.config_manager.get_option_value(ChildrenConfigOption).is_list()
 
-    def test_configure_callback(self) -> str:
-        def _name(option: ItemTreeConfigOptionMixin) -> str:
+    def test_configure_callback(self) -> None:
+        def _name(option: Any) -> str:
             return "yes"
 
         self.config_manager.set_value({"name": CallbackRenderConfigValue(raw=_name)})
@@ -115,10 +115,10 @@ class TestConfigManager:
             .is_str()
         )
         assert (
-            self.config_manager.get_option(DemoCustomValueConfigOption)
-            .get_value()
-            .get_str()
-            == "yeah"
+                self.config_manager.get_option(DemoCustomValueConfigOption)
+                .get_value()
+                .get_str()
+                == "yeah"
         )
 
     def test_configure_extensible(self) -> None:
@@ -163,7 +163,7 @@ class TestConfigManager:
                     "demo_dict": {
                         "lorem": {
                             "info": "As the demo_dict is typed, we should have sub dicts"
-                            "the type is like: Dict[str, Dict[str, Any]]",
+                                    "the type is like: Dict[str, Dict[str, Any]]",
                             "other": 123,
                             "demo_custom_value": CustomTypeConfigValue(raw="yeah"),
                         },
