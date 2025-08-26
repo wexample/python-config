@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from types import UnionType
 from typing import Any
 
 from wexample_config.config_option.abstract_list_config_option import (
@@ -11,7 +12,7 @@ from wexample_config.config_option.abstract_nested_config_option import (
 
 
 class ChildrenConfigOption(AbstractListConfigOption):
-    def get_item_class_type(self):
+    def get_item_class_type(self) -> type | UnionType:
         return AbstractNestedConfigOption
 
     def dump(self) -> Any:

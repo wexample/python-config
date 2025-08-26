@@ -23,7 +23,7 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
     def get_allowed_types() -> type | UnionType:
         return list[dict[str, Any]]
 
-    def get_item_class_type(self):
+    def get_item_class_type(self) -> type | UnionType:
         return AbstractConfigOption
 
     def set_value(self, raw_value: Any) -> None:
