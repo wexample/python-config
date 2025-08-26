@@ -1,19 +1,17 @@
-# Config
+# wexample-config
 
 Helpers to manage dict types configurations.
 
-Version: 0.0.30
+Version: 0.0.48
 
 ## Requirements
 
-- Python >=3.6
+- Python >=3.10
 
 ## Dependencies
 
-- pip-tools
-- pydantic
-- pytest
-- wexample-helpers==0.0.30
+- pydantic>=2,<3
+- wexample-helpers==0.0.64
 
 ## Installation
 
