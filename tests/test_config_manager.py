@@ -114,10 +114,10 @@ class TestConfigManager:
             .is_str()
         )
         assert (
-                self.config_manager.get_option(DemoCustomValueConfigOption)
-                .get_value()
-                .get_str()
-                == "yeah"
+            self.config_manager.get_option(DemoCustomValueConfigOption)
+            .get_value()
+            .get_str()
+            == "yeah"
         )
 
     def test_configure_extensible(self) -> None:
@@ -162,7 +162,7 @@ class TestConfigManager:
                     "demo_dict": {
                         "lorem": {
                             "info": "As the demo_dict is typed, we should have sub dicts"
-                                    "the type is like: Dict[str, Dict[str, Any]]",
+                            "the type is like: Dict[str, Dict[str, Any]]",
                             "other": 123,
                             "demo_custom_value": CustomTypeConfigValue(raw="yeah"),
                         },
