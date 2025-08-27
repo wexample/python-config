@@ -11,7 +11,7 @@ Version: 0.0.49
 ## Dependencies
 
 - pydantic>=2,<3
-- wexample-helpers==0.0.64
+- wexample-helpers==0.0.65
 
 ## Installation
 
