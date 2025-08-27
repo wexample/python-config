@@ -2,7 +2,7 @@
 
 Helpers to manage dict types configurations.
 
-Version: 0.0.48
+Version: 0.0.49
 
 ## Requirements
 
