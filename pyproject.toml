@@ -31,14 +31,18 @@ text = "MIT"
 homepage = "https://github.com/wexample/python-config"
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = [
+    "pytest",
+]
 [tool.setuptools.packages.find]
 include = [
     "*",
 ]
 
 [tool.pdm.build]
-includes = ["src/wexample_config/py.typed"]
+includes = [
+    "src/wexample_config/py.typed",
+]
 package-dir = "src"
 
 [[tool.pdm.build.packages]]
