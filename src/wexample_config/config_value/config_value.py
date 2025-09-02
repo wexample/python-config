@@ -153,7 +153,7 @@ class ConfigValue(BaseModel):
         return self.get_bool() == False
 
     def is_true(self) -> bool:
-        return self.get_bool() == True
+        return self.to_bool_or_none() == True
 
     def is_complex(self) -> bool:
         return self.is_of_type(complex, self._get_nested_raw())
