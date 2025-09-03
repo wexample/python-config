@@ -74,6 +74,7 @@ class NestedConfigValue(ConfigValue):
         self,
         path: str,
         separator: str = DICT_PATH_SEPARATOR_DEFAULT,
+        default: Any = None,
     ) -> ConfigValue | None:
         """
         Traverse nested dict/list/tuple values by a separated path.
@@ -87,10 +88,10 @@ class NestedConfigValue(ConfigValue):
         current: ConfigValue | None = self
         for part in path.split(separator):
             if not isinstance(current, NestedConfigValue):
-                return None
+                return ConfigValue(raw=default) if default is not None else None
             current = current.get_config_item(part)
             if current is None:
-                return None
+                return ConfigValue(raw=default) if default is not None else None
 
         return current
 
