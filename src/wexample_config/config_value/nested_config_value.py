@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-from collections.abc import Mapping, Sequence
 from typing import Any
 
 from wexample_config.config_value.config_value import ConfigValue
@@ -34,6 +32,7 @@ class NestedConfigValue(ConfigValue):
         - lists/tuples into the same type with wrapped elements
         - everything else unchanged
         """
+        from collections.abc import Mapping, Sequence
         # Case 1: dict / Mapping → wrap in NestedConfigValue
         if isinstance(val, Mapping):
             return cls(raw=dict(val))
@@ -103,6 +102,7 @@ class NestedConfigValue(ConfigValue):
         - ConfigValue(primitives) -> primitive raw value
         - Bare Mapping/Sequence (shouldn't happen after wrapping) -> recurse best-effort
         """
+        from collections.abc import Mapping, Sequence
         if isinstance(value, NestedConfigValue):
             if value.is_dict():
                 return value.to_dict()

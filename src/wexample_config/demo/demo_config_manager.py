@@ -12,9 +12,7 @@ if TYPE_CHECKING:
 
 class DemoConfigManager(AbstractConfigManager):
     def get_options_providers(self) -> list[type[AbstractOptionsProvider]]:
-        from wexample_config.demo.option_provider.demo_options_provider import (
-            DemoOptionsProvider,
-        )
+        from wexample_config.demo.option_provider.demo_options_provider import DemoOptionsProvider
 
         return [
             DemoOptionsProvider,

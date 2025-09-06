@@ -3,47 +3,22 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from wexample_config.config_option.children_config_option import ChildrenConfigOption
-from wexample_config.config_option.name_config_option import NameConfigOption
-from wexample_config.config_value.callback_render_config_value import (
-    CallbackRenderConfigValue,
-)
-from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
-from wexample_config.demo.config_option.demo_custom_value_config_option import (
-    DemoCustomValueConfigOption,
-)
-from wexample_config.demo.config_option.demo_dict_config_option import (
-    DemoDictConfigOption,
-)
-from wexample_config.demo.config_option.demo_extensible_config_option import (
-    DemoExtensibleConfigOption,
-)
-from wexample_config.demo.config_option.demo_list_config_option import (
-    DemoListConfigOption,
-)
-from wexample_config.demo.config_option.demo_nested_config_option import (
-    DemoNestedConfigOption,
-)
-from wexample_config.demo.config_option.demo_union_config_option import (
-    DemoUnionConfigOption,
-)
-from wexample_config.demo.demo_config_manager import DemoConfigManager
-from wexample_config.exception.invalid_option_exception import InvalidOptionException
-from wexample_helpers.exception.not_allowed_variable_type_exception import (
-    NotAllowedVariableTypeException,
-)
 
 
 class TestConfigManager:
 
     @pytest.fixture(autouse=True)
     def setup(self) -> None:
+        from wexample_config.demo.demo_config_manager import DemoConfigManager
         self.config_manager = DemoConfigManager()
 
     def test_setup(self) -> None:
+        from wexample_config.demo.demo_config_manager import DemoConfigManager
         assert isinstance(self.config_manager, DemoConfigManager)
 
     def test_configure_name(self) -> None:
+        from wexample_config.config_option.children_config_option import ChildrenConfigOption
+        from wexample_config.config_option.name_config_option import NameConfigOption
         self.config_manager.set_value({"name": "yes", "children": []})
 
         assert self.config_manager.get_value().is_dict()
@@ -54,6 +29,7 @@ class TestConfigManager:
         assert self.config_manager.get_option_value(ChildrenConfigOption).is_list()
 
     def test_configure_callback(self) -> None:
+        from wexample_config.config_value.callback_render_config_value import CallbackRenderConfigValue
         def _name(option: Any) -> str:
             return "yes"
 
@@ -62,10 +38,12 @@ class TestConfigManager:
         assert self.config_manager.get_option("name").get_value().is_str()
 
     def test_configure_unexpected(self) -> None:
+        from wexample_config.exception.invalid_option_exception import InvalidOptionException
         with pytest.raises(InvalidOptionException):
             self.config_manager.set_value({"unexpected_option": "yes"})
 
     def test_configure_unexpected_type(self) -> None:
+        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value({"name": 123})
 
@@ -73,6 +51,8 @@ class TestConfigManager:
             self.config_manager.set_value({"name": []})
 
     def test_configure_list_type(self) -> None:
+        from wexample_config.demo.config_option.demo_list_config_option import DemoListConfigOption
+        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value({"demo_list": 123})
 
@@ -83,6 +63,8 @@ class TestConfigManager:
         )
 
     def test_configure_union_type(self) -> None:
+        from wexample_config.demo.config_option.demo_union_config_option import DemoUnionConfigOption
+        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value({"demo_union": 123})
 
@@ -99,6 +81,9 @@ class TestConfigManager:
         )
 
     def test_configure_custom_value_type(self) -> None:
+        from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
+        from wexample_config.demo.config_option.demo_custom_value_config_option import DemoCustomValueConfigOption
+        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value(
                 {"demo_custom_value": CustomTypeConfigValue(raw=123)}
@@ -121,6 +106,8 @@ class TestConfigManager:
         )
 
     def test_configure_extensible(self) -> None:
+        from wexample_config.demo.config_option.demo_extensible_config_option import DemoExtensibleConfigOption
+        from wexample_config.exception.invalid_option_exception import InvalidOptionException
         # Extensible children option
         self.config_manager.set_value(
             {
@@ -155,6 +142,9 @@ class TestConfigManager:
         self.config_manager.allow_undefined_keys = False
 
     def test_configure_nested_dict_type(self) -> None:
+        from wexample_config.config_value.custom_type_config_value import CustomTypeConfigValue
+        from wexample_config.demo.config_option.demo_dict_config_option import DemoDictConfigOption
+        from wexample_config.demo.config_option.demo_nested_config_option import DemoNestedConfigOption
         self.config_manager.set_value(
             {
                 "demo_nested": {
