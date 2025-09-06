@@ -7,6 +7,7 @@ from wexample_config.config_option.abstract_config_option import AbstractConfigO
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
     from wexample_config.const.types import DictConfig
+    from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
 
 
 class AbstractNestedConfigOption(AbstractConfigOption):
@@ -116,7 +117,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_option(
-        self, option_type: type[AbstractConfigOption] | str
+            self, option_type: type[AbstractConfigOption] | str
     ) -> AbstractConfigOption | None:
         option_name = (
             option_type.get_name() if not isinstance(option_type, str) else option_type
@@ -128,7 +129,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_recursive(
-        self, option_type: type[AbstractConfigOption] | str
+            self, option_type: type[AbstractConfigOption] | str
     ) -> AbstractConfigOption | None:
         option = self.get_option(option_type)
 
@@ -144,7 +145,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_value(
-        self, option_type: type[AbstractConfigOption], default: Any = None
+            self, option_type: type[AbstractConfigOption], default: Any = None
     ) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
 

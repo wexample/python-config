@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC
-from typing import Any
+from typing import Any, ClassVar
 
 from pydantic import BaseModel
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
@@ -9,17 +8,21 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
     HasSnakeShortClassNameClassMixin,
 )
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
     from wexample_config.const.types import DictConfig
 
 
 class AbstractConfigOption(
-    HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel, ABC
+    HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel
 ):
     parent: AbstractConfigOption | None = None
     config_value: ConfigValue | None = None
     key: str | None = None
+    import_packages: ClassVar[tuple[str, ...]] = (
+        "wexample_config.config_value.config_value",
+    )
 
     def __init__(self, value: Any = None, **data) -> None:
         super().__init__(**data)
