@@ -1,11 +1,12 @@
 from __future__ import annotations
-
-from collections.abc import Callable
 from types import UnionType
 from typing import Any
 
 from pydantic import BaseModel, Field
-from wexample_helpers.const.types import AnyList, StringKeysDict
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_helpers.const.types import AnyList, StringKeysDict
+    from collections.abc import Callable
 
 
 class ConfigValue(BaseModel):
@@ -85,6 +86,7 @@ class ConfigValue(BaseModel):
         return Any
 
     def is_of_type(self, value_type: Any, value: Any) -> bool:
+        from collections.abc import Callable
         if value_type is Callable:
             return callable(value)
         if isinstance(value_type, type):
@@ -135,6 +137,7 @@ class ConfigValue(BaseModel):
 
     # Type checking methods
     def is_callable(self) -> bool:
+        from collections.abc import Callable
         return self.is_of_type(Callable[..., Any], self._get_nested_raw())
 
     def is_str(self) -> bool:
@@ -182,6 +185,7 @@ class ConfigValue(BaseModel):
         return value
 
     def get_callable(self, type_check: bool = True) -> Callable:
+        from collections.abc import Callable
         return self._get_value_from_callback(
             Callable[..., Any], self.get_callable, type_check
         )
@@ -284,10 +288,12 @@ class ConfigValue(BaseModel):
 
     # Setters
     def set_class(self, value: type[Any], type_check: bool = True) -> None:
+        from collections.abc import Callable
         self._assert_type(Callable, value, type_check)
         self.raw = value
 
     def set_callable(self, value: Callable, type_check: bool = True) -> None:
+        from collections.abc import Callable
         self._assert_type(Callable, value, type_check)
         self.raw = value
 

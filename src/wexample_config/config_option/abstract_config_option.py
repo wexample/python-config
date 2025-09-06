@@ -4,12 +4,14 @@ from abc import ABC
 from typing import Any
 
 from pydantic import BaseModel
-from wexample_config.config_value.config_value import ConfigValue
-from wexample_config.const.types import DictConfig
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from wexample_config.config_value.config_value import ConfigValue
+    from wexample_config.const.types import DictConfig
 
 
 class AbstractConfigOption(
@@ -30,6 +32,7 @@ class AbstractConfigOption(
         return self.key
 
     def set_value(self, raw_value: Any) -> Any:
+        from wexample_config.config_value.config_value import ConfigValue
         if raw_value is None:
             return
 
@@ -57,6 +60,7 @@ class AbstractConfigOption(
         return raw_value
 
     def get_value_class_type(self) -> type[ConfigValue]:
+        from wexample_config.config_value.config_value import ConfigValue
         return ConfigValue
 
     @classmethod

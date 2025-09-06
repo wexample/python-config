@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class CallbackRenderConfigValue(ConfigValue):
     @staticmethod
     def get_allowed_types() -> Any:
+        from collections.abc import Callable
         return Callable[..., Any]
 
     def render(self, option: AbstractNestedConfigOption) -> str:
