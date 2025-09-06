@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 from typing import Any, ClassVar
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel
+
+from wexample_helpers.classes.mixin.import_packages_mixin import ImportPackagesMixin
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
-from typing import TYPE_CHECKING
+from wexample_helpers.helpers.debug import debug_trace
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -15,17 +18,25 @@ if TYPE_CHECKING:
 
 
 class AbstractConfigOption(
-    HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel
+    ImportPackagesMixin,
+    HasSnakeShortClassNameClassMixin,
+    HasSimpleReprMixin,
+    BaseModel
 ):
     parent: AbstractConfigOption | None = None
     config_value: ConfigValue | None = None
     key: str | None = None
     import_packages: ClassVar[tuple[str, ...]] = (
+        "wexample_config.options_provider.abstract_options_provider",
         "wexample_config.config_value.config_value",
     )
 
-    def __init__(self, value: Any = None, **data) -> None:
-        super().__init__(**data)
+    def __init__(self, value: Any = None, **kwargs) -> None:
+        self.__class__.load_imports()
+        BaseModel.__init__(self, **kwargs)
+        ImportPackagesMixin.__init__(self)
+        HasSnakeShortClassNameClassMixin.__init__(self)
+        HasSimpleReprMixin.__init__(self)
 
         self.key = self.key or self.get_name()
         self.set_value(value)
