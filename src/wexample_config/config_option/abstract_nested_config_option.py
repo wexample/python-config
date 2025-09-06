@@ -6,7 +6,6 @@ from wexample_config.config_option.abstract_config_option import AbstractConfigO
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
-    from wexample_config.options_provider.abstract_options_provider import AbstractOptionsProvider
     from wexample_config.const.types import DictConfig
 
 
@@ -30,7 +29,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         self._create_options(config=raw_value)
 
     def _create_options(
-        self, config: DictConfig | set[type[AbstractConfigOption]]
+            self, config: DictConfig | set[type[AbstractConfigOption]]
     ) -> list[AbstractConfigOption]:
         from wexample_config.config_value.callback_render_config_value import CallbackRenderConfigValue
         from wexample_config.config_option.config_option import ConfigOption
