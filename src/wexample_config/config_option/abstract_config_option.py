@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, ClassVar
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from pydantic import BaseModel
-
-from wexample_helpers.classes.mixin.import_packages_mixin import ImportPackagesMixin
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
-from wexample_helpers.helpers.debug import debug_trace
+from wexample_helpers.classes.mixin.import_packages_mixin import ImportPackagesMixin
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -18,10 +15,7 @@ if TYPE_CHECKING:
 
 
 class AbstractConfigOption(
-    ImportPackagesMixin,
-    HasSnakeShortClassNameClassMixin,
-    HasSimpleReprMixin,
-    BaseModel
+    ImportPackagesMixin, HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel
 ):
     parent: AbstractConfigOption | None = None
     config_value: ConfigValue | None = None
@@ -47,6 +41,7 @@ class AbstractConfigOption(
 
     def set_value(self, raw_value: Any) -> Any:
         from wexample_config.config_value.config_value import ConfigValue
+
         if raw_value is None:
             return
 
@@ -75,6 +70,7 @@ class AbstractConfigOption(
 
     def get_value_class_type(self) -> type[ConfigValue]:
         from wexample_config.config_value.config_value import ConfigValue
+
         return ConfigValue
 
     @classmethod

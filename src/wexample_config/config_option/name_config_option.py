@@ -1,8 +1,9 @@
 from __future__ import annotations
-from typing import Any, Union
+
+from typing import TYPE_CHECKING, Any, Union
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from wexample_config.const.types import DictConfig
 

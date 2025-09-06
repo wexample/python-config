@@ -108,6 +108,7 @@ class TestConfigManager:
     def test_configure_extensible(self) -> None:
         from wexample_config.demo.config_option.demo_extensible_config_option import DemoExtensibleConfigOption
         from wexample_config.exception.invalid_option_exception import InvalidOptionException
+
         # Extensible children option
         self.config_manager.set_value(
             {

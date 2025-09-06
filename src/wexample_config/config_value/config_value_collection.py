@@ -1,12 +1,14 @@
 from __future__ import annotations
-from typing import Any, Generic, TypeVar
+
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from pydantic import BaseModel, Field
 from wexample_config.config_value.config_value import ConfigValue
-from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
-    from wexample_helpers.const.types import AnyList
     from collections.abc import Callable, Iterator
+
+    from wexample_helpers.const.types import AnyList
 
 T = TypeVar("T")
 
