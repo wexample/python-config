@@ -32,7 +32,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         self._create_options(config=raw_value)
 
     def _create_options(
-            self, config: DictConfig | set[type[AbstractConfigOption]]
+        self, config: DictConfig | set[type[AbstractConfigOption]]
     ) -> list[AbstractConfigOption]:
         from wexample_config.config_option.config_option import ConfigOption
         from wexample_config.config_value.callback_render_config_value import (
@@ -114,6 +114,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         from wexample_config.options_provider.abstract_options_provider import (
             AbstractOptionsProvider,
         )
+
         providers = self.get_options_providers()
         options = {}
 
@@ -125,7 +126,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_option(
-            self, option_type: type[AbstractConfigOption] | str
+        self, option_type: type[AbstractConfigOption] | str
     ) -> AbstractConfigOption | None:
         option_name = (
             option_type.get_name() if not isinstance(option_type, str) else option_type
@@ -137,7 +138,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_recursive(
-            self, option_type: type[AbstractConfigOption] | str
+        self, option_type: type[AbstractConfigOption] | str
     ) -> AbstractConfigOption | None:
         option = self.get_option(option_type)
 
@@ -153,7 +154,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return None
 
     def get_option_value(
-            self, option_type: type[AbstractConfigOption], default: Any = None
+        self, option_type: type[AbstractConfigOption], default: Any = None
     ) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
 

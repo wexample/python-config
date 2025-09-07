@@ -13,6 +13,7 @@ class ChildrenConfigOption(AbstractListConfigOption):
         from wexample_config.config_option.abstract_nested_config_option import (
             AbstractNestedConfigOption,
         )
+
         return AbstractNestedConfigOption
 
     def dump(self) -> Any:

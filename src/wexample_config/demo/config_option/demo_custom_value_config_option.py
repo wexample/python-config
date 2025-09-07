@@ -11,4 +11,5 @@ class DemoCustomValueConfigOption(AbstractConfigOption):
         from wexample_config.config_value.custom_type_config_value import (
             CustomTypeConfigValue,
         )
+
         return CustomTypeConfigValue

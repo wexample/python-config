@@ -10,10 +10,12 @@ class TestConfigManager:
     @pytest.fixture(autouse=True)
     def setup(self) -> None:
         from wexample_config.demo.demo_config_manager import DemoConfigManager
+
         self.config_manager = DemoConfigManager()
 
     def test_setup(self) -> None:
         from wexample_config.demo.demo_config_manager import DemoConfigManager
+
         assert isinstance(self.config_manager, DemoConfigManager)
 
     def test_configure_name(self) -> None:
@@ -21,6 +23,7 @@ class TestConfigManager:
             ChildrenConfigOption,
         )
         from wexample_config.config_option.name_config_option import NameConfigOption
+
         self.config_manager.set_value({"name": "yes", "children": []})
 
         assert self.config_manager.get_value().is_dict()
@@ -34,6 +37,7 @@ class TestConfigManager:
         from wexample_config.config_value.callback_render_config_value import (
             CallbackRenderConfigValue,
         )
+
         def _name(option: Any) -> str:
             return "yes"
 
@@ -45,6 +49,7 @@ class TestConfigManager:
         from wexample_config.exception.invalid_option_exception import (
             InvalidOptionException,
         )
+
         with pytest.raises(InvalidOptionException):
             self.config_manager.set_value({"unexpected_option": "yes"})
 
@@ -52,6 +57,7 @@ class TestConfigManager:
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
+
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value({"name": 123})
 
@@ -65,6 +71,7 @@ class TestConfigManager:
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
+
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value({"demo_list": 123})
 
@@ -81,6 +88,7 @@ class TestConfigManager:
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
+
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value({"demo_union": 123})
 
@@ -106,6 +114,7 @@ class TestConfigManager:
         from wexample_helpers.exception.not_allowed_variable_type_exception import (
             NotAllowedVariableTypeException,
         )
+
         with pytest.raises(NotAllowedVariableTypeException):
             self.config_manager.set_value(
                 {"demo_custom_value": CustomTypeConfigValue(raw=123)}
@@ -178,6 +187,7 @@ class TestConfigManager:
         from wexample_config.demo.config_option.demo_nested_config_option import (
             DemoNestedConfigOption,
         )
+
         self.config_manager.set_value(
             {
                 "demo_nested": {

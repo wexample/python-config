@@ -16,6 +16,7 @@ class NameConfigOption(AbstractConfigOption):
         from wexample_config.config_value.callback_render_config_value import (
             CallbackRenderConfigValue,
         )
+
         return Union[str, CallbackRenderConfigValue, Callable[..., Any]]
 
     @staticmethod
@@ -23,6 +24,7 @@ class NameConfigOption(AbstractConfigOption):
         from wexample_config.config_value.callback_render_config_value import (
             CallbackRenderConfigValue,
         )
+
         key = NameConfigOption.get_name()
 
         if key in config:
