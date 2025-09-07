@@ -45,9 +45,6 @@ include = [
 distribution = true
 
 [tool.pdm.build]
-includes = [
-    'src/wexample_config/*',
-]
 package-dir = "src"
 
 [[tool.pdm.build.packages]]
