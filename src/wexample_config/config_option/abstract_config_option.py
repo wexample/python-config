@@ -17,13 +17,13 @@ if TYPE_CHECKING:
 class AbstractConfigOption(
     ImportPackagesMixin, HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel
 ):
-    parent: AbstractConfigOption | None = None
     config_value: ConfigValue | None = None
-    key: str | None = None
     import_packages: ClassVar[tuple[str, ...]] = (
         "wexample_config.options_provider.abstract_options_provider",
         "wexample_config.config_value.config_value",
     )
+    key: str | None = None
+    parent: AbstractConfigOption | None = None
 
     def __init__(self, value: Any = None, **kwargs) -> None:
         self.__class__.load_imports()
