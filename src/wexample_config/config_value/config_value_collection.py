@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
-from pydantic import BaseModel, Field
+import attrs
+from wexample_helpers.classes.base_class import BaseClass
 from wexample_config.config_value.config_value import ConfigValue
 
 if TYPE_CHECKING:
@@ -13,16 +14,17 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 
-class ConfigValueCollection(BaseModel, Generic[T]):
+@attrs.define(kw_only=True)
+class ConfigValueCollection(BaseClass, Generic[T]):
     """A collection of ConfigValue objects that provides utility methods for working with collections."""
 
-    items: list[ConfigValue] = Field(
-        default_factory=list,
-        description="List of ConfigValue objects in the collection.",
+    items: list[ConfigValue] = attrs.field(
+        factory=list,
+        metadata={"description": "List of ConfigValue objects in the collection."},
     )
 
-    def __init__(self, **data) -> None:
-        super().__init__(**data)
+    def __attrs_post_init__(self) -> None:
+        pass
 
     def __len__(self) -> int:
         """Return the number of items in the collection."""
