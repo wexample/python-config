@@ -17,6 +17,7 @@ class ChildrenConfigOption(AbstractListConfigOption):
             output.append(child.dump())
 
         return output
+
     def get_item_class_type(self) -> type | UnionType:
         from wexample_config.config_option.abstract_nested_config_option import (
             AbstractNestedConfigOption,
