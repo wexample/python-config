@@ -3,7 +3,8 @@ from __future__ import annotations
 from types import UnionType
 from typing import TYPE_CHECKING, Any
 
-from pydantic import BaseModel, Field
+import attrs
+from wexample_helpers.classes.base_class import BaseClass
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -11,7 +12,8 @@ if TYPE_CHECKING:
     from wexample_helpers.const.types import AnyList, StringKeysDict
 
 
-class ConfigValue(BaseModel):
+@attrs.define(kw_only=True)
+class ConfigValue(BaseClass):
     """
     Wraps a raw configuration value (with optional filters) and provides a consistent API for:
 
@@ -52,11 +54,9 @@ class ConfigValue(BaseModel):
         cv.get_int_or_default(0)   # 0 (no exception)
     """
 
-    raw: Any = Field(..., description="The raw value of the configuration.")
+    raw: Any = attrs.field(metadata={"description": "The raw value of the configuration."})
 
-    def __init__(self, **data) -> None:
-        super().__init__(**data)
-
+    def __attrs_post_init__(self) -> None:
         self.validate_value_type(
             raw_value=self.raw, allowed_type=self.get_allowed_types()
         )

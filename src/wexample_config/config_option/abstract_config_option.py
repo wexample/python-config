@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from pydantic import BaseModel
+import attrs
+from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
@@ -14,26 +15,27 @@ if TYPE_CHECKING:
     from wexample_config.const.types import DictConfig
 
 
+@attrs.define(kw_only=True)
 class AbstractConfigOption(
-    ImportPackagesMixin, HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseModel
+    ImportPackagesMixin, HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseClass
 ):
-    config_value: ConfigValue | None = None
+    config_value: ConfigValue | None = attrs.field(default=None)
     import_packages: ClassVar[tuple[str, ...]] = (
         "wexample_config.options_provider.abstract_options_provider",
         "wexample_config.config_value.config_value",
     )
-    key: str | None = None
-    parent: AbstractConfigOption | None = None
+    key: str | None = attrs.field(default=None)
+    parent: AbstractConfigOption | None = attrs.field(default=None)
+    value: Any = attrs.field(default=None)
 
-    def __init__(self, value: Any = None, **kwargs) -> None:
+    def __attrs_post_init__(self) -> None:
         self.__class__.load_imports()
-        BaseModel.__init__(self, **kwargs)
         ImportPackagesMixin.__init__(self)
         HasSnakeShortClassNameClassMixin.__init__(self)
         HasSimpleReprMixin.__init__(self)
 
         self.key = self.key or self.get_name()
-        self.set_value(value)
+        self.set_value(self.value)
 
     @classmethod
     def get_class_name_suffix(cls) -> str | None:
