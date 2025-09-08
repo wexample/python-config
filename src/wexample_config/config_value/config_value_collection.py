@@ -15,7 +15,6 @@ T = TypeVar("T")
 
 class ConfigValueCollection(BaseModel, Generic[T]):
     """A collection of ConfigValue objects that provides utility methods for working with collections."""
-
     items: list[ConfigValue] = Field(
         default_factory=list,
         description="List of ConfigValue objects in the collection.",

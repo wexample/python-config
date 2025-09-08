@@ -51,7 +51,6 @@ class ConfigValue(BaseModel):
         cv.to_int()                # 123
         cv.get_int_or_default(0)   # 0 (no exception)
     """
-
     raw: Any = Field(..., description="The raw value of the configuration.")
 
     def __init__(self, **data) -> None:

@@ -9,7 +9,6 @@ from wexample_config.config_option.abstract_list_config_option import (
 
 
 class ChildrenConfigOption(AbstractListConfigOption):
-
     def dump(self) -> Any:
         output = []
 

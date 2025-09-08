@@ -6,7 +6,6 @@ import pytest
 
 
 class TestConfigManager:
-
     @pytest.fixture(autouse=True)
     def setup(self) -> None:
         from wexample_config.demo.demo_config_manager import DemoConfigManager
