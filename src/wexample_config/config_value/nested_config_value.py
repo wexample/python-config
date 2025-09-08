@@ -96,6 +96,25 @@ class NestedConfigValue(ConfigValue):
 
         return current
 
+    def to_dict(self) -> dict[str, Any]:
+        """Recursively dump to a native dict.
+
+        If the underlying value isn't a dict, fallback to the base conversion.
+        """
+        if not self.is_dict():
+            # Fallback – may still contain wrapped values; ensure we unwrap keys
+            raw = super().to_dict()
+            return {k: self._unwrap(v) for k, v in raw.items()}
+        return {k: self._unwrap(v) for k, v in self.raw.items()}
+
+    def to_list(self) -> list[Any]:
+        """Recursively dump to a native list (tuples become lists)."""
+        if self.is_list() or self.is_tuple():
+            return [self._unwrap(v) for v in self.raw]
+        # Fallback to base, then unwrap any items just in case
+        base_list = super().to_list()
+        return [self._unwrap(v) for v in base_list]
+
     def _unwrap(self, value: Any) -> Any:
         """Return a native Python object from any ConfigValue/NestedConfigValue.
 
@@ -122,22 +141,3 @@ class NestedConfigValue(ConfigValue):
         ):
             return [self._unwrap(v) for v in value]
         return value
-
-    def to_dict(self) -> dict[str, Any]:
-        """Recursively dump to a native dict.
-
-        If the underlying value isn't a dict, fallback to the base conversion.
-        """
-        if not self.is_dict():
-            # Fallback – may still contain wrapped values; ensure we unwrap keys
-            raw = super().to_dict()
-            return {k: self._unwrap(v) for k, v in raw.items()}
-        return {k: self._unwrap(v) for k, v in self.raw.items()}
-
-    def to_list(self) -> list[Any]:
-        """Recursively dump to a native list (tuples become lists)."""
-        if self.is_list() or self.is_tuple():
-            return [self._unwrap(v) for v in self.raw]
-        # Fallback to base, then unwrap any items just in case
-        base_list = super().to_list()
-        return [self._unwrap(v) for v in base_list]

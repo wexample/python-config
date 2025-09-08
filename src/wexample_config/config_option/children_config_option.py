@@ -9,12 +9,6 @@ from wexample_config.config_option.abstract_list_config_option import (
 
 
 class ChildrenConfigOption(AbstractListConfigOption):
-    def get_item_class_type(self) -> type | UnionType:
-        from wexample_config.config_option.abstract_nested_config_option import (
-            AbstractNestedConfigOption,
-        )
-
-        return AbstractNestedConfigOption
 
     def dump(self) -> Any:
         output = []
@@ -23,3 +17,9 @@ class ChildrenConfigOption(AbstractListConfigOption):
             output.append(child.dump())
 
         return output
+    def get_item_class_type(self) -> type | UnionType:
+        from wexample_config.config_option.abstract_nested_config_option import (
+            AbstractNestedConfigOption,
+        )
+
+        return AbstractNestedConfigOption

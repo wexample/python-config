@@ -22,6 +22,77 @@ class AbstractNestedConfigOption(AbstractConfigOption):
     def get_raw_value_allowed_type() -> Any:
         return Union[dict[str, Any], set[type[AbstractConfigOption]]]
 
+    def dump(self) -> Any:
+        output = {}
+
+        for name, option in self.options.items():
+            output[name] = option.dump()
+
+        return output
+
+    def get_available_options(self) -> dict[str, type[AbstractConfigOption]]:
+        from wexample_config.options_provider.abstract_options_provider import (
+            AbstractOptionsProvider,
+        )
+
+        providers = self.get_options_providers()
+        options = {}
+
+        for provider in providers:
+            options.update(
+                cast(AbstractOptionsProvider, provider).get_options_registry()
+            )
+
+        return options
+
+    def get_option(
+        self, option_type: type[AbstractConfigOption] | str
+    ) -> AbstractConfigOption | None:
+        option_name = (
+            option_type.get_name() if not isinstance(option_type, str) else option_type
+        )
+
+        if option_name in self.options:
+            return self.options[option_name]
+
+        return None
+
+    def get_option_recursive(
+        self, option_type: type[AbstractConfigOption] | str
+    ) -> AbstractConfigOption | None:
+        option = self.get_option(option_type)
+
+        if option is not None:
+            return option
+
+        for option in self.options.values():
+            if isinstance(option, AbstractNestedConfigOption):
+                found_option = option.get_option_recursive(option_type)
+                if found_option is not None:
+                    return found_option
+
+        return None
+
+    def get_option_value(
+        self, option_type: type[AbstractConfigOption], default: Any = None
+    ) -> ConfigValue:
+        from wexample_config.config_value.config_value import ConfigValue
+
+        option = self.get_option(option_type)
+        if option:
+            return cast(ConfigValue, option.get_value())
+
+        return ConfigValue(raw=default)
+
+    def get_options_providers(self) -> list[type[AbstractOptionsProvider]]:
+        if self.parent:
+            return self.parent.get_options_providers()
+
+        if self.options_providers:
+            return self.options_providers
+
+        return []
+
     def set_value(self, raw_value: Any) -> None:
         # Config might have been modified
         raw_value = super().set_value(raw_value)
@@ -100,74 +171,3 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             new_options.append(new_option)
 
         return new_options
-
-    def get_options_providers(self) -> list[type[AbstractOptionsProvider]]:
-        if self.parent:
-            return self.parent.get_options_providers()
-
-        if self.options_providers:
-            return self.options_providers
-
-        return []
-
-    def get_available_options(self) -> dict[str, type[AbstractConfigOption]]:
-        from wexample_config.options_provider.abstract_options_provider import (
-            AbstractOptionsProvider,
-        )
-
-        providers = self.get_options_providers()
-        options = {}
-
-        for provider in providers:
-            options.update(
-                cast(AbstractOptionsProvider, provider).get_options_registry()
-            )
-
-        return options
-
-    def get_option(
-        self, option_type: type[AbstractConfigOption] | str
-    ) -> AbstractConfigOption | None:
-        option_name = (
-            option_type.get_name() if not isinstance(option_type, str) else option_type
-        )
-
-        if option_name in self.options:
-            return self.options[option_name]
-
-        return None
-
-    def get_option_recursive(
-        self, option_type: type[AbstractConfigOption] | str
-    ) -> AbstractConfigOption | None:
-        option = self.get_option(option_type)
-
-        if option is not None:
-            return option
-
-        for option in self.options.values():
-            if isinstance(option, AbstractNestedConfigOption):
-                found_option = option.get_option_recursive(option_type)
-                if found_option is not None:
-                    return found_option
-
-        return None
-
-    def get_option_value(
-        self, option_type: type[AbstractConfigOption], default: Any = None
-    ) -> ConfigValue:
-        from wexample_config.config_value.config_value import ConfigValue
-
-        option = self.get_option(option_type)
-        if option:
-            return cast(ConfigValue, option.get_value())
-
-        return ConfigValue(raw=default)
-
-    def dump(self) -> Any:
-        output = {}
-
-        for name, option in self.options.items():
-            output[name] = option.dump()
-
-        return output

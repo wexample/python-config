@@ -16,11 +16,11 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
     children: list[AbstractConfigOption] = []
 
     @staticmethod
-    def get_raw_value_allowed_type() -> Any:
+    def get_allowed_types() -> type | UnionType:
         return list[dict[str, Any]]
 
     @staticmethod
-    def get_allowed_types() -> type | UnionType:
+    def get_raw_value_allowed_type() -> Any:
         return list[dict[str, Any]]
 
     def get_item_class_type(self) -> type | UnionType:
