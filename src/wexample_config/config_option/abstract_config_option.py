@@ -17,9 +17,7 @@ if TYPE_CHECKING:
 
 @base_class
 class AbstractConfigOption(
-    HasSnakeShortClassNameClassMixin,
-    HasSimpleReprMixin,
-    BaseClass
+    HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseClass
 ):
     config_value: ConfigValue | None = public_field(
         description="The value object associated with this config option",

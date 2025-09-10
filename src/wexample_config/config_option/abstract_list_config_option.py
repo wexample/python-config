@@ -17,8 +17,7 @@ if TYPE_CHECKING:
 @base_class
 class AbstractListConfigOption(AbstractNestedConfigOption):
     children: list[AbstractConfigOption] = public_field(
-        factory=list,
-        description="The list of children"
+        factory=list, description="The list of children"
     )
 
     @staticmethod

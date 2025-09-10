@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 import attrs
-from wexample_helpers.classes.base_class import BaseClass
 from wexample_config.config_value.config_value import ConfigValue
+from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 
 if TYPE_CHECKING:
