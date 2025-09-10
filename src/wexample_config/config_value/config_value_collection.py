@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, Generic, TypeVar
 import attrs
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_config.config_value.config_value import ConfigValue
+from wexample_helpers.classes.field import public_field
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
@@ -18,9 +19,9 @@ T = TypeVar("T")
 class ConfigValueCollection(BaseClass, Generic[T]):
     """A collection of ConfigValue objects that provides utility methods for working with collections."""
 
-    items: list[ConfigValue] = attrs.field(
+    items: list[ConfigValue] = public_field(
         factory=list,
-        metadata={"description": "List of ConfigValue objects in the collection."},
+        description="List of ConfigValue objects in the collection.",
     )
 
     def __attrs_post_init__(self) -> None:
