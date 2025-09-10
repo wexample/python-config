@@ -15,7 +15,9 @@ if TYPE_CHECKING:
 
 
 @base_class
-class AbstractNestedConfigOption(AbstractConfigOption):
+class AbstractNestedConfigOption(
+    AbstractConfigOption
+):
     allow_undefined_keys: bool = public_field(
         description="Whether undefined keys are allowed",
         default=False,
