@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Union, cast
 
 from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -12,11 +14,20 @@ if TYPE_CHECKING:
     )
 
 
+@base_class
 class AbstractNestedConfigOption(AbstractConfigOption):
-    allow_undefined_keys: bool = False
-    options: dict[str, AbstractConfigOption] = {}
-    options_providers: list[type[AbstractOptionsProvider]] | None = None
-    parent: AbstractConfigOption | None = None
+    allow_undefined_keys: bool = public_field(
+        description="Whether undefined keys are allowed",
+        default=False,
+    )
+    options: dict[str, AbstractConfigOption] = public_field(
+        description="Mapping of option keys to config options",
+        factory=dict,
+    )
+    options_providers: list[type[AbstractOptionsProvider]] | None = public_field(
+        description="Providers that can add additional options",
+        default=None,
+    )
 
     @staticmethod
     def get_raw_value_allowed_type() -> Any:

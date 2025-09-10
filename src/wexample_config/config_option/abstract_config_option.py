@@ -1,39 +1,42 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any
 
-import attrs
 from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
-from wexample_helpers.classes.mixin.import_packages_mixin import ImportPackagesMixin
+from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
     from wexample_config.const.types import DictConfig
 
 
-@attrs.define(kw_only=True)
+@base_class
 class AbstractConfigOption(
-    ImportPackagesMixin, HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseClass
+    HasSnakeShortClassNameClassMixin, HasSimpleReprMixin, BaseClass
 ):
-    config_value: ConfigValue | None = attrs.field(default=None)
-    import_packages: ClassVar[tuple[str, ...]] = (
-        "wexample_config.options_provider.abstract_options_provider",
-        "wexample_config.config_value.config_value",
+    config_value: ConfigValue | None = public_field(
+        description="The value object associated with this config option",
+        default=None,
     )
-    key: str | None = attrs.field(default=None)
-    parent: AbstractConfigOption | None = attrs.field(default=None)
-    value: Any = attrs.field(default=None)
+    key: str | None = public_field(
+        description="The option key",
+        default=None,
+    )
+    parent: AbstractConfigOption | None = public_field(
+        description="Parent config option if nested",
+        default=None,
+    )
+    value: Any = public_field(
+        description="The raw value of this config option",
+        default=None,
+    )
 
     def __attrs_post_init__(self) -> None:
-        self.__class__.load_imports()
-        ImportPackagesMixin.__init__(self)
-        HasSnakeShortClassNameClassMixin.__init__(self)
-        HasSimpleReprMixin.__init__(self)
-
         self.key = self.key or self.get_name()
         self.set_value(self.value)
 

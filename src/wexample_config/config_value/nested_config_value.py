@@ -4,12 +4,12 @@ from typing import Any
 
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.helpers.dict import DICT_PATH_SEPARATOR_DEFAULT
+from wexample_helpers.decorator.base_class import base_class
 
 
+@base_class
 class NestedConfigValue(ConfigValue):
-    def __init__(self, **data) -> None:
-        super().__init__(**data)
-
+    def __attrs_post_init__(self) -> None:
         # If this ConfigValue holds a dict,
         # replace all nested dict values with NestedConfigValue.
         if self.is_dict():
@@ -41,7 +41,7 @@ class NestedConfigValue(ConfigValue):
 
         # Case 2: sequences (list/tuple), but not str/bytes
         # Return a NestedConfigValue so traversal always hits a node
-        # capable of get_config_item. Element wrapping is handled in __init__.
+        # capable of get_config_item. Element wrapping is handled in initialization fields.
         if isinstance(val, Sequence) and not isinstance(val, (str, bytes, bytearray)):
             return cls(raw=val)
 
