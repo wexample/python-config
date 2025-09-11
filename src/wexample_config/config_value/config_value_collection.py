@@ -24,9 +24,6 @@ class ConfigValueCollection(BaseClass, Generic[T]):
         description="List of ConfigValue objects in the collection.",
     )
 
-    def __attrs_post_init__(self) -> None:
-        pass
-
     def __len__(self) -> int:
         """Return the number of items in the collection."""
         return len(self.items)
@@ -38,6 +35,9 @@ class ConfigValueCollection(BaseClass, Generic[T]):
     def __getitem__(self, index: int) -> ConfigValue:
         """Allow indexing to access items directly."""
         return self.items[index]
+
+    def __attrs_post_init__(self) -> None:
+        pass
 
     # Factory methods
     @classmethod

@@ -57,18 +57,18 @@ class ConfigValue(BaseClass):
 
     raw: Any = public_field(description="The raw value of the configuration.")
 
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}(type={type(self.raw).__name__}, value={self.raw})>"
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
     def __attrs_post_init__(self) -> None:
         self.validate_value_type(
             raw_value=self.raw, allowed_type=self.get_allowed_types()
         )
         # Allow class to generate raw value by itself.
         self.raw = self._create_default_raw(self.raw)
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}(type={type(self.raw).__name__}, value={self.raw})>"
-
-    def __str__(self) -> str:
-        return self.__repr__()
 
     @classmethod
     def validate_value_type(
