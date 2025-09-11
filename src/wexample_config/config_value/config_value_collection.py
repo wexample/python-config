@@ -6,6 +6,7 @@ import attrs
 from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
+from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
@@ -15,7 +16,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 
-@attrs.define(kw_only=True)
+@base_class
 class ConfigValueCollection(BaseClass, Generic[T]):
     """A collection of ConfigValue objects that provides utility methods for working with collections."""
 

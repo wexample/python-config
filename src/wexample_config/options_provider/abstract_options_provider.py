@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import attrs
 from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from wexample_config.config_option.abstract_config_option import (
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
     )
 
 
-@attrs.define(kw_only=True)
+@base_class
 class AbstractOptionsProvider(BaseClass, ABC):
     @classmethod
     @abstractmethod
