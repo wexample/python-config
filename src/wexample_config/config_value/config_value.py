@@ -3,7 +3,6 @@ from __future__ import annotations
 from types import UnionType
 from typing import TYPE_CHECKING, Any
 
-import attrs
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
