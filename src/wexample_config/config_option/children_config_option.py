@@ -7,6 +7,9 @@ from wexample_config.config_option.abstract_list_config_option import (
     AbstractListConfigOption,
 )
 from wexample_helpers.decorator.base_class import base_class
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from types import UnionType
 
 
 @base_class

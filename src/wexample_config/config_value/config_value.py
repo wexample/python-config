@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from wexample_helpers.const.types import AnyList, StringKeysDict
+    from types import UnionType
 
 
 @base_class

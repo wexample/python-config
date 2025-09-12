@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
-
-from wexample_config.config_value.config_value import ConfigValue
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
@@ -11,6 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
     from wexample_helpers.const.types import AnyList
+    from wexample_config.config_value.config_value import ConfigValue
 
 T = TypeVar("T")
 
@@ -50,6 +49,7 @@ class ConfigValueCollection(BaseClass, Generic[T]):
     @classmethod
     def from_raw_values(cls, values: list[Any]) -> ConfigValueCollection:
         """Create a ConfigValueCollection from a list of raw values."""
+        from wexample_config.config_value.config_value import ConfigValue
         return cls.from_config_values([ConfigValue(raw=value) for value in values])
 
     def append(self, value: ConfigValue) -> None:
