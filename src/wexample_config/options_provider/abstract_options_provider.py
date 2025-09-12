@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+from wexample_helpers.classes.abstract_method import abstract_method
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.decorator.base_class import base_class
 
@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 
 @base_class
-class AbstractOptionsProvider(BaseClass, ABC):
+class AbstractOptionsProvider(BaseClass):
     @classmethod
-    @abstractmethod
+    @abstract_method
     def get_options(cls) -> list[type[AbstractConfigOption]]:
         pass
 
