@@ -9,7 +9,6 @@ from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
-    pass
     from wexample_config.config_option.abstract_config_option import AbstractConfigOption
     from types import UnionType
 
