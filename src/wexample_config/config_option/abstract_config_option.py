@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from wexample_helpers.classes.abstract_method import abstract_method
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
@@ -101,3 +102,25 @@ class AbstractConfigOption(
         )
 
         return raw_value
+
+    def get_required_operations(self, target) -> list:
+        """Return operation instances that should be executed when this option is not satisfied.
+        
+        Args:
+            target: The target file or directory to check against
+            
+        Returns:
+            List of operation instances with their required parameters
+        """
+        return []
+
+    def is_satisfied(self, target) -> bool:
+        """Check if the current state satisfies this option's requirements.
+        
+        Args:
+            target: The target file or directory to check
+            
+        Returns:
+            True if the option requirements are met, False otherwise
+        """
+        return True
