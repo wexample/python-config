@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Union
 
-from wexample_filestate.config_option.abstract_item_config_option import AbstractItemConfigOption
+from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 @base_class
-class NameConfigOption(AbstractItemConfigOption):
+class NameConfigOption(AbstractConfigOption):
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
         from collections.abc import Callable

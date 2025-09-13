@@ -149,7 +149,6 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
             if not self.allow_undefined_keys:
-
                 raise InvalidOptionException(
                     f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
                     f'in "{self.__class__.__name__}", '

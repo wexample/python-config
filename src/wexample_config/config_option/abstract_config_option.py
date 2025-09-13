@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from wexample_helpers.classes.abstract_method import abstract_method
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
@@ -102,4 +101,3 @@ class AbstractConfigOption(
         )
 
         return raw_value
-
