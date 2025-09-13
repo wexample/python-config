@@ -2,7 +2,7 @@
 
 Helpers to manage dict types configurations.
 
-Version: 0.0.51
+Version: 0.0.52
 
 ## Requirements
 
@@ -13,7 +13,7 @@ Version: 0.0.51
 - attrs>=23.1.0
 - cattrs>=23.1.0
 - pydantic>=2,<3
-- wexample-helpers==0.0.67
+- wexample-helpers==0.0.68
 
 ## Installation
 
