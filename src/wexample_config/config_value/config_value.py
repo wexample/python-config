@@ -9,9 +9,9 @@ from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from types import UnionType
 
     from wexample_helpers.const.types import AnyList, StringKeysDict
-    from types import UnionType
 
 
 @base_class

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from types import UnionType
 from typing import TYPE_CHECKING, Any
+
 from wexample_config.config_option.abstract_nested_config_option import (
     AbstractNestedConfigOption,
 )
@@ -9,8 +10,11 @@ from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
-    from wexample_config.config_option.abstract_config_option import AbstractConfigOption
     from types import UnionType
+
+    from wexample_config.config_option.abstract_config_option import (
+        AbstractConfigOption,
+    )
 
 
 @base_class
@@ -28,11 +32,16 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
         return list[dict[str, Any]]
 
     def get_item_class_type(self) -> type | UnionType:
-        from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+        from wexample_config.config_option.abstract_config_option import (
+            AbstractConfigOption,
+        )
         return AbstractConfigOption
 
     def set_value(self, raw_value: Any) -> None:
-        from wexample_config.config_option.abstract_config_option import AbstractConfigOption
+        from wexample_config.config_option.abstract_config_option import (
+            AbstractConfigOption,
+        )
+
         # Skip direct parent which creates only one item.
         AbstractConfigOption.set_value(self, raw_value)
 
