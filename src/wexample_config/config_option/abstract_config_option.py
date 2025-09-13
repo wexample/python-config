@@ -103,24 +103,3 @@ class AbstractConfigOption(
 
         return raw_value
 
-    def get_required_operations(self, target) -> list:
-        """Return operation instances that should be executed when this option is not satisfied.
-        
-        Args:
-            target: The target file or directory to check against
-            
-        Returns:
-            List of operation instances with their required parameters
-        """
-        return []
-
-    def is_satisfied(self, target) -> bool:
-        """Check if the current state satisfies this option's requirements.
-        
-        Args:
-            target: The target file or directory to check
-            
-        Returns:
-            True if the option requirements are met, False otherwise
-        """
-        return True
