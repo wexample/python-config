@@ -4,7 +4,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "wexample-config"
-version = "0.0.53"
+version = "0.0.54"
 description = "Helpers to manage dict types configurations."
 authors = [
     { name = "weeger", email = "contact@wexample.com" },
@@ -19,7 +19,7 @@ dependencies = [
     "attrs>=23.1.0",
     "cattrs>=23.1.0",
     "pydantic>=2,<3",
-    "wexample-helpers==0.0.70",
+    "wexample-helpers==0.0.71",
 ]
 
 [project.readme]
