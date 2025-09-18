@@ -41,20 +41,21 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return output
 
-    def get_available_options(self) -> dict[str, type[AbstractConfigOption]]:
-        from wexample_config.options_provider.abstract_options_provider import (
-            AbstractOptionsProvider,
-        )
-
+    def get_allowed_options(self) -> list[type[AbstractConfigOption]]:
         providers = self.get_options_providers()
-        options = {}
-
+        options = []
         for provider in providers:
-            options.update(
-                cast(AbstractOptionsProvider, provider).get_options_registry()
-            )
-
+            options.extend(provider.get_options())
         return options
+
+    def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
+        options_list = self.get_allowed_options()
+        options_registry = {}
+
+        for option in options_list:
+            options_registry[option.get_name()] = option
+
+        return options_registry
 
     def get_option(
         self, option_type: type[AbstractConfigOption] | str
@@ -125,7 +126,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             InvalidOptionException,
         )
 
-        options = self.get_available_options()
+        options = self.get_allowed_options_registry()
         valid_option_names = set(options.keys())
         new_options = []
 
