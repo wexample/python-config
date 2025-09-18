@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from types import UnionType
 from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.classes.base_class import BaseClass
@@ -71,9 +70,12 @@ class ConfigValue(BaseClass):
         # Allow class to generate raw value by itself.
         self.raw = self._create_default_raw(self.raw)
 
+    def to_option_raw_value(self) -> Any:
+        return self.raw
+
     @classmethod
     def validate_value_type(
-        cls, raw_value: Any, allowed_type: type | UnionType
+            cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
         from wexample_helpers.helpers.type import type_validate_or_fail
 

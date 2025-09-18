@@ -77,6 +77,12 @@ class AbstractConfigOption(
         return ConfigValue
 
     def prepare_value(self, raw_value: Any) -> Any:
+        from wexample_config.config_value.config_value import ConfigValue
+
+        # Allow config option
+        if isinstance(raw_value, ConfigValue):
+            return raw_value.to_option_raw_value()
+
         return raw_value
 
     def set_value(self, raw_value: Any) -> Any:
@@ -85,7 +91,6 @@ class AbstractConfigOption(
         if raw_value is None:
             return
 
-        raw_value = self.prepare_value(raw_value)
         config_value_class = self.get_value_class_type()
 
         # Check if value is valid for the config option,
@@ -93,6 +98,8 @@ class AbstractConfigOption(
         config_value_class.validate_value_type(
             raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
         )
+
+        raw_value = self.prepare_value(raw_value)
 
         self.config_value = (
             config_value_class(raw=raw_value)
