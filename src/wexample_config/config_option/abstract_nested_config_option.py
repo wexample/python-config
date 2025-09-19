@@ -154,7 +154,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                 raise InvalidOptionException(
                     f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
                     f'in "{self.__class__.__name__}", '
-                    f"allowed options are: {', '.join(valid_option_names)}"
+                    f"allowed options are: {', '.join(sorted(valid_option_names))}"
                 )
             else:
                 for option_name in unknown_keys:
