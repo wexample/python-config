@@ -53,12 +53,12 @@ class AbstractConfigOption(
     def resolve_config(config: DictConfig) -> DictConfig:
         return config
 
+    def dump(self) -> Any:
+        return self.get_value().raw
+
     @abstract_method
     def get_description(self) -> str:
         pass
-
-    def dump(self) -> Any:
-        return self.get_value().raw
 
     def get_key(self) -> str:
         assert self.key is not None
