@@ -53,6 +53,10 @@ class AbstractConfigOption(
     def resolve_config(config: DictConfig) -> DictConfig:
         return config
 
+    @abstract_method
+    def get_description(self) -> str:
+        pass
+
     def dump(self) -> Any:
         return self.get_value().raw
 
@@ -71,10 +75,6 @@ class AbstractConfigOption(
 
     def get_value(self) -> ConfigValue | None:
         return self.config_value
-
-    @abstract_method
-    def get_description(self) -> str:
-        pass
 
     def get_value_class_type(self) -> type[ConfigValue]:
         from wexample_config.config_value.config_value import ConfigValue
