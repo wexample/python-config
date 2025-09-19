@@ -35,6 +35,7 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
         from wexample_config.config_option.abstract_config_option import (
             AbstractConfigOption,
         )
+
         return AbstractConfigOption
 
     def set_value(self, raw_value: Any) -> None:

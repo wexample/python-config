@@ -51,6 +51,7 @@ class ConfigValueCollection(BaseClass, Generic[T]):
     def from_raw_values(cls, values: list[Any]) -> ConfigValueCollection:
         """Create a ConfigValueCollection from a list of raw values."""
         from wexample_config.config_value.config_value import ConfigValue
+
         return cls.from_config_values([ConfigValue(raw=value) for value in values])
 
     def append(self, value: ConfigValue) -> None:
