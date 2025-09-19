@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from wexample_helpers.classes.abstract_method import abstract_method
 from wexample_helpers.classes.base_class import BaseClass
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMixin
@@ -70,6 +71,10 @@ class AbstractConfigOption(
 
     def get_value(self) -> ConfigValue | None:
         return self.config_value
+
+    @abstract_method
+    def get_description(self) -> str:
+        pass
 
     def get_value_class_type(self) -> type[ConfigValue]:
         from wexample_config.config_value.config_value import ConfigValue
