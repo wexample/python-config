@@ -10,6 +10,7 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
     HasSnakeShortClassNameClassMixin,
 )
 from wexample_helpers.decorator.base_class import base_class
+from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -98,11 +99,24 @@ class AbstractConfigOption(
 
         config_value_class = self.get_value_class_type()
 
-        # Check if value is valid for the config option,
-        # reuse same method to validate types.
-        config_value_class.validate_value_type(
-            raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
-        )
+        try:
+            # Check if value is valid for the config option,
+            # reuse same method to validate types.
+            config_value_class.validate_value_type(
+                raw_value=raw_value, allowed_type=self.get_raw_value_allowed_type()
+            )
+        except NotAllowedVariableTypeException as e:
+            # Add context about the option class that caused the error
+            # Create a new exception with enhanced context
+            enhanced_exception = NotAllowedVariableTypeException(
+                variable_type=e.item_type,
+                variable_value=e.item_value,
+                message=f"[{self.get_name()}] ",
+                allowed_types=e.allowed_values,
+            )
+            
+            # Raise the enhanced exception with the original as cause
+            raise enhanced_exception from e
 
         raw_value = self.prepare_value(raw_value)
 
