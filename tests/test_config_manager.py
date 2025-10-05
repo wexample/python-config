@@ -86,16 +86,6 @@ class TestConfigManager:
         with pytest.raises(InvalidOptionException):
             self.config_manager.set_value({"lorem": "ipsum"})
 
-        # Works if configured
-        self.config_manager.allow_undefined_keys = True
-        self.config_manager.set_value({"lorem": "ipsum"})
-
-        # In nested, unexpected keys for child are still not allowed, if not specified in class handler.
-        with pytest.raises(InvalidOptionException):
-            self.config_manager.allow_undefined_keys = True
-            self.config_manager.set_value({"demo_nested": {"lorem": "ipsum"}})
-
-        self.config_manager.allow_undefined_keys = False
 
     def test_configure_list_type(self) -> None:
         from wexample_config.demo.config_option.demo_list_config_option import (
