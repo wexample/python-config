@@ -150,11 +150,19 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         # Accept both dict configs and normalized set-of-types
         unknown_keys = set(config.keys()) - valid_option_names
         if unknown_keys:
-            raise InvalidOptionException(
-                f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
-                f'in "{self.__class__.__name__}", '
-                f"allowed options are: {', '.join(sorted(valid_option_names))}"
-            )
+            if not self.allow_undefined_keys:
+                raise InvalidOptionException(
+                    f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
+                    f'in "{self.__class__.__name__}", '
+                    f"allowed options are: {', '.join(sorted(valid_option_names))}"
+                )
+            else:
+                for option_name in unknown_keys:
+                    if not isinstance(config[option_name], AbstractConfigOption):
+                        # Wrap unknown options
+                        config[option_name] = ConfigOption(
+                            key=option_name, parent=self, value=config[option_name]
+                        )
 
         # Resolve callables and process children recursively
         for key, child_raw_value in list(config.items()):
