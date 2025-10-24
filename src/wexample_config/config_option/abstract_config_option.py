@@ -10,7 +10,9 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
     HasSnakeShortClassNameClassMixin,
 )
 from wexample_helpers.decorator.base_class import base_class
-from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+from wexample_helpers.exception.not_allowed_variable_type_exception import (
+    NotAllowedVariableTypeException,
+)
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -76,6 +78,7 @@ class AbstractConfigOption(
 
     def get_value(self) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
+
         return self.config_value or ConfigValue(raw=None)
 
     def get_value_class_type(self) -> type[ConfigValue]:
@@ -115,7 +118,7 @@ class AbstractConfigOption(
                 message=f"[{self.get_name()}] ",
                 allowed_types=e.allowed_values,
             )
-            
+
             # Raise the enhanced exception with the original as cause
             raise enhanced_exception from e
 

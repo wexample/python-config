@@ -9,8 +9,9 @@ from wexample_helpers.decorator.base_class import base_class
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
-    from wexample_config.config_value.config_value import ConfigValue
     from wexample_helpers.const.types import AnyList
+
+    from wexample_config.config_value.config_value import ConfigValue
 
 T = TypeVar("T")
 

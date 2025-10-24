@@ -70,9 +70,6 @@ class ConfigValue(BaseClass):
         # Allow class to generate raw value by itself.
         self.raw = self._create_default_raw(self.raw)
 
-    def to_option_raw_value(self) -> Any:
-        return self.raw
-
     @classmethod
     def validate_value_type(
         cls, raw_value: Any, allowed_type: type | UnionType
@@ -438,6 +435,9 @@ class ConfigValue(BaseClass):
         if self.is_none():
             return None
         return self.to_list()
+
+    def to_option_raw_value(self) -> Any:
+        return self.raw
 
     def to_set(self) -> set:
         return set(self._execute_nested_method(self.get_set))
