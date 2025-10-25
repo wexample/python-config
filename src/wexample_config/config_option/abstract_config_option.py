@@ -94,7 +94,9 @@ class AbstractConfigOption(
 
     def set_value(self, raw_value: Any) -> Any:
         from wexample_config.config_value.config_value import ConfigValue
-        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
+        )
 
         if raw_value is None:
             return
