@@ -10,9 +10,6 @@ from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin impor
     HasSnakeShortClassNameClassMixin,
 )
 from wexample_helpers.decorator.base_class import base_class
-from wexample_helpers.exception.not_allowed_variable_type_exception import (
-    NotAllowedVariableTypeException,
-)
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue
@@ -97,6 +94,7 @@ class AbstractConfigOption(
 
     def set_value(self, raw_value: Any) -> Any:
         from wexample_config.config_value.config_value import ConfigValue
+        from wexample_helpers.exception.not_allowed_variable_type_exception import NotAllowedVariableTypeException
 
         if raw_value is None:
             return

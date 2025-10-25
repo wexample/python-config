@@ -85,7 +85,7 @@ class TestConfigManager:
         # Unexpected option fails on current
         with pytest.raises(InvalidOptionException):
             self.config_manager.set_value({"lorem": "ipsum"})
-    
+
     def test_configure_list_type(self) -> None:
         from wexample_config.demo.config_option.demo_list_config_option import (
             DemoListConfigOption,
