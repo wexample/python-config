@@ -103,7 +103,7 @@ class NestedConfigValue(ConfigValue):
         value: Any,
         separator: str = DICT_PATH_SEPARATOR_DEFAULT,
         create_missing: bool = True,
-    ) -> None:
+    ) -> NestedConfigValue:
         """
         Set a value at a nested path.
         Example: set_by_path("global.version", "0.1.0")
@@ -148,7 +148,9 @@ class NestedConfigValue(ConfigValue):
         final_key = parts[-1]
         current[final_key] = self._wrap(value)
 
-    def update_nested(self, data: dict[str, Any]) -> None:
+        return self
+
+    def update_nested(self, data: dict[str, Any]) -> AbstractConfigValue:
         """
         Update the nested structure with values from a dict.
         Example: update_nested({"global": {"version": "0.1.0"}})
@@ -165,6 +167,8 @@ class NestedConfigValue(ConfigValue):
             raise ValueError("Can only update dict-based NestedConfigValue")
 
         self._update_nested_recursive(self.raw, data)
+
+        return self
 
     def _update_nested_recursive(
         self, target: dict[str, ConfigValue], source: dict[str, Any]
