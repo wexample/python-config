@@ -148,51 +148,6 @@ class NestedConfigValue(ConfigValue):
         final_key = parts[-1]
         current[final_key] = self._wrap(value)
 
-    def update_nested(self, data: dict[str, Any]) -> None:
-        """
-        Update the nested structure with values from a dict.
-        Example: update_nested({"global": {"version": "0.1.0"}})
-
-        This method recursively merges the provided dict into the existing structure.
-
-        Args:
-            data: Dictionary with nested structure to merge
-
-        Raises:
-            ValueError: If this ConfigValue is not a dict
-        """
-        if not self.is_dict():
-            raise ValueError("Can only update dict-based NestedConfigValue")
-
-        self._update_nested_recursive(self.raw, data)
-
-    def _update_nested_recursive(
-        self, target: dict[str, ConfigValue], source: dict[str, Any]
-    ) -> None:
-        """
-        Recursively merge source dict into target dict.
-
-        Args:
-            target: Target dict (with ConfigValue values)
-            source: Source dict (with raw Python values)
-        """
-        for key, value in source.items():
-            if key in target:
-                existing = target[key]
-                # If both are dicts, merge recursively
-                if (
-                    isinstance(existing, NestedConfigValue)
-                    and existing.is_dict()
-                    and isinstance(value, dict)
-                ):
-                    self._update_nested_recursive(existing.raw, value)
-                else:
-                    # Otherwise, replace with new wrapped value
-                    target[key] = self._wrap(value)
-            else:
-                # Key doesn't exist, add it
-                target[key] = self._wrap(value)
-
     def to_dict(self) -> dict[str, Any]:
         """Recursively dump to a native dict.
 
@@ -211,6 +166,24 @@ class NestedConfigValue(ConfigValue):
         # Fallback to base, then unwrap any items just in case
         base_list = super().to_list()
         return [self._unwrap(v) for v in base_list]
+
+    def update_nested(self, data: dict[str, Any]) -> None:
+        """
+        Update the nested structure with values from a dict.
+        Example: update_nested({"global": {"version": "0.1.0"}})
+
+        This method recursively merges the provided dict into the existing structure.
+
+        Args:
+            data: Dictionary with nested structure to merge
+
+        Raises:
+            ValueError: If this ConfigValue is not a dict
+        """
+        if not self.is_dict():
+            raise ValueError("Can only update dict-based NestedConfigValue")
+
+        self._update_nested_recursive(self.raw, data)
 
     def _unwrap(self, value: Any) -> Any:
         """Return a native Python object from any ConfigValue/NestedConfigValue.
@@ -238,3 +211,30 @@ class NestedConfigValue(ConfigValue):
         ):
             return [self._unwrap(v) for v in value]
         return value
+
+    def _update_nested_recursive(
+        self, target: dict[str, ConfigValue], source: dict[str, Any]
+    ) -> None:
+        """
+        Recursively merge source dict into target dict.
+
+        Args:
+            target: Target dict (with ConfigValue values)
+            source: Source dict (with raw Python values)
+        """
+        for key, value in source.items():
+            if key in target:
+                existing = target[key]
+                # If both are dicts, merge recursively
+                if (
+                    isinstance(existing, NestedConfigValue)
+                    and existing.is_dict()
+                    and isinstance(value, dict)
+                ):
+                    self._update_nested_recursive(existing.raw, value)
+                else:
+                    # Otherwise, replace with new wrapped value
+                    target[key] = self._wrap(value)
+            else:
+                # Key doesn't exist, add it
+                target[key] = self._wrap(value)
