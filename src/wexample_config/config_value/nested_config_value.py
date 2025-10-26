@@ -97,6 +97,102 @@ class NestedConfigValue(ConfigValue):
 
         return current
 
+    def set_by_path(
+        self,
+        path: str,
+        value: Any,
+        separator: str = DICT_PATH_SEPARATOR_DEFAULT,
+        create_missing: bool = True,
+    ) -> None:
+        """
+        Set a value at a nested path.
+        Example: set_by_path("global.version", "0.1.0")
+        
+        Args:
+            path: Dot-separated path to the value (e.g., "global.version")
+            value: The value to set
+            separator: Path separator (default: ".")
+            create_missing: If True, creates missing intermediate dicts
+        
+        Raises:
+            ValueError: If the path is invalid or intermediate values are not dicts
+        """
+        if not path:
+            raise ValueError("Path cannot be empty")
+
+        if not self.is_dict():
+            raise ValueError("Can only set values on dict-based NestedConfigValue")
+
+        parts = path.split(separator)
+        current = self.raw
+
+        # Navigate to the parent of the target
+        for i, part in enumerate(parts[:-1]):
+            if part not in current:
+                if create_missing:
+                    current[part] = self._wrap({})
+                else:
+                    raise ValueError(
+                        f"Path '{separator.join(parts[:i+1])}' does not exist"
+                    )
+            
+            next_item = current[part]
+            if not isinstance(next_item, NestedConfigValue) or not next_item.is_dict():
+                raise ValueError(
+                    f"Cannot traverse path at '{separator.join(parts[:i+1])}': "
+                    f"not a dict"
+                )
+            current = next_item.raw
+
+        # Set the final value
+        final_key = parts[-1]
+        current[final_key] = self._wrap(value)
+
+    def update_nested(self, data: dict[str, Any]) -> None:
+        """
+        Update the nested structure with values from a dict.
+        Example: update_nested({"global": {"version": "0.1.0"}})
+        
+        This method recursively merges the provided dict into the existing structure.
+        
+        Args:
+            data: Dictionary with nested structure to merge
+        
+        Raises:
+            ValueError: If this ConfigValue is not a dict
+        """
+        if not self.is_dict():
+            raise ValueError("Can only update dict-based NestedConfigValue")
+
+        self._update_nested_recursive(self.raw, data)
+
+    def _update_nested_recursive(
+        self, target: dict[str, ConfigValue], source: dict[str, Any]
+    ) -> None:
+        """
+        Recursively merge source dict into target dict.
+        
+        Args:
+            target: Target dict (with ConfigValue values)
+            source: Source dict (with raw Python values)
+        """
+        for key, value in source.items():
+            if key in target:
+                existing = target[key]
+                # If both are dicts, merge recursively
+                if (
+                    isinstance(existing, NestedConfigValue)
+                    and existing.is_dict()
+                    and isinstance(value, dict)
+                ):
+                    self._update_nested_recursive(existing.raw, value)
+                else:
+                    # Otherwise, replace with new wrapped value
+                    target[key] = self._wrap(value)
+            else:
+                # Key doesn't exist, add it
+                target[key] = self._wrap(value)
+
     def to_dict(self) -> dict[str, Any]:
         """Recursively dump to a native dict.
 
