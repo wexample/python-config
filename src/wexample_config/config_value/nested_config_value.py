@@ -107,13 +107,13 @@ class NestedConfigValue(ConfigValue):
         """
         Set a value at a nested path.
         Example: set_by_path("global.version", "0.1.0")
-        
+
         Args:
             path: Dot-separated path to the value (e.g., "global.version")
             value: The value to set
             separator: Path separator (default: ".")
             create_missing: If True, creates missing intermediate dicts
-        
+
         Raises:
             ValueError: If the path is invalid or intermediate values are not dicts
         """
@@ -135,7 +135,7 @@ class NestedConfigValue(ConfigValue):
                     raise ValueError(
                         f"Path '{separator.join(parts[:i+1])}' does not exist"
                     )
-            
+
             next_item = current[part]
             if not isinstance(next_item, NestedConfigValue) or not next_item.is_dict():
                 raise ValueError(
@@ -152,12 +152,12 @@ class NestedConfigValue(ConfigValue):
         """
         Update the nested structure with values from a dict.
         Example: update_nested({"global": {"version": "0.1.0"}})
-        
+
         This method recursively merges the provided dict into the existing structure.
-        
+
         Args:
             data: Dictionary with nested structure to merge
-        
+
         Raises:
             ValueError: If this ConfigValue is not a dict
         """
@@ -171,7 +171,7 @@ class NestedConfigValue(ConfigValue):
     ) -> None:
         """
         Recursively merge source dict into target dict.
-        
+
         Args:
             target: Target dict (with ConfigValue values)
             source: Source dict (with raw Python values)
