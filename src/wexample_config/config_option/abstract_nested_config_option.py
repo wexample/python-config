@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Union, cast
 
-from wexample_filestate.option.mixin.option_mixin import OptionMixin
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
@@ -61,7 +60,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
     def get_option(
         self, option_type: type[AbstractConfigOption] | str
-    ) -> OptionMixin | None:
+    ) -> AbstractConfigOption | None:
         option_name = (
             option_type.get_name() if not isinstance(option_type, str) else option_type
         )
