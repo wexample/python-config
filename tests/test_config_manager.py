@@ -25,15 +25,14 @@ class TestConfigManager:
         assert self.config_manager.get_option("name").get_value().is_str()
 
     def test_configure_custom_value_type(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import (
-            NotAllowedVariableTypeException,
-        )
-
         from wexample_config.config_value.custom_type_config_value import (
             CustomTypeConfigValue,
         )
         from wexample_config.demo.config_option.demo_custom_value_config_option import (
             DemoCustomValueConfigOption,
+        )
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
         )
 
         with pytest.raises(NotAllowedVariableTypeException):
@@ -88,12 +87,11 @@ class TestConfigManager:
             self.config_manager.set_value({"lorem": "ipsum"})
 
     def test_configure_list_type(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import (
-            NotAllowedVariableTypeException,
-        )
-
         from wexample_config.demo.config_option.demo_list_config_option import (
             DemoListConfigOption,
+        )
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
         )
 
         with pytest.raises(NotAllowedVariableTypeException):
@@ -179,12 +177,11 @@ class TestConfigManager:
             self.config_manager.set_value({"name": []})
 
     def test_configure_union_type(self) -> None:
-        from wexample_helpers.exception.not_allowed_variable_type_exception import (
-            NotAllowedVariableTypeException,
-        )
-
         from wexample_config.demo.config_option.demo_union_config_option import (
             DemoUnionConfigOption,
+        )
+        from wexample_helpers.exception.not_allowed_variable_type_exception import (
+            NotAllowedVariableTypeException,
         )
 
         with pytest.raises(NotAllowedVariableTypeException):
