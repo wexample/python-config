@@ -112,11 +112,13 @@ class ConfigValue(BaseClass):
         return None
 
     def get_callable(self, type_check: bool = True) -> Callable:
-        from collections.abc import Callable
+        """Return the stored value as a callable, checking recursively if needed."""
+        value = self._get_nested_raw()
 
-        return self._get_value_from_callback(
-            Callable[..., Any], self.get_callable, type_check
-        )
+        if type_check and not callable(value):
+            raise TypeError(f"Expected a callable, got {type(value)}")
+
+        return value
 
     # Getters or None
     def get_callable_or_none(self) -> Callable | None:
@@ -261,9 +263,7 @@ class ConfigValue(BaseClass):
 
     # Type checking methods
     def is_callable(self) -> bool:
-        from collections.abc import Callable
-
-        return self.is_of_type(Callable[..., Any], self._get_nested_raw())
+        return callable(self._get_nested_raw())
 
     # Type checking methods
     def is_class(self) -> bool:
