@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Union, cast
 
-from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
+
+from wexample_config.config_option.abstract_config_option import AbstractConfigOption
 
 if TYPE_CHECKING:
     from wexample_config.config_value.config_value import ConfigValue

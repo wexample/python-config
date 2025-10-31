@@ -1,10 +1,16 @@
+# wexample-config
+
+Version: 0.0.56
+
+Helpers to manage dict types configurations.
+
 ## Code Quality & Typing
 
-All Wexample packages follow strict quality standards:
+All the suite packages follow strict quality standards:
 
 - **Type hints**: Full type coverage with mypy validation
-- **Code formatting**: Enforced with black and ruff
-- **Linting**: Comprehensive checks with ruff
+- **Code formatting**: Enforced with black and isort
+- **Linting**: Comprehensive checks with custom scripts and tools
 - **Testing**: High test coverage requirements
 
 These standards ensure reliability and maintainability across the suite.
