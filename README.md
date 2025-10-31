@@ -1,6 +1,6 @@
 # wexample-config
 
-Version: 0.0.56
+Version: 0.0.57
 
 Helpers to manage dict types configurations.
 
