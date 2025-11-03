@@ -114,10 +114,10 @@ class AbstractConfigOption(
             # Add context about the option class that caused the error
             # Create a new exception with enhanced context
             enhanced_exception = NotAllowedVariableTypeException(
-                variable_type=e.item_type,
-                variable_value=e.item_value,
+                variable_type=e.data.get('item_type'),
+                variable_value=e.data.get('item_value'),
                 message=f"[{self.get_name()}] ",
-                allowed_types=e.allowed_values,
+                allowed_types=e.data.get('allowed_values'),
             )
 
             # Raise the enhanced exception with the original as cause
