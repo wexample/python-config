@@ -1,3 +1,11 @@
 global:
   name: config
   version: 0.0.90
+test:
+  coverage:
+    last_report:
+      covered: 848
+      excluded: 38
+      missing: 422
+      percent: 66.77165354330708
+      total: 1270
