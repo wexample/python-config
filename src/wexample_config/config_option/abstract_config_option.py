@@ -45,6 +45,11 @@ class AbstractConfigOption(
     def __attrs_post_init__(self) -> None:
         self.key = self.key or self.get_name()
         self.set_value(self.value)
+        if self.parent:
+            self.parent.add_child(self)
+
+    def add_child(self, child:AbstractConfigOption) -> None:
+        """Do stuff with this new child"""
 
     @classmethod
     def get_class_name_suffix(cls) -> str | None:
@@ -73,22 +78,10 @@ class AbstractConfigOption(
         assert self.parent is not None
         return self.parent
 
-    def get_root(self) -> AbstractConfigOption | False:
-        if self._root is not None:
-            return self._root
-
+    def get_root(self) -> AbstractConfigOption:
         if self.parent is not None:
-            result = self.parent.get_root()
-
-            if result is False:
-                self._root = False
-                return False
-
-            self._root = result
-        else:
-            self._root = self
-
-        return self._root
+            return self.parent.get_root()
+        return self
 
     def get_value(self) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
