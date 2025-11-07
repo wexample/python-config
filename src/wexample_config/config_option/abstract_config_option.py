@@ -9,6 +9,7 @@ from wexample_helpers.classes.mixin.has_simple_repr_mixin import HasSimpleReprMi
 from wexample_helpers.classes.mixin.has_snake_short_class_name_class_mixin import (
     HasSnakeShortClassNameClassMixin,
 )
+from wexample_helpers.classes.private_field import private_field
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
@@ -34,6 +35,10 @@ class AbstractConfigOption(
     )
     value: Any = public_field(
         description="The raw value of this config option",
+        default=None,
+    )
+    _root: AbstractConfigOption | None | False = private_field(
+        description="The root parent",
         default=None,
     )
 
@@ -68,10 +73,22 @@ class AbstractConfigOption(
         assert self.parent is not None
         return self.parent
 
-    def get_root(self) -> AbstractConfigOption:
+    def get_root(self) -> AbstractConfigOption | False:
+        if self._root is not None:
+            return self._root
+
         if self.parent is not None:
-            return self.parent.get_root()
-        return self
+            result = self.parent.get_root()
+
+            if result is False:
+                self._root = False
+                return False
+
+            self._root = result
+        else:
+            self._root = self
+
+        return self._root
 
     def get_value(self) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
