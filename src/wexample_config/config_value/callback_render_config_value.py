@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from wexample_config.config_value.config_value import ConfigValue
@@ -14,6 +13,8 @@ if TYPE_CHECKING:
 class CallbackRenderConfigValue(ConfigValue):
     @staticmethod
     def get_allowed_types() -> Any:
+        from collections.abc import Callable
+
         return Callable[..., Any]
 
     def render(self, option: AbstractNestedConfigOption) -> str:

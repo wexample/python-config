@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel
+from wexample_helpers.classes.abstract_method import abstract_method
+from wexample_helpers.classes.base_class import BaseClass
+from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
     from wexample_config.config_option.abstract_config_option import (
@@ -11,9 +12,10 @@ if TYPE_CHECKING:
     )
 
 
-class AbstractOptionsProvider(BaseModel, ABC):
+@base_class
+class AbstractOptionsProvider(BaseClass):
     @classmethod
-    @abstractmethod
+    @abstract_method
     def get_options(cls) -> list[type[AbstractConfigOption]]:
         pass
 
