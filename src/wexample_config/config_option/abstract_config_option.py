@@ -48,9 +48,6 @@ class AbstractConfigOption(
         if self.parent:
             self.parent.add_child(self)
 
-    def add_child(self, child:AbstractConfigOption) -> None:
-        """Do stuff with this new child"""
-
     @classmethod
     def get_class_name_suffix(cls) -> str | None:
         return "ConfigOption"
@@ -62,6 +59,9 @@ class AbstractConfigOption(
     @staticmethod
     def resolve_config(config: DictConfig) -> DictConfig:
         return config
+
+    def add_child(self, child: AbstractConfigOption) -> None:
+        """Do stuff with this new child"""
 
     def dump(self) -> Any:
         return self.get_value().raw
