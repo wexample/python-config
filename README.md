@@ -62,7 +62,7 @@ All the suite packages follow strict quality standards:
 - **Linting**: Comprehensive checks with custom scripts and tools
 - **Testing**: High test coverage requirements
 
-These standards ensure reliability ``and maintainability across the suite.
+These standards ensure reliability and maintainability across the suite.
 
 ## Versioning & Compatibility Policy
 
@@ -90,7 +90,7 @@ Breaking changes are clearly documented with upgrade paths and examples.
 
 Current limitations and planned features are tracked in the GitHub issues.
 
-See the [project roadmap](https://github.com/wexample/python-app/issues) for upcoming features and improvements.
+See the [project roadmap](https://github.com/wexample/python-config/issues) for upcoming features and improvements.
 
 ## Security Policy
 
@@ -143,11 +143,11 @@ Free to use in both personal and commercial projects.
 
 ## Useful Links
 
-- **Homepage**: https://github.com/wexample/python-app
+- **Homepage**: https://github.com/wexample/python-config
 - **Documentation**: [docs.wexample.com](https://docs.wexample.com)
-- **Issue Tracker**: https://github.com/wexample/python-app/issues
-- **Discussions**: https://github.com/wexample/python-app/discussions
-- **PyPI**: [pypi.org/project/wexample-app](https://pypi.org/project/wexample-app/)
+- **Issue Tracker**: https://github.com/wexample/python-config/issues
+- **Discussions**: https://github.com/wexample/python-config/discussions
+- **PyPI**: [pypi.org/project/wexample-config](https://pypi.org/project/wexample-config/)
 
 ## Integration in the Suite
 
