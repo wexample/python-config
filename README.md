@@ -159,6 +159,14 @@ The suite includes packages for configuration management, file handling, prompts
 
 Visit the [Wexample Suite documentation](https://docs.wexample.com) for the complete package ecosystem.
 
+## Dependencies
+
+- attrs: >=23.1.0
+- cattrs: >=23.1.0
+- pydantic: <3,>=2
+- wexample-helpers: ==0.0.85
+
+
 # About us
 
 Wexample stands as a cornerstone of the digital ecosystem — a collective of seasoned engineers, researchers, and creators driven by a relentless pursuit of technological excellence. More than a media platform, it has grown into a vibrant community where innovation meets craftsmanship, and where every line of code reflects a commitment to clarity, durability, and shared intelligence.
