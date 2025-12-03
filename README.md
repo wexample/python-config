@@ -1,6 +1,6 @@
 # wexample-config
 
-Version: 0.0.96
+Version: 0.0.97
 
 Helpers to manage dict types configurations.
 
@@ -209,7 +209,7 @@ Refer to each package's documentation for specific version compatibility require
 - attrs: >=23.1.0
 - cattrs: >=23.1.0
 - pydantic: <3,>=2
-- wexample-helpers: ==0.0.87
+- wexample-helpers: ==0.0.88
 
 
 # About us
