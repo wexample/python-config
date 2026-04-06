@@ -20,5 +20,9 @@ class AbstractOptionsProvider(BaseClass):
         pass
 
     @classmethod
+    def get_docker_image_name(cls) -> str | None:
+        return None
+
+    @classmethod
     def get_options_registry(cls) -> dict[str, type[AbstractConfigOption]]:
         return {option.get_name(): option for option in cls.get_options()}
