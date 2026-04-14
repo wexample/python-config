@@ -54,7 +54,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
-        cache_key = tuple(self.get_options_providers())
+        cache_key = (type(self), tuple(self.get_options_providers()))
         cached = _REGISTRY_CACHE.get(cache_key)
         if cached is not None:
             return cached
