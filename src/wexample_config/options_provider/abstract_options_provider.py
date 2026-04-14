@@ -15,6 +15,10 @@ if TYPE_CHECKING:
 @base_class
 class AbstractOptionsProvider(BaseClass):
     @classmethod
+    def get_docker_image_name(cls) -> str | None:
+        return None
+
+    @classmethod
     @abstract_method
     def get_options(cls) -> list[type[AbstractConfigOption]]:
         pass
