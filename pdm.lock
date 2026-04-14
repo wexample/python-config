@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:f5f4d092aee6c508576a20ef5ca9183b6c0750bc5d46565f8d8b9258b4ddeecc"
+content_hash = "sha256:7b4d2893f222ddeacee05d277dc94ebef14e7fb2099d2e61e1947069da30e12f"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -319,6 +319,16 @@ files = [
 ]
 
 [[package]]
+name = "py-cpuinfo"
+version = "9.0.0"
+summary = "Get CPU info with pure Python"
+groups = ["dev"]
+files = [
+    {file = "py-cpuinfo-9.0.0.tar.gz", hash = "sha256:3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690"},
+    {file = "py_cpuinfo-9.0.0-py3-none-any.whl", hash = "sha256:859625bc251f64e21f077d099d4162689c762b5d6a4c3c97553d56241c9674d5"},
+]
+
+[[package]]
 name = "pydantic"
 version = "2.12.3"
 requires_python = ">=3.9"
@@ -475,6 +485,21 @@ files = [
 ]
 
 [[package]]
+name = "pytest-benchmark"
+version = "5.2.3"
+requires_python = ">=3.9"
+summary = "A ``pytest`` fixture for benchmarking code. It will group the tests into rounds that are calibrated to the chosen timer."
+groups = ["dev"]
+dependencies = [
+    "py-cpuinfo",
+    "pytest>=8.1",
+]
+files = [
+    {file = "pytest_benchmark-5.2.3-py3-none-any.whl", hash = "sha256:bc839726ad20e99aaa0d11a127445457b4219bdb9e80a1afc4b51da7f96b0803"},
+    {file = "pytest_benchmark-5.2.3.tar.gz", hash = "sha256:deb7317998a23c650fd4ff76e1230066a76cb45dcece0aca5607143c619e7779"},
+]
+
+[[package]]
 name = "pytest-cov"
 version = "7.0.0"
 requires_python = ">=3.9"
@@ -569,7 +594,7 @@ files = [
 
 [[package]]
 name = "wexample-helpers"
-version = "0.0.78"
+version = "1.0.0"
 requires_python = ">=3.10"
 summary = "Some python basic helpers and constants."
 groups = ["default"]
@@ -578,6 +603,6 @@ dependencies = [
     "cattrs>=23.1.0",
 ]
 files = [
-    {file = "wexample_helpers-0.0.78-py3-none-any.whl", hash = "sha256:08ccc368e99c695345dabd781185d49e09b6cdbed35fada46e4cb1063d76debf"},
-    {file = "wexample_helpers-0.0.78.tar.gz", hash = "sha256:33db86bbae97329f114173392f1d5a57898b4cfac09b2be6aab9e80651789efc"},
+    {file = "wexample_helpers-1.0.0-py3-none-any.whl", hash = "sha256:98582dd5b25fbd74226f06822337b965117671f791a368e7d3af1ec8e99288e9"},
+    {file = "wexample_helpers-1.0.0.tar.gz", hash = "sha256:3060739602423dbf2a9225e88d08351fccb3b645c91df01dceb1e872d7adb41d"},
 ]

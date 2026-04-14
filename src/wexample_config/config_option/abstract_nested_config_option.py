@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Union, cast
 
+# Keyed by tuple of provider classes (types are hashable and stable).
+# The registry only depends on which providers are active, never on instance state.
+_REGISTRY_CACHE: dict[tuple, dict] = {}
+
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
@@ -50,12 +54,15 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
-        options_list = self.get_allowed_options()
-        options_registry = {}
+        cache_key = tuple(self.get_options_providers())
+        cached = _REGISTRY_CACHE.get(cache_key)
+        if cached is not None:
+            return cached
 
-        for option in options_list:
-            options_registry[option.get_name()] = option
-
+        options_registry = {
+            option.get_name(): option for option in self.get_allowed_options()
+        }
+        _REGISTRY_CACHE[cache_key] = options_registry
         return options_registry
 
     def get_option(
