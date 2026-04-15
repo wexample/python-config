@@ -159,7 +159,10 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         for option_class in options.values():
             has_custom = _HAS_CUSTOM_RESOLVE.get(option_class)
             if has_custom is None:
-                has_custom = option_class.resolve_config is not AbstractConfigOption.resolve_config
+                has_custom = (
+                    option_class.resolve_config
+                    is not AbstractConfigOption.resolve_config
+                )
                 _HAS_CUSTOM_RESOLVE[option_class] = has_custom
             if has_custom:
                 config = option_class.resolve_config(config)
