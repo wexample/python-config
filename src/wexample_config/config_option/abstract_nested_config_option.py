@@ -2,6 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Union, cast
 
+# Keyed by tuple of provider classes (types are hashable and stable).
+# The registry only depends on which providers are active, never on instance state.
+_REGISTRY_CACHE: dict[tuple, dict] = {}
+
+# Cache which option classes have a custom resolve_config (not the base no-op).
+# Populated lazily on first encounter of each class.
+_HAS_CUSTOM_RESOLVE: dict[type, bool] = {}
+
 from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
@@ -50,12 +58,15 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return options
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
-        options_list = self.get_allowed_options()
-        options_registry = {}
+        cache_key = (type(self), tuple(self.get_options_providers()))
+        cached = _REGISTRY_CACHE.get(cache_key)
+        if cached is not None:
+            return cached
 
-        for option in options_list:
-            options_registry[option.get_name()] = option
-
+        options_registry = {
+            option.get_name(): option for option in self.get_allowed_options()
+        }
+        _REGISTRY_CACHE[cache_key] = options_registry
         return options_registry
 
     def get_option(
@@ -144,8 +155,17 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         # Loop over all options classes to execute option_class.resolve_config(config)
         # This will modify config before using it, with extra configuration keys.
         # For instance, an option defining the content of a file may add the should_exist option to ensure existence.
+        # Skip classes that haven't overridden the base no-op (checked once per class, cached).
         for option_class in options.values():
-            config = option_class.resolve_config(config)
+            has_custom = _HAS_CUSTOM_RESOLVE.get(option_class)
+            if has_custom is None:
+                has_custom = (
+                    option_class.resolve_config
+                    is not AbstractConfigOption.resolve_config
+                )
+                _HAS_CUSTOM_RESOLVE[option_class] = has_custom
+            if has_custom:
+                config = option_class.resolve_config(config)
 
         # Accept both dict configs and normalized set-of-types
         unknown_keys = set(config.keys()) - valid_option_names
