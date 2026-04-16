@@ -1,6 +1,6 @@
 global:
   name: config
-  version: 0.3.2
+  version: 0.3.4
 test:
   coverage:
     last_report:
