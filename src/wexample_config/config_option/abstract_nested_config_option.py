@@ -97,6 +97,13 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
         return None
 
+    def iter_options_recursive(self):
+        """Yield every option (including nested) under this holder."""
+        for option in self.options.values():
+            yield option
+            if isinstance(option, AbstractNestedConfigOption):
+                yield from option.iter_options_recursive()
+
     def get_option_value(
         self, option_type: type[AbstractConfigOption], default: Any = None
     ) -> ConfigValue:
