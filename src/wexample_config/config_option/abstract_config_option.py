@@ -37,8 +37,10 @@ class AbstractConfigOption(
         description="The raw value of this config option",
         default=None,
     )
-    _root: AbstractConfigOption | None | False = private_field(
-        description="The root parent",
+    _root: AbstractConfigOption | None = private_field(
+        description="Memoized result of get_root(); None means uncached. "
+        "Invariant for the lifetime of the option (parent is set once at "
+        "construction time and never reparented).",
         default=None,
     )
 
@@ -79,9 +81,13 @@ class AbstractConfigOption(
         return self.parent
 
     def get_root(self) -> AbstractConfigOption:
+        if self._root is not None:
+            return self._root
         if self.parent is not None:
-            return self.parent.get_root()
-        return self
+            self._root = self.parent.get_root()
+        else:
+            self._root = self
+        return self._root
 
     def get_value(self) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
