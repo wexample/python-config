@@ -1,6 +1,6 @@
 # config
 
-Version: 6.4.1
+Version: 6.4.2
 
 Helpers to manage dict types configurations.
 
