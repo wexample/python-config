@@ -4,7 +4,7 @@ domains: []
 global:
   name: config
   type: app
-  version: 6.4.3
+  version: 6.5.0
 test:
   coverage:
     last_report:
@@ -15,4 +15,4 @@ test:
       total: 1270
 wex:
   migration: 1
-  version: 6.0.90
+  version: 6.0.112
