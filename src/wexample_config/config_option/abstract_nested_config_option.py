@@ -43,19 +43,15 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return Union[dict[str, Any], set[type[AbstractConfigOption]]]
 
     def dump(self) -> Any:
-        output = {}
-
-        for name, option in self.options.items():
-            output[name] = option.dump()
-
-        return output
+        return {name: option.dump() for name, option in self.options.items()}
 
     def get_allowed_options(self) -> list[type[AbstractConfigOption]]:
         providers = self.get_options_providers()
-        options = []
-        for provider in providers:
-            options.extend(provider.get_options())
-        return options
+        return [
+            option
+            for provider in providers
+            for option in provider.get_options()
+        ]
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
         cache_key = (type(self), tuple(self.get_options_providers()))
@@ -76,10 +72,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             option_type.get_name() if not isinstance(option_type, str) else option_type
         )
 
-        if option_name in self.options:
-            return self.options[option_name]
-
-        return None
+        return self.options.get(option_name)
 
     def get_option_recursive(
         self, option_type: type[AbstractConfigOption] | str

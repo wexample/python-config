@@ -68,7 +68,8 @@ class NestedConfigValue(ConfigValue):
                     idx = None
             if idx is not None:
                 seq = self.raw
-                if -len(seq) <= idx < len(seq):
+                n = len(seq)
+                if -n <= idx < n:
                     return seq[idx]
         return ConfigValue(raw=default)
 
@@ -90,10 +91,10 @@ class NestedConfigValue(ConfigValue):
         current: ConfigValue | None = self
         for part in path.split(separator):
             if not isinstance(current, NestedConfigValue):
-                return ConfigValue(raw=default if default is not None else None)
+                return ConfigValue(raw=default)
             current = current.get_config_item(part)
             if current is None:
-                return ConfigValue(raw=default if default is not None else None)
+                return ConfigValue(raw=default)
 
         return current
 
