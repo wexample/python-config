@@ -4,16 +4,7 @@ domains: []
 global:
   name: config
   type: app
-  version: 6.6.3
-test:
-  coverage:
-    last_report:
-      commit_hash: d5a3a24cd9410ca6f4af9cfc7c51a29c220f714c
-      covered: 448
-      excluded: 32
-      missing: 390
-      percent: 53.46062052505967
-      total: 838
+  version: 6.6.4
 wex:
   migration: 1
   version: 6.0.112
