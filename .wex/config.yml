@@ -4,10 +4,11 @@ domains: []
 global:
   name: config
   type: app
-  version: 6.6.2
+  version: 6.6.3
 test:
   coverage:
     last_report:
+      commit_hash: d5a3a24cd9410ca6f4af9cfc7c51a29c220f714c
       covered: 448
       excluded: 32
       missing: 390
