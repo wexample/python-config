@@ -31,7 +31,7 @@ class NameConfigOption(AbstractConfigOption):
         key = NameConfigOption.get_name()
 
         if key in config:
-            value = config.get(key)
+            value = config[key]
 
             if callable(value):
                 config[key] = CallbackRenderConfigValue(raw=value)
