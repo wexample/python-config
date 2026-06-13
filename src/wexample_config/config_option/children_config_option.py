@@ -16,12 +16,7 @@ if TYPE_CHECKING:
 @base_class
 class ChildrenConfigOption(AbstractListConfigOption):
     def dump(self) -> Any:
-        output = []
-
-        for child in self.children:
-            output.append(child.dump())
-
-        return output
+        return [child.dump() for child in self.children]
 
     def get_item_class_type(self) -> type | UnionType:
         from wexample_config.config_option.abstract_nested_config_option import (

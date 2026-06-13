@@ -50,7 +50,8 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
         if raw_value is None:
             return
 
+        item_class_type = self.get_item_class_type()
         for child_config in raw_value:
             self.children.append(
-                self.get_item_class_type()(value=child_config, parent=self)
+                item_class_type(value=child_config, parent=self)
             )

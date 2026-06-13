@@ -281,11 +281,11 @@ class ConfigValue(BaseClass):
         raw = self._get_nested_raw()
         return (
             raw is None
-            or (self.is_of_type(list, raw) and len(raw) == 0)
-            or (self.is_of_type(str, raw) and raw == "")
-            or (self.is_of_type(dict, raw) and len(raw) == 0)
-            or (self.is_of_type(tuple, raw) and len(raw) == 0)
-            or (self.is_of_type(set, raw) and len(raw) == 0)
+            or (self.is_of_type(list, raw) and not raw)
+            or (self.is_of_type(str, raw) and not raw)
+            or (self.is_of_type(dict, raw) and not raw)
+            or (self.is_of_type(tuple, raw) and not raw)
+            or (self.is_of_type(set, raw) and not raw)
             or raw == 0
             or raw is False
             or (hasattr(raw, "__len__") and len(raw) == 0)
