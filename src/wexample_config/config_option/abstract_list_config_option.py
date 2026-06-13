@@ -52,6 +52,4 @@ class AbstractListConfigOption(AbstractNestedConfigOption):
 
         item_class_type = self.get_item_class_type()
         for child_config in raw_value:
-            self.children.append(
-                item_class_type(value=child_config, parent=self)
-            )
+            self.children.append(item_class_type(value=child_config, parent=self))

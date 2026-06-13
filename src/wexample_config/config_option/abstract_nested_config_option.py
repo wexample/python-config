@@ -47,11 +47,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
 
     def get_allowed_options(self) -> list[type[AbstractConfigOption]]:
         providers = self.get_options_providers()
-        return [
-            option
-            for provider in providers
-            for option in provider.get_options()
-        ]
+        return [option for provider in providers for option in provider.get_options()]
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
         cache_key = (type(self), tuple(self.get_options_providers()))
