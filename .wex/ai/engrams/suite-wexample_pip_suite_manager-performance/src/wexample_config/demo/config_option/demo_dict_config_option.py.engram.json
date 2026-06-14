@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/config_option/demo_dict_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:50:20+00:00",
+  "last_rev": "b4a1bec5b138f48bf0e9f18afbd4d4a6b214d44e",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted invariant dict[str, dict[str, Any]] GenericAlias out of get_raw_value_allowed_type into module-level constant",
+  "in_progress": null
+}
