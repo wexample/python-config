@@ -11,8 +11,6 @@ from wexample_config.config_option.abstract_nested_config_option import (
 )
 
 if TYPE_CHECKING:
-    from types import UnionType
-
     from wexample_config.config_option.abstract_config_option import (
         AbstractConfigOption,
     )

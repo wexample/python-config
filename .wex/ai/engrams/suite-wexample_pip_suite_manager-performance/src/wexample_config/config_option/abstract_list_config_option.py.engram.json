@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_option/abstract_list_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:41:16+00:00",
+  "last_rev": "752b9f0e43a2aebe610fff30ca26fe97ba849524",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed duplicate `from types import UnionType` inside TYPE_CHECKING block (already imported unconditionally)",
+  "in_progress": null
+}
