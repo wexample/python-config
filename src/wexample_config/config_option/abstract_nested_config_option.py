@@ -50,13 +50,20 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return [option for provider in providers for option in provider.get_options()]
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
-        cache_key = (type(self), tuple(self.get_options_providers()))
+        # Capture providers once; building the tuple for the cache key and
+        # expanding options both use the same list — avoids a second call to
+        # get_options_providers() (and the implicit third call that would happen
+        # inside get_allowed_options() on a cache miss).
+        providers = self.get_options_providers()
+        cache_key = (type(self), tuple(providers))
         cached = _REGISTRY_CACHE.get(cache_key)
         if cached is not None:
             return cached
 
         options_registry = {
-            option.get_name(): option for option in self.get_allowed_options()
+            option.get_name(): option
+            for provider in providers
+            for option in provider.get_options()
         }
         _REGISTRY_CACHE[cache_key] = options_registry
         return options_registry
@@ -180,12 +187,12 @@ class AbstractNestedConfigOption(AbstractConfigOption):
                             key=option_name, parent=self, value=config[option_name]
                         )
 
-        # Resolve callables and process children recursively
-        for key, child_raw_value in list(config.items()):
-            if isinstance(child_raw_value, CallbackRenderConfigValue):
-                config[key] = child_raw_value.render(self)
-
+        # Resolve callables and create options in a single pass — avoids
+        # allocating a list() copy of config.items() and halves the number
+        # of iterations over the config dict.
         for option_name, option_config in config.items():
+            if isinstance(option_config, CallbackRenderConfigValue):
+                option_config = option_config.render(self)
             if isinstance(option_config, AbstractConfigOption):
                 new_option = option_config
                 new_option.parent = self

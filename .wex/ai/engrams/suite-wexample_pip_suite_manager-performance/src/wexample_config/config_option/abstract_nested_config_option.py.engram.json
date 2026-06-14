@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_option/abstract_nested_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:42:14+00:00",
+  "last_rev": "358956484da2926fb165297411f5addec70e4eee",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "eliminated double get_options_providers() call in registry builder; merged two config-iteration loops into one, removing list() copy",
+  "in_progress": null
+}
