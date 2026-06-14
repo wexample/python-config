@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_value/config_value_collection.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:46:56+00:00",
+  "last_rev": "20e1e87de4eda62efdca6937d33958c19e15a139",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "removed no-op __attrs_post_init__, direct-construct in from_config_values, inlined 12 lambdas+self.map() calls into list comprehensions",
+  "in_progress": null
+}
