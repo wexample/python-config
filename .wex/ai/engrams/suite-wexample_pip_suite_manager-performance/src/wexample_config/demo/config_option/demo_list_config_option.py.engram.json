@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/config_option/demo_list_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:53:28+00:00",
+  "last_rev": "99ccaba14aa827c6da71b66310f5a13cfda65970",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "single static method returning builtin constant `list`; no GenericAlias allocation, no hot path to optimize (mirrors demo_extensible_config_option skip decision)",
+  "in_progress": null
+}
