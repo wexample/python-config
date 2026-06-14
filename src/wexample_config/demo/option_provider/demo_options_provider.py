@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from wexample_config.options_provider.abstract_options_provider import (
     AbstractOptionsProvider,
@@ -13,8 +13,12 @@ if TYPE_CHECKING:
 
 
 class DemoOptionsProvider(AbstractOptionsProvider):
+    _options_cache: ClassVar[list[type[AbstractConfigOption]] | None] = None
+
     @classmethod
     def get_options(cls) -> list[type[AbstractConfigOption]]:
+        if cls._options_cache is not None:
+            return cls._options_cache
         from wexample_config.config_option.children_config_option import (
             ChildrenConfigOption,
         )
@@ -38,7 +42,7 @@ class DemoOptionsProvider(AbstractOptionsProvider):
             DemoUnionConfigOption,
         )
 
-        return [
+        cls._options_cache = [
             ChildrenConfigOption,
             DemoCustomValueConfigOption,
             DemoDictConfigOption,
@@ -48,3 +52,4 @@ class DemoOptionsProvider(AbstractOptionsProvider):
             DemoUnionConfigOption,
             NameConfigOption,
         ]
+        return cls._options_cache

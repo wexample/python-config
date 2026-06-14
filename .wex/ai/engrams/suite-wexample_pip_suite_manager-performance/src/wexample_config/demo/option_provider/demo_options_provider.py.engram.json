@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/option_provider/demo_options_provider.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:56:00+00:00",
+  "last_rev": "3edff4d8a873c9b3c05c5f8750641edc8621ea57",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "cached get_options() result in ClassVar to skip repeated deferred-import lookups and list allocation on every call",
+  "in_progress": null
+}
