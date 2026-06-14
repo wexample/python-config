@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/demo_config_manager.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:54:52+00:00",
+  "last_rev": "3c916f3921fa4753d6dbc56f7ec41715a9e1fb9b",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "demo stub with single trivial method; local import is intentional circular-import guard, no hot path",
+  "in_progress": null
+}
