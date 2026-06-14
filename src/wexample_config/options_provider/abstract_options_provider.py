@@ -25,4 +25,10 @@ class AbstractOptionsProvider(BaseClass):
 
     @classmethod
     def get_options_registry(cls) -> dict[str, type[AbstractConfigOption]]:
-        return {option.get_name(): option for option in cls.get_options()}
+        if "_options_registry" not in cls.__dict__:
+            setattr(
+                cls,
+                "_options_registry",
+                {option.get_name(): option for option in cls.get_options()},
+            )
+        return cls.__dict__["_options_registry"]
