@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_value/callback_render_config_value.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:44:08+00:00",
+  "last_rev": "b8b6bcaa88aedf25fc9f89b2350f82964983556c",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted `collections.abc.Callable` import out of get_allowed_types static method to module level",
+  "in_progress": null
+}
