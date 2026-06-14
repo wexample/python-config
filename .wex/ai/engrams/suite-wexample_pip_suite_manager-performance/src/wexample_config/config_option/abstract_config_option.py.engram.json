@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_option/abstract_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:40:51+00:00",
+  "last_rev": "78be8c3188bbf407cc7237af5a6a3c24290f4286",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "lazy-init config_value in get_value() to avoid allocating ConfigValue(raw=None) on every call",
+  "in_progress": null
+}

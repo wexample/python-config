@@ -92,7 +92,9 @@ class AbstractConfigOption(
     def get_value(self) -> ConfigValue:
         from wexample_config.config_value.config_value import ConfigValue
 
-        return self.config_value or ConfigValue(raw=None)
+        if self.config_value is None:
+            self.config_value = ConfigValue(raw=None)
+        return self.config_value
 
     def get_value_class_type(self) -> type[ConfigValue]:
         from wexample_config.config_value.config_value import ConfigValue
