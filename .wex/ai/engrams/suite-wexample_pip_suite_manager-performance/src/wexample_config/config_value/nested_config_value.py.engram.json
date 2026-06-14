@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_value/nested_config_value.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:48:54+00:00",
+  "last_rev": "275ed1be6bc9b68abfeea0f4d7f6c5b9952474fc",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted Mapping/Sequence imports to module level, cached is_tuple() in post_init, removed dead try/except in get_config_item",
+  "in_progress": null
+}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from wexample_helpers.decorator.base_class import base_class
@@ -21,10 +22,11 @@ class NestedConfigValue(ConfigValue):
         # If this ConfigValue holds a list/tuple,
         # wrap each element consistently as ConfigValue/NestedConfigValue.
         elif self.is_list() or self.is_tuple():
+            _is_tuple = self.is_tuple()
             seq = self.raw
             wrapped = [self._wrap(v) for v in seq]
             # Preserve tuple/list type
-            self.raw = tuple(wrapped) if self.is_tuple() else wrapped
+            self.raw = tuple(wrapped) if _is_tuple else wrapped
 
     @classmethod
     def _wrap(cls, val: Any) -> ConfigValue:
@@ -34,8 +36,6 @@ class NestedConfigValue(ConfigValue):
         - lists/tuples into the same type with wrapped elements
         - everything else unchanged
         """
-        from collections.abc import Mapping, Sequence
-
         # Case 1: dict / Mapping → wrap in NestedConfigValue
         if isinstance(val, Mapping):
             return cls(raw=dict(val))
@@ -62,10 +62,7 @@ class NestedConfigValue(ConfigValue):
             elif isinstance(key, str) and (
                 key.isdigit() or (key.startswith("-") and key[1:].isdigit())
             ):
-                try:
-                    idx = int(key)
-                except ValueError:
-                    idx = None
+                idx = int(key)
             if idx is not None:
                 seq = self.raw
                 n = len(seq)
@@ -194,8 +191,6 @@ class NestedConfigValue(ConfigValue):
         - ConfigValue(primitives) -> primitive raw value
         - Bare Mapping/Sequence (shouldn't happen after wrapping) -> recurse best-effort
         """
-        from collections.abc import Mapping, Sequence
-
         if isinstance(value, NestedConfigValue):
             if value.is_dict():
                 return value.to_dict()
