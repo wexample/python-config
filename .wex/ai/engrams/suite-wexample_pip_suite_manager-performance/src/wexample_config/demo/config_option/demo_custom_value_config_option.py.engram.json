@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/config_option/demo_custom_value_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:49:21+00:00",
+  "last_rev": "6b43cb4bcf6b4c7eed2a61e38f1b2362e5d7effc",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "single static method with intentional lazy import; no hot path, loop, or invariant to optimize",
+  "in_progress": null
+}
