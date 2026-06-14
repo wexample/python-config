@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/config_option/demo_nested_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:53:50+00:00",
+  "last_rev": "bfba5c530d5f5e5bfcb9c506522dd3465fd60ade",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "only a class attribute and a trivial static method returning Any; no hot path or computation to optimize",
+  "in_progress": null
+}
