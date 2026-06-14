@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_value/custom_type_config_value.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:47:30+00:00",
+  "last_rev": "7ca7b413db141cce4589e7ddaa0b638d779d523e",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "12-line stub with a single `return str`; no hot path, loop, or allocation to optimize",
+  "in_progress": null
+}
