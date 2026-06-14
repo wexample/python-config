@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/config_value/config_value.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:45:36+00:00",
+  "last_rev": "be65d6a1ba59372673b3f2606b08be5ac4319ca7",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted Callable+inspect imports to module level, collapsed is_empty isinstance checks, replaced ==False/==True with identity comparisons",
+  "in_progress": null
+}

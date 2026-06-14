@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import inspect
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
 from wexample_helpers.classes.base_class import BaseClass
@@ -7,7 +9,6 @@ from wexample_helpers.classes.field import public_field
 from wexample_helpers.decorator.base_class import base_class
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
     from types import UnionType
 
     from wexample_helpers.const.types import AnyList, StringKeysDict
@@ -267,8 +268,6 @@ class ConfigValue(BaseClass):
 
     # Type checking methods
     def is_class(self) -> bool:
-        import inspect
-
         return inspect.isclass(self.raw)
 
     def is_complex(self) -> bool:
@@ -281,18 +280,14 @@ class ConfigValue(BaseClass):
         raw = self._get_nested_raw()
         return (
             raw is None
-            or (self.is_of_type(list, raw) and not raw)
-            or (self.is_of_type(str, raw) and not raw)
-            or (self.is_of_type(dict, raw) and not raw)
-            or (self.is_of_type(tuple, raw) and not raw)
-            or (self.is_of_type(set, raw) and not raw)
+            or (isinstance(raw, (list, str, dict, tuple, set)) and not raw)
             or raw == 0
             or raw is False
             or (hasattr(raw, "__len__") and len(raw) == 0)
         )
 
     def is_false(self) -> bool:
-        return self.get_bool() == False
+        return self.get_bool() is False
 
     def is_float(self) -> bool:
         return self.is_of_type(float, self._get_nested_raw())
@@ -307,8 +302,6 @@ class ConfigValue(BaseClass):
         return self.raw is None
 
     def is_of_type(self, value_type: Any, value: Any) -> bool:
-        from collections.abc import Callable
-
         if value_type is Callable:
             return callable(value)
         if isinstance(value_type, type):
@@ -322,7 +315,7 @@ class ConfigValue(BaseClass):
         return self.is_of_type(str, self._get_nested_raw())
 
     def is_true(self) -> bool:
-        return self.to_bool_or_none() == True
+        return self.to_bool_or_none() is True
 
     def is_tuple(self) -> bool:
         return self.is_of_type(tuple, self._get_nested_raw())
@@ -336,15 +329,11 @@ class ConfigValue(BaseClass):
         self.raw = value
 
     def set_callable(self, value: Callable, type_check: bool = True) -> None:
-        from collections.abc import Callable
-
         self._assert_type(Callable, value, type_check)
         self.raw = value
 
     # Setters
     def set_class(self, value: type[Any], type_check: bool = True) -> None:
-        from collections.abc import Callable
-
         self._assert_type(Callable, value, type_check)
         self.raw = value
 
