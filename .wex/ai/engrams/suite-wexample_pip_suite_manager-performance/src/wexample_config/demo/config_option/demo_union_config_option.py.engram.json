@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/config_option/demo_union_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:54:18+00:00",
+  "last_rev": "d0a9ea5caefaae228518bafdf31f5eeca1c901c7",
+  "last_decision": "edit",
+  "kinds": [],
+  "notes": "hoisted Union[str, dict[str, Any]] type expression to module-level constant to avoid per-call reconstruction",
+  "in_progress": null
+}
