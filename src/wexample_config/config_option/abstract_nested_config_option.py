@@ -50,10 +50,13 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         return [option for provider in providers for option in provider.get_options()]
 
     def get_allowed_options_registry(self) -> dict[str, type[AbstractConfigOption]]:
-        # Capture providers once; building the tuple for the cache key and
-        # expanding options both use the same list — avoids a second call to
-        # get_options_providers() (and the implicit third call that would happen
-        # inside get_allowed_options() on a cache miss).
+        # Cache key bound to (type(self), providers) so subclasses with their own
+        # overrides get their own cache entry. MUST go through self.get_allowed_options()
+        # — subclasses (e.g. ModeOption) override that method to return a fixed list
+        # that bypasses providers entirely. Building the registry directly from
+        # providers would silently ignore those overrides and surface the parent's
+        # provider options instead, producing "Unknown configuration option" errors
+        # on perfectly valid configs.
         providers = self.get_options_providers()
         cache_key = (type(self), tuple(providers))
         cached = _REGISTRY_CACHE.get(cache_key)
@@ -61,9 +64,7 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             return cached
 
         options_registry = {
-            option.get_name(): option
-            for provider in providers
-            for option in provider.get_options()
+            option.get_name(): option for option in self.get_allowed_options()
         }
         _REGISTRY_CACHE[cache_key] = options_registry
         return options_registry
@@ -142,7 +143,6 @@ class AbstractNestedConfigOption(AbstractConfigOption):
         )
 
         options = self.get_allowed_options_registry()
-        valid_option_names = set(options.keys())
         new_options = []
 
         # Normalize: accept a set of option classes and convert to dict[name -> instance]
@@ -170,14 +170,17 @@ class AbstractNestedConfigOption(AbstractConfigOption):
             if has_custom:
                 config = option_class.resolve_config(config)
 
-        # Accept both dict configs and normalized set-of-types
-        unknown_keys = set(config.keys()) - valid_option_names
+        # Accept both dict configs and normalized set-of-types.
+        # dict_keys supports set-difference natively — avoids materialising a
+        # full set(options.keys()) on every call; the set is only built lazily
+        # inside the (rare) error branch via sorted(options).
+        unknown_keys = config.keys() - options.keys()
         if unknown_keys:
             if not self.allow_undefined_keys:
                 raise InvalidOptionException(
                     message=f"Unknown configuration option \"{', '.join(sorted(unknown_keys))}\", "
                     f'in "{self.__class__.__name__}", '
-                    f"allowed options are: {', '.join(sorted(valid_option_names))}"
+                    f"allowed options are: {', '.join(sorted(options))}"
                 )
             else:
                 for option_name in unknown_keys:
