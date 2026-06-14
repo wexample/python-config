@@ -1,0 +1,11 @@
+{
+  "engram_version": 1,
+  "source_key": "src/wexample_config/demo/config_option/demo_extensible_config_option.py",
+  "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
+  "last_visited_at": "2026-06-14T18:51:46+00:00",
+  "last_rev": "4980ca6e1bbc809f48f604cd6347b1c4d50c7718",
+  "last_decision": "skip",
+  "kinds": [],
+  "notes": "single static method returning constant `list`; no hot path, loops, or cacheable invariants to optimize",
+  "in_progress": null
+}
