@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any, Callable, Union
 
 from wexample_helpers.decorator.base_class import base_class
 
@@ -14,8 +14,6 @@ if TYPE_CHECKING:
 class NameConfigOption(AbstractConfigOption):
     @staticmethod
     def get_raw_value_allowed_type() -> Any:
-        from collections.abc import Callable
-
         from wexample_config.config_value.callback_render_config_value import (
             CallbackRenderConfigValue,
         )
