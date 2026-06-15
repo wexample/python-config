@@ -10,7 +10,6 @@ from wexample_config.config_option.abstract_list_config_option import (
 )
 
 
-
 @base_class
 class ChildrenConfigOption(AbstractListConfigOption):
     def dump(self) -> Any:
