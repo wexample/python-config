@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 from wexample_helpers.decorator.base_class import base_class
 
-if TYPE_CHECKING:
-    from types import UnionType
-    from typing import Any
-
 from wexample_config.config_option.abstract_list_config_option import (
     AbstractListConfigOption,
 )
+
+if TYPE_CHECKING:
+    from types import UnionType
+    from typing import Any
 
 
 @base_class
