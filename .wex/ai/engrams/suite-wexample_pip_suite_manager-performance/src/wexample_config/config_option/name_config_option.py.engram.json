@@ -2,10 +2,10 @@
   "engram_version": 1,
   "source_key": "src/wexample_config/config_option/name_config_option.py",
   "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
-  "last_visited_at": "2026-06-14T18:43:33+00:00",
-  "last_rev": "8c40dadd63d211c1d032b31598cf54a8a98597cc",
+  "last_visited_at": "2026-06-16T07:35:20+00:00",
+  "last_rev": "3f5dfbd889c96cfcc1e19046e89b9a4cc4e9f907",
   "last_decision": "edit",
   "kinds": [],
-  "notes": "hoisted `Callable` import from per-call method body to module-level typing import",
+  "notes": "deferred CallbackRenderConfigValue import into callable branch in resolve_config, skipping sys.modules lookup on non-callable paths",
   "in_progress": null
 }

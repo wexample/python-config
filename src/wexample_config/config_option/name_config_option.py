@@ -23,16 +23,16 @@ class NameConfigOption(AbstractConfigOption):
 
     @staticmethod
     def resolve_config(config: DictConfig) -> DictConfig:
-        from wexample_config.config_value.callback_render_config_value import (
-            CallbackRenderConfigValue,
-        )
-
         key = NameConfigOption.get_name()
 
         if key in config:
             value = config[key]
 
             if callable(value):
+                from wexample_config.config_value.callback_render_config_value import (
+                    CallbackRenderConfigValue,
+                )
+
                 config[key] = CallbackRenderConfigValue(raw=value)
 
         return config
