@@ -2,10 +2,10 @@
   "engram_version": 1,
   "source_key": "src/wexample_config/config_option/children_config_option.py",
   "cache_nonce": "1c2800147ebc4367950bb7b61bd21d00",
-  "last_visited_at": "2026-06-16T07:34:46+00:00",
-  "last_rev": "3421cab1156ea76ad2a8b82328ffb45278630f5c",
-  "last_decision": "edit",
+  "last_visited_at": "2026-06-16T18:44:47+00:00",
+  "last_rev": "348a842cfc72f41bda569662c859f0d14c61fa99",
+  "last_decision": "skip",
   "kinds": [],
-  "notes": "moved UnionType and Any to TYPE_CHECKING — both used only in annotations, never at runtime",
+  "notes": "tiny file; list comprehension and lazy import already optimal, TYPE_CHECKING guards eliminate annotation overhead",
   "in_progress": null
 }
