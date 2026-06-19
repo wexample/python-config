@@ -75,7 +75,7 @@ class ConfigValue(BaseClass):
     def validate_value_type(
         cls, raw_value: Any, allowed_type: type | UnionType
     ) -> None:
-        from wexample_helpers.helpers.type import type_validate_or_fail
+        from wexample_helpers.helper.type import type_validate_or_fail
 
         type_validate_or_fail(
             value=raw_value,
