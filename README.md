@@ -1,6 +1,6 @@
 # config
 
-Version: 7.1.2
+Version: 7.2.0
 
 Helpers to manage dict types configurations.
 
@@ -83,7 +83,7 @@ Visit the [Wexample Suite documentation](https://docs.wexample.com) for the comp
 - attrs: >=23.1.0
 - cattrs: >=23.1.0
 - pydantic: <3,>=2
-- wexample-helpers: >=18.0.0
+- wexample-helpers: >=19.0.0
 
 ## Versioning & Compatibility Policy
 
